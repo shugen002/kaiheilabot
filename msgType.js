@@ -1,6 +1,5 @@
 var server = require('./server')
 var RongIMLib = require('./RongIMLib')
-var RongIMClient = RongIMLib.RongIMClient
 class TextMessage {
   constructor (msg) {
     this.msg = msg
@@ -16,7 +15,7 @@ class TextMessage {
    * @param {string} content 内容
    */
   reply (content) {
-    sendMessage(this.channelId,
+    server.sendMessage(3, this.channelId,
       new RongIMLib.TextMessage({
         messageName: 'TextMessage',
         content: content,
@@ -59,23 +58,28 @@ class TextMessage {
   }
 }
 
-function sendMessage (channelId, textMessage) {
-  return new Promise((resolve, reject) => {
-    RongIMClient.getInstance().sendMessage(
-      3,
-      channelId,
-      textMessage, {
-        onSuccess: resolve,
-        onError: reject
-      },
-      false,
-      'Push 显示内容',
-      'Push 通知时附加信息',
-      null, {}
-    )
-  })
+class AddReaction {
+  constructor (msg) {
+    this.msg = msg
+    this.guildId = msg.targetId.split('_')[1]
+    this.userId = msg.content.content.body.user_id
+    this.channelId = msg.content.content.body.channel_id
+    this.targetMessageId = msg.content.content.body.rong_id
+    this.emoji = msg.content.content.body.emoji
+  }
+}
+
+class RemoveReaction {
+  constructor (msg) {
+    this.msg = msg
+    this.guildId = msg.targetId.split('_')[1]
+    this.userId = msg.content.content.body.user_id
+    this.channelId = msg.content.content.body.channel_id
+    this.targetMessageId = msg.content.content.body.rong_id
+    this.emoji = msg.content.content.body.emoji
+  }
 }
 
 module.exports = {
-  TextMessage
+  TextMessage, AddReaction, RemoveReaction
 }

@@ -23,7 +23,7 @@ var {
   EventEmitter
 } = require('events')
 const {
-  TextMessage
+  TextMessage, AddReaction, RemoveReaction
 } = require('./msgType')
 var eventBus = new EventEmitter()
 
@@ -74,9 +74,9 @@ RongIMClient.setOnReceiveMessageListener({
         }
         if (msg.conversationType === 3 && typeof msg.content.content === 'object') {
           if (msg.content.content.type === 'add_reaction') {
-            eventBus.emit('add_reaction', msg)
-          } else if (msg.content.content.type === 'add_reaction') {
-            eventBus.emit('delete_reaction', msg)
+            eventBus.emit('addReaction', new AddReaction(msg))
+          } else if (msg.content.content.type === 'delete_reaction') {
+            eventBus.emit('removeReaction', new RemoveReaction(msg))
           }
         }
       }
@@ -92,4 +92,12 @@ eventBus.on('message', (e) => {
   if (e.content.startsWith('.') || e.content.startsWith('。')) {
     Commands(e)
   }
+})
+
+var Reactions = require('./reactions')
+eventBus.on('addReaction', (e) => {
+  Reactions('add', e)
+})
+eventBus.on('removeReaction', (e) => {
+  Reactions('remove', e)
 })

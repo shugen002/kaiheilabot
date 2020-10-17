@@ -47,7 +47,44 @@ server.getGuilds = async () => {
   server.guilds = res.data
   return server.guilds
 }
+server.sendMessage = (type, channelId, textMessage) => {
+  return new Promise((resolve, reject) => {
+    RongIMClient.getInstance().sendMessage(
+      type,
+      channelId,
+      textMessage, {
+        onSuccess: resolve,
+        onError: reject
+      },
+      false,
+      'Push 显示内容',
+      'Push 通知时附加信息',
+      null, {}
+    )
+  })
+}
 
+server.grantRole = (guildId, userId, roleId) => {
+  return axios.patch(`/api/v2/guild-roles/grant/${guildId.toString()}`, JSON.stringify({
+    user_id: userId.toString(),
+    role_id: roleId
+  }), {
+    headers: {
+      'content-type': 'application/json'
+    }
+  })
+}
+
+server.revokeRole = (guildId, userId, roleId) => {
+  return axios.patch(`/api/v2/guild-roles/revoke/${guildId.toString()}`, JSON.stringify({
+    user_id: userId.toString(),
+    role_id: roleId
+  }), {
+    headers: {
+      'content-type': 'application/json'
+    }
+  })
+}
 server.doTickA = async () => {
   return (await axios.get('/api/v2/channels/sync-time')).data
 }
