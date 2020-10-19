@@ -1,5 +1,3 @@
-var server = require('../server')
-var allowChannel = ['3010778326605551']
 var r = require('./r')
 var jrrp = require('./jrrp')
 var ti = require('./ti')
@@ -7,14 +5,20 @@ var li = require('./li')
 var rd10 = require('./rd10')
 var rd100 = require('./rd100')
 var rd = require('./rd')
+const storage = require('../storage')
 module.exports = function (message) {
-  if (!allowChannel.includes(message.channelId)) {
+  const guild = storage.getGuild(message.guildId)
+  if (!guild.allowChannel || !guild.allowChannel.includes(message.channelId)) {
     return
   }
+  const channel = storage.getChannel(message.channelId)
   var line = message.content.split(' ')
   var command = line.shift().split('')
   command.shift()
   command = command.join('')
+  if (!guild.allowChannel || !guild.allowChannel.includes(message.channelId)) {
+    return
+  }
   if (commands[command]) {
     commands[command].exec(line, message)
   }

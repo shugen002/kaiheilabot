@@ -3,8 +3,12 @@ class Storage {
   constructor () {
     this.guilds = {}
     this.users = {}
+    this.channels = {}
     this.server = null
     fs.mkdirSync('data/guilds', {
+      recursive: true
+    })
+    fs.mkdirSync('data/channels', {
       recursive: true
     })
     fs.mkdirSync('data/users', {
@@ -17,6 +21,13 @@ class Storage {
       this.guilds[guildId] = new JSONStorage(`data/guilds/${guildId}.json`)
     }
     return this.guilds[guildId]
+  }
+
+  getChannel (channelId) {
+    if (!this.channels[channelId]) {
+      this.channels[channelId] = new JSONStorage(`data/channels/${channelId}.json`)
+    }
+    return this.channels[channelId]
   }
 
   getUser (userId) {
@@ -48,7 +59,7 @@ function JSONStorage (path) {
     console.error('Fail to read File', path, error.message)
   }
   async function writeAsync () {
-    fs.promises.writeFile(path, JSON.stringify({})).then(() => {}).catch((error) => {
+    fs.promises.writeFile(path, JSON.stringify(data)).then(() => {}).catch((error) => {
       console.error('Fail to write File', path, error.message)
     })
   }

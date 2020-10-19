@@ -4,6 +4,7 @@ var axios = require('axios').create({
     cookie: process.env.cookie
   }
 })
+require('./utils').patchRongIMClient()
 var RongIMLib = require('./RongIMLib')
 var RongIMClient = RongIMLib.RongIMClient
 
@@ -49,7 +50,10 @@ server.getGuildList = async () => {
   return server.guilds
 }
 server.getGuildInfo = async (guildId) => {
-  return (await axios.get('/api/v2'))
+  return (await axios.get(`/api/v2/guilds/${guildId}`)).data
+}
+server.getChannelInfo = async (channelId) => {
+  return (await axios.get(`/api/v2/channels/${channelId}`)).data
 }
 server.sendMessage = (type, channelId, textMessage) => {
   return new Promise((resolve, reject) => {
