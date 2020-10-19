@@ -14,18 +14,22 @@ module.exports = {
     if (params.length === 0) {
       message.reply('使用 .help r 查看帮助')
     } else {
-      const result = RollFormat(params[0])
-      if (result.success) {
-        message.reply(`投出了 ${params[0]} 骰子，结果: ${result.form} = ${result.value}`)
-      } else {
-        message.reply(`执行中发生错误: ${result.reason}`)
-      }
+      message.reply(rollCommand(params[0]))
     }
   },
   roll,
-  RollFormat
+  RollFormat,
+  rollCommand
 }
 
+function rollCommand (format) {
+  const result = RollFormat(format)
+  if (result.success) {
+    return `投出了 ${format} 骰子，结果: ${result.form} = ${result.value}`
+  } else {
+    return `执行中发生错误: ${result.reason}`
+  }
+}
 function roll (max) {
   return Math.floor(Math.random() * max + 1)
 }

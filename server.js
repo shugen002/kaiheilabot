@@ -42,10 +42,13 @@ server.getUserInfo = async () => {
   server.user = res.data.user
   return server.user
 }
-server.getGuilds = async () => {
+server.getGuildList = async () => {
   var res = await axios.get('/api/v2/guilds')
   server.guilds = res.data
   return server.guilds
+}
+server.getGuildInfo = async (guildId) => {
+  return (await axios.get('/api/v2'))
 }
 server.sendMessage = (type, channelId, textMessage) => {
   return new Promise((resolve, reject) => {

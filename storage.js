@@ -1,3 +1,14 @@
 var fs = require('fs').promises
 
-module.exports = {}
+class Storage {
+  getGuild (guildId) {
+
+  }
+
+  getUser (userId) {}
+}
+
+class GuildStorage {}
+class ChannelStorage {}
+class UserStorage {}
+module.exports = new Storage()

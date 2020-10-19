@@ -27,11 +27,11 @@ class TextMessage {
           mention_roles: [],
           mention_here: false,
           author: {
-            nickname: 'I am a ROBOT',
-            username: 'I am a ROBOT',
-            identify_num: '4844',
-            avatar: 'https://img.kaiheila.cn/avatars/2020-10/9Kc27NEcZt08c08c.jpg/icon',
-            id: '1795611792'
+            nickname: server.user.username,
+            username: server.user.username,
+            identify_num: server.user.identify_num,
+            avatar: server.user.avatar,
+            id: server.user.id
           },
           quote: {
             create_at: this.msg.sentTime,

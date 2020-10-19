@@ -4,6 +4,9 @@ var r = require('./r')
 var jrrp = require('./jrrp')
 var ti = require('./ti')
 var li = require('./li')
+var rd10 = require('./rd10')
+var rd100 = require('./rd100')
+var rd = require('./rd')
 module.exports = function (message) {
   if (!allowChannel.includes(message.channelId)) {
     return
@@ -43,5 +46,8 @@ var commands = {
   r,
   jrrp,
   ti,
-  li
+  li,
+  rd10,
+  rd100,
+  rd
 }
