@@ -10,6 +10,7 @@ var RongIMClient = RongIMLib.RongIMClient
 var server = {}
 var timerA = null
 var timerB = null
+
 server.connect = async () => {
   var res = await axios
     .get('/api/v2/user/user-state', {

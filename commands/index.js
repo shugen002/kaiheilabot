@@ -1,5 +1,5 @@
 var server = require('../server')
-var allowChannel = ['1689186694180743']
+var allowChannel = ['3010778326605551']
 var r = require('./r')
 var jrrp = require('./jrrp')
 var ti = require('./ti')
