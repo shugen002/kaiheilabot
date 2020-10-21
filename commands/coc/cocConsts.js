@@ -228,4 +228,27 @@ const phobia = [
   '异域恐惧症(Xenophobia) : 对陌生人或外国人的恐惧。',
   '动物恐惧症(Zoophobia) : 对动物的恐惧。'
 ]
-module.exports = { ti, li, mania, phobia }
+function checkSuccess (value, standard) {
+  var result = { success: true, msg: '' }
+  if (value <= (standard)) {
+    result.success = true
+    if (value <= 5) {
+      result.msg = '大成功'
+    } else if (value <= standard / 5) {
+      result.msg = '极限成功'
+    } else if (value <= standard / 2) {
+      result.msg = '困难成功'
+    } else {
+      result.msg = '普通成功'
+    }
+  } else {
+    result.success = false
+    if (value <= 95) {
+      result.msg = '失败'
+    } else {
+      result.msg = '大失败'
+    }
+  }
+  return result
+}
+module.exports = { ti, li, mania, phobia, checkSuccess }

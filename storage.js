@@ -18,49 +18,65 @@ class Storage {
 
   getGuild (guildId) {
     if (!this.guilds[guildId]) {
-      this.guilds[guildId] = new JSONStorage(`data/guilds/${guildId}.json`)
+      this.guilds[guildId] = new JSONStorage(`data/guilds/${guildId}`)
     }
     return this.guilds[guildId]
   }
 
   getChannel (channelId) {
     if (!this.channels[channelId]) {
-      this.channels[channelId] = new JSONStorage(`data/channels/${channelId}.json`)
+      this.channels[channelId] = new JSONStorage(`data/channels/${channelId}`)
     }
     return this.channels[channelId]
   }
 
   getUser (userId) {
     if (!this.users[userId]) {
-      this.users[userId] = new JSONStorage(`data/users/${userId}.json`)
+      this.users[userId] = new JSONStorage(`data/users/${userId}`)
     }
     return this.users[userId]
   }
 
   getServer () {
     if (!this.server) {
-      this.server = new JSONStorage('data/server.json')
+      this.server = new JSONStorage('data/server')
     }
     return this.server
   }
 }
 
 function JSONStorage (path) {
-  var data = {}
+  var module = {}
+  var data = {
+    getUserModule (moduleName, userId) {
+      if (!module[moduleName]) {
+        module[moduleName] = {}
+        try {
+          fs.mkdirSync(`${path}/${moduleName}`, { recursive: true })
+        } catch (error) {
+          console.log(error)
+        }
+      }
+      if (!module[moduleName][userId]) {
+        module[moduleName][userId] = new JSONStorage(`${path}/${moduleName}/${userId}`)
+      }
+      return module[moduleName][userId]
+    }
+  }
   try {
-    if (fs.existsSync(path)) {
-      data = JSON.parse(fs.readFileSync(path, 'utf-8'))
+    if (fs.existsSync(path + '.json')) {
+      Object.assign(data, JSON.parse(fs.readFileSync(path + '.json', 'utf-8')))
     } else {
-      fs.promises.writeFile(path, JSON.stringify({})).then(() => {}).catch((error) => {
-        console.error('Fail to write File', path, error.message)
+      fs.promises.writeFile(path + '.json', JSON.stringify({})).then(() => {}).catch((error) => {
+        console.error('Fail to write File', path + '.json', error.message)
       })
     }
   } catch (error) {
-    console.error('Fail to read File', path, error.message)
+    console.error('Fail to read File', path + '.json', error.message)
   }
   async function writeAsync () {
-    fs.promises.writeFile(path, JSON.stringify(data)).then(() => {}).catch((error) => {
-      console.error('Fail to write File', path, error.message)
+    fs.promises.writeFile(path + '.json', JSON.stringify(data)).then(() => {}).catch((error) => {
+      console.error('Fail to write File', path + '.json', error.message)
     })
   }
   var handler = {

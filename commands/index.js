@@ -1,10 +1,14 @@
 var r = require('./r')
 var jrrp = require('./jrrp')
-var ti = require('./ti')
-var li = require('./li')
+var ti = require('./coc/ti')
+var li = require('./coc/li')
 var rd10 = require('./rd10')
 var rd100 = require('./rd100')
 var rd = require('./rd')
+var st = require('./coc/st')
+var ra = require('./coc/ra')
+var cocname = require('./coc/cocname')
+var coc7 = require('./coc/coc7')
 const storage = require('../storage')
 module.exports = function (message) {
   const guild = storage.getGuild(message.guildId)
@@ -53,5 +57,9 @@ var commands = {
   li,
   rd10,
   rd100,
-  rd
+  rd,
+  st,
+  ra,
+  cocname,
+  coc7
 }

@@ -1,4 +1,4 @@
-var { roll } = require('./r')
+var { roll } = require('../r')
 var { ti, phobia, mania } = require('./cocConsts')
 module.exports = {
   description: '疯狂发作-临时症状',
