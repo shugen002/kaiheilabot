@@ -13,7 +13,7 @@ module.exports = {
       return message.reply('????你在干什么')
     }
     params = params.filter((e) => { return e !== '' })
-    if (typeof params[0] === 'string' && params[0].match(/^#channel:\d+$/)) {
+    if (typeof params[0] === 'string' && params[0].match(/^#channel:\d+;$/)) {
       const channel = storage.getChannel(message.channelId)
       channel.cocInheritChannel = params[0].match(/^#channel:(\d+);$/)[1]
       message.reply(`设置继承成功 ${params[0]}`)
