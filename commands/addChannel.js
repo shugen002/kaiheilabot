@@ -10,6 +10,9 @@ module.exports = {
    * @param {{reply(content:string)=>{}}} message
    */
   async exec (params, message) {
+    if (!message.isAdmin) {
+      return
+    }
     const guild = storage.getGuild(message.guildId)
     if (guild.allowChannel) {
       if (!guild.allowChannel.includes(message.channelId)) {
