@@ -16,7 +16,10 @@ module.exports = {
     var a = params.join(' ')
     var out = ''
     var lines = a.replace(/(\d+)/g, '$1\n').split('\n')
-    const channel = storage.getChannel(message.channelId)
+    let channel = storage.getChannel(message.channelId)
+    if (channel.cocInheritChannel) {
+      channel = storage.getChannel(channel.cocInheritChannel)
+    }
     const player = channel.getUserModule('coc', message.userId)
     if (!player.attributes) {
       player.attributes = {}

@@ -83,6 +83,7 @@ function JSONStorage (path) {
     set (target, key, value) {
       target[key] = value
       writeAsync()
+      return true
     },
     deleteProperty (target, key) {
       delete target[key]

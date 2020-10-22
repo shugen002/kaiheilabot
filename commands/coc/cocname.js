@@ -16,7 +16,10 @@ module.exports = {
     if (params.length === 0) {
       return message.reply('使用 .help cocname 查看帮助')
     }
-    const channel = storage.getChannel(message.channelId)
+    let channel = storage.getChannel(message.channelId)
+    if (channel.cocInheritChannel) {
+      channel = storage.getChannel(channel.cocInheritChannel)
+    }
     const player = channel.getUserModule('coc', message.userId)
     player.name = params[0]
     message.reply(`${params[0]} 名字已设定`)

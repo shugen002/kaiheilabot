@@ -136,7 +136,11 @@ function RollFormat (input, maxValue = false) {
           }
           var dices = []
           for (let i = 0; i < element.num; i++) {
-            dices.push(roll(element.max))
+            if (maxValue) {
+              dices.push(element.max)
+            } else {
+              dices.push(roll(element.max))
+            }
           }
           var text = dices.join('+')
           var totalDice = 0

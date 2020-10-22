@@ -1,11 +1,10 @@
-var server = require('../../server')
 var storage = require('../../storage')
 var { checkSuccess } = require('./cocConsts')
 var { roll } = require('../r')
 module.exports = {
-  description: '进行属性检定',
+  description: '进行奖励骰属性检定',
   help:
-    '命令格式 .ra 属性 例如:\n.ra 技术',
+    '命令格式 .rb 属性 例如:\n.rb 技术',
   /**
    *
    * @param {string[]} params
@@ -16,7 +15,7 @@ module.exports = {
       return e !== ''
     })
     if (params.length === 0) {
-      return message.reply('使用 .help ra 查看帮助')
+      return message.reply('使用 .help rb 查看帮助')
     }
     let channel = storage.getChannel(message.channelId)
     if (channel.cocInheritChannel) {
@@ -28,11 +27,18 @@ module.exports = {
     }
     // @ts-ignore
     if (player.attributes[params[0]] !== undefined) {
+      var extra = Math.floor(Math.random() * 10)
       var value = roll(100)
-      // @ts-ignore
-      var result = checkSuccess(value, player.attributes[params[0]])
-      // @ts-ignore
-      var log = `对 ${player.name || message.userId} 进行 ${params[0]} 检定，D100=${value}/${player.attributes[params[0]]}，${result.msg}`
+      var point = Math.floor(value % 10)
+      var value2 = extra * 10 + point
+      if (value2 === 0) {
+        value2 = 100
+      }
+      var finalValue = Math.min(value, value2)
+
+      var result = checkSuccess(finalValue, player.attributes[params[0]])
+
+      var log = `对 ${player.name || message.userId} 进行 ${params[0]} 奖励骰检定，D100=${value}，奖励骰${extra}，最终结果 ${finalValue}/${player.attributes[params[0]]}，${result.msg}`
       message.reply(log)
     } else {
       message.reply(`${player.name || message.userId} 没有 ${params[0]} 这个属性/技能值`)

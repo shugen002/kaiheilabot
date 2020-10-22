@@ -29,7 +29,7 @@ var eventBus = new EventEmitter()
 
 RongIMClient.setOnReceiveMessageListener({
   onReceived: (...args) => {
-    if (args[1] === 0) {
+    if (!args[0].offLineMessage) {
       const msg = args[0]
       if (msg.messageType === 'TextMessage' && msg.objectName === 'RC:TxtMsg') {
         if (msg.conversationType === 3 && typeof msg.content.content === 'string') {
