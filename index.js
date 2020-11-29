@@ -49,7 +49,7 @@ function clientHandler (data) {
     return
   }
   if (packet.cmd && packet.cmd === 'sendMessage') {
-    server.sendMessage(3, packet.channelId,
+    server.sendMessage(packet.type, packet.channelId,
       new RongIMLib.TextMessage({
         messageName: 'TextMessage',
         content: packet.content,
