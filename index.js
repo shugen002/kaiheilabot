@@ -1,6 +1,7 @@
 // patch nodejs for RongIMLib
 global.window = global
-global.WebSocket = require('ws')
+var ws = require('ws')
+global.WebSocket = ws
 global.location = {
   protocol: 'https:'
 }
@@ -18,49 +19,63 @@ Object.assign(global, wrtc)
 
 var RongIMLib = require('./RongIMLib')
 var RongIMClient = RongIMLib.RongIMClient
-
-var {
-  EventEmitter
-} = require('events')
-const {
-  TextMessage, AddReaction, RemoveReaction
-} = require('./msgType')
-var eventBus = new EventEmitter()
-
-RongIMClient.setOnReceiveMessageListener({
-  onReceived: (...args) => {
-    if (!args[0].offLineMessage) {
-      const msg = args[0]
-      if (msg.messageType === 'TextMessage' && msg.objectName === 'RC:TxtMsg') {
-        if (msg.conversationType === 3 && typeof msg.content.content === 'string') {
-          eventBus.emit('message', new TextMessage(msg))
-        }
-        if (msg.conversationType === 3 && typeof msg.content.content === 'object') {
-          if (msg.content.content.type === 'add_reaction') {
-            eventBus.emit('addReaction', new AddReaction(msg))
-          } else if (msg.content.content.type === 'delete_reaction') {
-            eventBus.emit('removeReaction', new RemoveReaction(msg))
-          }
-        }
-      }
-    }
-  }
+var wsServer = new ws.Server({
+  host: process.env.host,
+  port: parseInt(process.env.port)
 })
 
 var server = require('./server')
-server.connect()
 
-var Commands = require('./commands')
-eventBus.on('message', (e) => {
-  if (e.content.startsWith('.') || e.content.startsWith('。')) {
-    Commands(e)
+wsServer.on('connection', (socket) => {
+  socket.on('message', clientHandler)
+})
+
+RongIMClient.setOnReceiveMessageListener({
+  onReceived: (...args) => {
+    var data = JSON.stringify({
+      cmd: 'receiveMessage',
+      args: args
+    })
+    wsServer.clients.forEach((e) => {
+      e.send(data, () => {})
+    })
   }
 })
+function clientHandler (data) {
+  try {
+    var packet = JSON.parse(data)
+  } catch (error) {
+    console.log(error)
+    return
+  }
+  if (packet.cmd && packet.cmd === 'sendMessage') {
+    server.sendMessage(3, packet.channelId,
+      new RongIMLib.TextMessage({
+        messageName: 'TextMessage',
+        content: packet.content,
+        extra: JSON.stringify({
+          type: '1',
+          guild_id: packet.guildId,
+          mention: [],
+          mention_all: false,
+          mention_roles: [],
+          mention_here: false,
+          author: {
+            nickname: server.user.username,
+            username: server.user.username,
+            identify_num: server.user.identify_num,
+            avatar: server.user.avatar,
+            id: server.user.id
+          }
+        }),
+        mentionedInfo: {
+          type: 2,
+          userIdList: []
+        }
+      }))
+      .then((e) => {})
+      .catch(console.error)
+  }
+}
 
-var Reactions = require('./reactions')
-eventBus.on('addReaction', (e) => {
-  Reactions('add', e)
-})
-eventBus.on('removeReaction', (e) => {
-  Reactions('remove', e)
-})
+server.connect()
