@@ -1,6 +1,6 @@
 var RongIMLib = require('./RongIMLib')
 var RongIMClient = RongIMLib.RongIMClient
-function patchRongIMClient () {
+function patchRongIMClient() {
   RongIMClient.init('qd46yzrfqp4qf')
 
   RongIMClient.registerMessageType(
@@ -36,9 +36,9 @@ function patchRongIMClient () {
   RongIMClient.setConnectionStatusListener({
     onChanged: (...args) => {
       console.log('ConnectionStatusChanged', ...args)
-    }
+    },
   })
 }
 module.exports = {
-  patchRongIMClient
+  patchRongIMClient,
 }

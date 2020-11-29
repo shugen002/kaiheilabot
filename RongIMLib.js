@@ -3,7 +3,7 @@
     用途: 自动拼接暴露方式
     命令: grunt release 中 concat
 */
-(function (global, factory) {
+;(function (global, factory) {
   if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = factory()
   } else if (typeof define === 'function' && (define.amd || define.cmd)) {
@@ -11,7 +11,7 @@
   } else {
     var tempIMLib = factory()
     var tempClient = tempIMLib.RongIMClient
-    var isExists = (!!global.RongIMLib)
+    var isExists = !!global.RongIMLib
     if (isExists) {
       var currentClient = RongIMLib.RongIMClient || {}
       for (var key in currentClient) {
@@ -342,7 +342,9 @@
         a.classname = b
       }
       this.setContent = function (b) {
-        if (b) { a.content = b }
+        if (b) {
+          a.content = b
+        }
       }
       this.setDataTime = function (b) {
         a.dataTime = b
@@ -690,7 +692,7 @@
         for (var i = 0, arr = []; i < b.length; i++) {
           arr.push({
             id: b[i].getContent().id,
-            name: b[i].getContent().name
+            name: b[i].getContent().name,
           })
         }
         a.groupInfo = arr
@@ -1028,7 +1030,7 @@
       this.setRtcToken = function (b) {
         a.rtcToken = b
       }
-    }
+    },
   }
   for (var f in Polling) {
     Polling[f].decode = function (b) {
@@ -1045,23 +1047,23 @@
   }
 
   /*
-     * JavaScript MD5
-     * https://github.com/blueimp/JavaScript-MD5
-     *
-     * Copyright 2011, Sebastian Tschan
-     * https://blueimp.net
-     *
-     * Licensed under the MIT license:
-     * http://www.opensource.org/licenses/MIT
-     *
-     * Based on
-     * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
-     * Digest Algorithm, as defined in RFC 1321.
-     * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
-     * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
-     * Distributed under the BSD License
-     * See http://pajhome.org.uk/crypt/md5 for more info.
-     */
+   * JavaScript MD5
+   * https://github.com/blueimp/JavaScript-MD5
+   *
+   * Copyright 2011, Sebastian Tschan
+   * https://blueimp.net
+   *
+   * Licensed under the MIT license:
+   * http://www.opensource.org/licenses/MIT
+   *
+   * Based on
+   * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
+   * Digest Algorithm, as defined in RFC 1321.
+   * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
+   * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
+   * Distributed under the BSD License
+   * See http://pajhome.org.uk/crypt/md5 for more info.
+   */
 
   /* jslint bitwise: true */
   /* global unescape, define, module */
@@ -1070,54 +1072,58 @@
     'use strict'
 
     /*
-         * Add integers, wrapping at 2^32. This uses 16-bit operations internally
-         * to work around bugs in some JS interpreters.
-         */
-    function safe_add (x, y) {
-      var lsw = (x & 0xFFFF) + (y & 0xFFFF)
+     * Add integers, wrapping at 2^32. This uses 16-bit operations internally
+     * to work around bugs in some JS interpreters.
+     */
+    function safe_add(x, y) {
+      var lsw = (x & 0xffff) + (y & 0xffff)
       var msw = (x >> 16) + (y >> 16) + (lsw >> 16)
-      return (msw << 16) | (lsw & 0xFFFF)
+      return (msw << 16) | (lsw & 0xffff)
     }
 
     /*
-         * Bitwise rotate a 32-bit number to the left.
-         */
-    function bit_rol (num, cnt) {
+     * Bitwise rotate a 32-bit number to the left.
+     */
+    function bit_rol(num, cnt) {
       return (num << cnt) | (num >>> (32 - cnt))
     }
 
     /*
-         * These functions implement the four basic operations the algorithm uses.
-         */
-    function md5_cmn (q, a, b, x, s, t) {
+     * These functions implement the four basic operations the algorithm uses.
+     */
+    function md5_cmn(q, a, b, x, s, t) {
       return safe_add(bit_rol(safe_add(safe_add(a, q), safe_add(x, t)), s), b)
     }
 
-    function md5_ff (a, b, c, d, x, s, t) {
-      return md5_cmn((b & c) | ((~b) & d), a, b, x, s, t)
+    function md5_ff(a, b, c, d, x, s, t) {
+      return md5_cmn((b & c) | (~b & d), a, b, x, s, t)
     }
 
-    function md5_gg (a, b, c, d, x, s, t) {
-      return md5_cmn((b & d) | (c & (~d)), a, b, x, s, t)
+    function md5_gg(a, b, c, d, x, s, t) {
+      return md5_cmn((b & d) | (c & ~d), a, b, x, s, t)
     }
 
-    function md5_hh (a, b, c, d, x, s, t) {
+    function md5_hh(a, b, c, d, x, s, t) {
       return md5_cmn(b ^ c ^ d, a, b, x, s, t)
     }
 
-    function md5_ii (a, b, c, d, x, s, t) {
-      return md5_cmn(c ^ (b | (~d)), a, b, x, s, t)
+    function md5_ii(a, b, c, d, x, s, t) {
+      return md5_cmn(c ^ (b | ~d), a, b, x, s, t)
     }
 
     /*
-         * Calculate the MD5 of an array of little-endian words, and a bit length.
-         */
-    function binl_md5 (x, len) {
+     * Calculate the MD5 of an array of little-endian words, and a bit length.
+     */
+    function binl_md5(x, len) {
       /* append padding */
-      x[len >> 5] |= 0x80 << (len % 32)
+      x[len >> 5] |= 0x80 << len % 32
       x[(((len + 64) >>> 9) << 4) + 14] = len
 
-      var i; var olda; var oldb; var oldc; var oldd
+      var i
+      var olda
+      var oldb
+      var oldc
+      var oldd
       var a = 1732584193
       var b = -271733879
       var c = -1732584194
@@ -1206,22 +1212,22 @@
     }
 
     /*
-         * Convert an array of little-endian words to a string
-         */
-    function binl2rstr (input) {
+     * Convert an array of little-endian words to a string
+     */
+    function binl2rstr(input) {
       var i
       var output = ''
       for (i = 0; i < input.length * 32; i += 8) {
-        output += String.fromCharCode((input[i >> 5] >>> (i % 32)) & 0xFF)
+        output += String.fromCharCode((input[i >> 5] >>> i % 32) & 0xff)
       }
       return output
     }
 
     /*
-         * Convert a raw string to an array of little-endian words
-         * Characters >255 have their high-byte silently ignored.
-         */
-    function rstr2binl (input) {
+     * Convert a raw string to an array of little-endian words
+     * Characters >255 have their high-byte silently ignored.
+     */
+    function rstr2binl(input) {
       var i
       var output = []
       output[(input.length >> 2) - 1] = undefined
@@ -1229,22 +1235,22 @@
         output[i] = 0
       }
       for (i = 0; i < input.length * 8; i += 8) {
-        output[i >> 5] |= (input.charCodeAt(i / 8) & 0xFF) << (i % 32)
+        output[i >> 5] |= (input.charCodeAt(i / 8) & 0xff) << i % 32
       }
       return output
     }
 
     /*
-         * Calculate the MD5 of a raw string
-         */
-    function rstr_md5 (s) {
+     * Calculate the MD5 of a raw string
+     */
+    function rstr_md5(s) {
       return binl2rstr(binl_md5(rstr2binl(s), s.length * 8))
     }
 
     /*
-         * Calculate the HMAC-MD5, of a key and some data (raw strings)
-         */
-    function rstr_hmac_md5 (key, data) {
+     * Calculate the HMAC-MD5, of a key and some data (raw strings)
+     */
+    function rstr_hmac_md5(key, data) {
       var i
       var bkey = rstr2binl(key)
       var ipad = []
@@ -1256,55 +1262,54 @@
       }
       for (i = 0; i < 16; i += 1) {
         ipad[i] = bkey[i] ^ 0x36363636
-        opad[i] = bkey[i] ^ 0x5C5C5C5C
+        opad[i] = bkey[i] ^ 0x5c5c5c5c
       }
       hash = binl_md5(ipad.concat(rstr2binl(data)), 512 + data.length * 8)
       return binl2rstr(binl_md5(opad.concat(hash), 512 + 128))
     }
 
     /*
-         * Convert a raw string to a hex string
-         */
-    function rstr2hex (input) {
+     * Convert a raw string to a hex string
+     */
+    function rstr2hex(input) {
       var hex_tab = '0123456789abcdef'
       var output = ''
       var x
       var i
       for (i = 0; i < input.length; i += 1) {
         x = input.charCodeAt(i)
-        output += hex_tab.charAt((x >>> 4) & 0x0F) +
-                    hex_tab.charAt(x & 0x0F)
+        output += hex_tab.charAt((x >>> 4) & 0x0f) + hex_tab.charAt(x & 0x0f)
       }
       return output
     }
 
     /*
-         * Encode a string as utf-8
-         */
-    function str2rstr_utf8 (input) {
+     * Encode a string as utf-8
+     */
+    function str2rstr_utf8(input) {
       return unescape(encodeURIComponent(input))
     }
 
     /*
-         * Take string arguments and return either raw or hex encoded strings
-         */
-    function raw_md5 (s) {
+     * Take string arguments and return either raw or hex encoded strings
+     */
+    function raw_md5(s) {
       return rstr_md5(str2rstr_utf8(s))
     }
 
-    function hex_md5 (s) {
+    function hex_md5(s) {
       return rstr2hex(raw_md5(s))
     }
 
-    function raw_hmac_md5 (k, d) {
+    function raw_hmac_md5(k, d) {
       return rstr_hmac_md5(str2rstr_utf8(k), str2rstr_utf8(d))
     }
 
-    function hex_hmac_md5 (k, d) {
+    function hex_hmac_md5(k, d) {
       return rstr2hex(raw_hmac_md5(k, d))
     }
 
-    function md5 (string, key, raw) {
+    function md5(string, key, raw) {
       if (!key) {
         if (!raw) {
           return hex_md5(string)
@@ -1317,770 +1322,876 @@
       return raw_hmac_md5(key, string)
     }
     return md5
-  }())
+  })()
 
-  var RongIMLib;
-  (function (RongIMLib) {
-    (function (MentionedType) {
-      MentionedType[MentionedType.ALL = 1] = 'ALL'
-      MentionedType[MentionedType.PART = 2] = 'PART'
+  var RongIMLib
+  ;(function (RongIMLib) {
+    ;(function (MentionedType) {
+      MentionedType[(MentionedType.ALL = 1)] = 'ALL'
+      MentionedType[(MentionedType.PART = 2)] = 'PART'
     })(RongIMLib.MentionedType || (RongIMLib.MentionedType = {}))
-    var MentionedType = RongIMLib.MentionedType;
-    (function (MethodType) {
-      MethodType[MethodType.CUSTOMER_SERVICE = 1] = 'CUSTOMER_SERVICE'
-      MethodType[MethodType.RECALL = 2] = 'RECALL'
+    var MentionedType = RongIMLib.MentionedType
+    ;(function (MethodType) {
+      MethodType[(MethodType.CUSTOMER_SERVICE = 1)] = 'CUSTOMER_SERVICE'
+      MethodType[(MethodType.RECALL = 2)] = 'RECALL'
     })(RongIMLib.MethodType || (RongIMLib.MethodType = {}))
-    var MethodType = RongIMLib.MethodType;
-    (function (BlacklistStatus) {
+    var MethodType = RongIMLib.MethodType
+    ;(function (BlacklistStatus) {
       /**
-             * 在黑名单中。
-             */
-      BlacklistStatus[BlacklistStatus.IN_BLACK_LIST = 0] = 'IN_BLACK_LIST'
+       * 在黑名单中。
+       */
+      BlacklistStatus[(BlacklistStatus.IN_BLACK_LIST = 0)] = 'IN_BLACK_LIST'
       /**
-             * 不在黑名单中。
-             */
-      BlacklistStatus[BlacklistStatus.NOT_IN_BLACK_LIST = 1] = 'NOT_IN_BLACK_LIST'
+       * 不在黑名单中。
+       */
+      BlacklistStatus[(BlacklistStatus.NOT_IN_BLACK_LIST = 1)] =
+        'NOT_IN_BLACK_LIST'
     })(RongIMLib.BlacklistStatus || (RongIMLib.BlacklistStatus = {}))
-    var BlacklistStatus = RongIMLib.BlacklistStatus;
-    (function (ConnectionChannel) {
-      ConnectionChannel[ConnectionChannel.XHR_POLLING = 0] = 'XHR_POLLING'
-      ConnectionChannel[ConnectionChannel.WEBSOCKET = 1] = 'WEBSOCKET'
+    var BlacklistStatus = RongIMLib.BlacklistStatus
+    ;(function (ConnectionChannel) {
+      ConnectionChannel[(ConnectionChannel.XHR_POLLING = 0)] = 'XHR_POLLING'
+      ConnectionChannel[(ConnectionChannel.WEBSOCKET = 1)] = 'WEBSOCKET'
       // 外部调用
-      ConnectionChannel[ConnectionChannel.HTTP = 0] = 'HTTP'
+      ConnectionChannel[(ConnectionChannel.HTTP = 0)] = 'HTTP'
       // 外部调用
-      ConnectionChannel[ConnectionChannel.HTTPS = 1] = 'HTTPS'
+      ConnectionChannel[(ConnectionChannel.HTTPS = 1)] = 'HTTPS'
     })(RongIMLib.ConnectionChannel || (RongIMLib.ConnectionChannel = {}))
-    var ConnectionChannel = RongIMLib.ConnectionChannel;
-    (function (CustomerType) {
-      CustomerType[CustomerType.ONLY_ROBOT = 1] = 'ONLY_ROBOT'
-      CustomerType[CustomerType.ONLY_HUMAN = 2] = 'ONLY_HUMAN'
-      CustomerType[CustomerType.ROBOT_FIRST = 3] = 'ROBOT_FIRST'
-      CustomerType[CustomerType.HUMAN_FIRST = 4] = 'HUMAN_FIRST'
+    var ConnectionChannel = RongIMLib.ConnectionChannel
+    ;(function (CustomerType) {
+      CustomerType[(CustomerType.ONLY_ROBOT = 1)] = 'ONLY_ROBOT'
+      CustomerType[(CustomerType.ONLY_HUMAN = 2)] = 'ONLY_HUMAN'
+      CustomerType[(CustomerType.ROBOT_FIRST = 3)] = 'ROBOT_FIRST'
+      CustomerType[(CustomerType.HUMAN_FIRST = 4)] = 'HUMAN_FIRST'
     })(RongIMLib.CustomerType || (RongIMLib.CustomerType = {}))
-    var CustomerType = RongIMLib.CustomerType;
-    (function (GetChatRoomType) {
-      GetChatRoomType[GetChatRoomType.NONE = 0] = 'NONE'
-      GetChatRoomType[GetChatRoomType.SQQUENCE = 1] = 'SQQUENCE'
-      GetChatRoomType[GetChatRoomType.REVERSE = 2] = 'REVERSE'
+    var CustomerType = RongIMLib.CustomerType
+    ;(function (GetChatRoomType) {
+      GetChatRoomType[(GetChatRoomType.NONE = 0)] = 'NONE'
+      GetChatRoomType[(GetChatRoomType.SQQUENCE = 1)] = 'SQQUENCE'
+      GetChatRoomType[(GetChatRoomType.REVERSE = 2)] = 'REVERSE'
     })(RongIMLib.GetChatRoomType || (RongIMLib.GetChatRoomType = {}))
-    var GetChatRoomType = RongIMLib.GetChatRoomType;
-    (function (ConnectionStatus) {
+    var GetChatRoomType = RongIMLib.GetChatRoomType
+    ;(function (ConnectionStatus) {
       /**
-             * 连接成功。
-             */
-      ConnectionStatus[ConnectionStatus.CONNECTED = 0] = 'CONNECTED'
+       * 连接成功。
+       */
+      ConnectionStatus[(ConnectionStatus.CONNECTED = 0)] = 'CONNECTED'
       /**
-             * 连接中。
-             */
-      ConnectionStatus[ConnectionStatus.CONNECTING = 1] = 'CONNECTING'
+       * 连接中。
+       */
+      ConnectionStatus[(ConnectionStatus.CONNECTING = 1)] = 'CONNECTING'
       /**
-             * 断开连接。
-             */
-      ConnectionStatus[ConnectionStatus.DISCONNECTED = 2] = 'DISCONNECTED'
+       * 断开连接。
+       */
+      ConnectionStatus[(ConnectionStatus.DISCONNECTED = 2)] = 'DISCONNECTED'
       /**
-             * 用户账户在其他设备登录，本机会被踢掉线。
-             */
-      ConnectionStatus[ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT = 6] = 'KICKED_OFFLINE_BY_OTHER_CLIENT'
+       * 用户账户在其他设备登录，本机会被踢掉线。
+       */
+      ConnectionStatus[(ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT = 6)] =
+        'KICKED_OFFLINE_BY_OTHER_CLIENT'
       /**
-             * websocket 连接失败
-             */
-      ConnectionStatus[ConnectionStatus.WEBSOCKET_UNAVAILABLE = 7] = 'WEBSOCKET_UNAVAILABLE'
+       * websocket 连接失败
+       */
+      ConnectionStatus[(ConnectionStatus.WEBSOCKET_UNAVAILABLE = 7)] =
+        'WEBSOCKET_UNAVAILABLE'
       /**
-             * websocket 报错
-             */
-      ConnectionStatus[ConnectionStatus.WEBSOCKET_ERROR = 8] = 'WEBSOCKET_ERROR'
+       * websocket 报错
+       */
+      ConnectionStatus[(ConnectionStatus.WEBSOCKET_ERROR = 8)] =
+        'WEBSOCKET_ERROR'
       /**
-             * 网络不可用。
-             */
-      ConnectionStatus[ConnectionStatus.NETWORK_UNAVAILABLE = 3] = 'NETWORK_UNAVAILABLE'
+       * 网络不可用。
+       */
+      ConnectionStatus[(ConnectionStatus.NETWORK_UNAVAILABLE = 3)] =
+        'NETWORK_UNAVAILABLE'
       /**
-             * 域名错误
-             */
-      ConnectionStatus[ConnectionStatus.DOMAIN_INCORRECT = 12] = 'DOMAIN_INCORRECT'
+       * 域名错误
+       */
+      ConnectionStatus[(ConnectionStatus.DOMAIN_INCORRECT = 12)] =
+        'DOMAIN_INCORRECT'
       /**
-             * appkey 不正确
-             */
-      ConnectionStatus[ConnectionStatus.APPKEY_IS_FAKE = 20] = 'APPKEY_IS_FAKE'
+       * appkey 不正确
+       */
+      ConnectionStatus[(ConnectionStatus.APPKEY_IS_FAKE = 20)] =
+        'APPKEY_IS_FAKE'
       /**
-             *  连接关闭。
-             */
-      ConnectionStatus[ConnectionStatus.CONNECTION_CLOSED = 4] = 'CONNECTION_CLOSED'
+       *  连接关闭。
+       */
+      ConnectionStatus[(ConnectionStatus.CONNECTION_CLOSED = 4)] =
+        'CONNECTION_CLOSED'
       /*
                 互踢次数过多（count > 5），此时可能出现：在其它他设备登陆有 reconnect 逻辑
             */
-      ConnectionStatus[ConnectionStatus.ULTRALIMIT = 1101] = 'ULTRALIMIT'
+      ConnectionStatus[(ConnectionStatus.ULTRALIMIT = 1101)] = 'ULTRALIMIT'
       /*
                 开始请求导航
             */
-      ConnectionStatus[ConnectionStatus.REQUEST_NAVI = 201] = 'REQUEST_NAVI'
+      ConnectionStatus[(ConnectionStatus.REQUEST_NAVI = 201)] = 'REQUEST_NAVI'
       /*
                 请求导航结束
             */
-      ConnectionStatus[ConnectionStatus.RESPONSE_NAVI = 202] = 'RESPONSE_NAVI'
+      ConnectionStatus[(ConnectionStatus.RESPONSE_NAVI = 202)] = 'RESPONSE_NAVI'
       /*
                 请求导航失败
             */
-      ConnectionStatus[ConnectionStatus.RESPONSE_NAVI_ERROR = 203] = 'RESPONSE_NAVI_ERROR'
+      ConnectionStatus[(ConnectionStatus.RESPONSE_NAVI_ERROR = 203)] =
+        'RESPONSE_NAVI_ERROR'
       /*
                 请求导航超时
             */
-      ConnectionStatus[ConnectionStatus.RESPONSE_NAVI_TIMEOUT = 204] = 'RESPONSE_NAVI_TIMEOUT'
+      ConnectionStatus[(ConnectionStatus.RESPONSE_NAVI_TIMEOUT = 204)] =
+        'RESPONSE_NAVI_TIMEOUT'
     })(RongIMLib.ConnectionStatus || (RongIMLib.ConnectionStatus = {}))
-    var ConnectionStatus = RongIMLib.ConnectionStatus;
-    (function (ConversationNotificationStatus) {
+    var ConnectionStatus = RongIMLib.ConnectionStatus
+    ;(function (ConversationNotificationStatus) {
       /**
-             * 免打扰状态，关闭对应会话的通知提醒。
-             */
-      ConversationNotificationStatus[ConversationNotificationStatus.DO_NOT_DISTURB = 0] = 'DO_NOT_DISTURB'
+       * 免打扰状态，关闭对应会话的通知提醒。
+       */
+      ConversationNotificationStatus[
+        (ConversationNotificationStatus.DO_NOT_DISTURB = 0)
+      ] = 'DO_NOT_DISTURB'
       /**
-             * 提醒。
-             */
-      ConversationNotificationStatus[ConversationNotificationStatus.NOTIFY = 1] = 'NOTIFY'
-    })(RongIMLib.ConversationNotificationStatus || (RongIMLib.ConversationNotificationStatus = {}))
-    var ConversationNotificationStatus = RongIMLib.ConversationNotificationStatus;
-    (function (ConversationType) {
-      ConversationType[ConversationType.NONE = 0] = 'NONE'
-      ConversationType[ConversationType.PRIVATE = 1] = 'PRIVATE'
-      ConversationType[ConversationType.DISCUSSION = 2] = 'DISCUSSION'
-      ConversationType[ConversationType.GROUP = 3] = 'GROUP'
-      ConversationType[ConversationType.CHATROOM = 4] = 'CHATROOM'
-      ConversationType[ConversationType.CUSTOMER_SERVICE = 5] = 'CUSTOMER_SERVICE'
-      ConversationType[ConversationType.SYSTEM = 6] = 'SYSTEM'
+       * 提醒。
+       */
+      ConversationNotificationStatus[
+        (ConversationNotificationStatus.NOTIFY = 1)
+      ] = 'NOTIFY'
+    })(
+      RongIMLib.ConversationNotificationStatus ||
+        (RongIMLib.ConversationNotificationStatus = {})
+    )
+    var ConversationNotificationStatus =
+      RongIMLib.ConversationNotificationStatus
+    ;(function (ConversationType) {
+      ConversationType[(ConversationType.NONE = 0)] = 'NONE'
+      ConversationType[(ConversationType.PRIVATE = 1)] = 'PRIVATE'
+      ConversationType[(ConversationType.DISCUSSION = 2)] = 'DISCUSSION'
+      ConversationType[(ConversationType.GROUP = 3)] = 'GROUP'
+      ConversationType[(ConversationType.CHATROOM = 4)] = 'CHATROOM'
+      ConversationType[(ConversationType.CUSTOMER_SERVICE = 5)] =
+        'CUSTOMER_SERVICE'
+      ConversationType[(ConversationType.SYSTEM = 6)] = 'SYSTEM'
       // 默认关注 MC
-      ConversationType[ConversationType.APP_PUBLIC_SERVICE = 7] = 'APP_PUBLIC_SERVICE'
+      ConversationType[(ConversationType.APP_PUBLIC_SERVICE = 7)] =
+        'APP_PUBLIC_SERVICE'
       // 手工关注 MP
-      ConversationType[ConversationType.PUBLIC_SERVICE = 8] = 'PUBLIC_SERVICE'
+      ConversationType[(ConversationType.PUBLIC_SERVICE = 8)] = 'PUBLIC_SERVICE'
     })(RongIMLib.ConversationType || (RongIMLib.ConversationType = {}))
-    var ConversationType = RongIMLib.ConversationType;
-    (function (DiscussionInviteStatus) {
+    var ConversationType = RongIMLib.ConversationType
+    ;(function (DiscussionInviteStatus) {
       /**
-             * 开放邀请。
-             */
-      DiscussionInviteStatus[DiscussionInviteStatus.OPENED = 0] = 'OPENED'
+       * 开放邀请。
+       */
+      DiscussionInviteStatus[(DiscussionInviteStatus.OPENED = 0)] = 'OPENED'
       /**
-             * 关闭邀请。
-             */
-      DiscussionInviteStatus[DiscussionInviteStatus.CLOSED = 1] = 'CLOSED'
-    })(RongIMLib.DiscussionInviteStatus || (RongIMLib.DiscussionInviteStatus = {}))
-    var DiscussionInviteStatus = RongIMLib.DiscussionInviteStatus;
-    (function (ErrorCode) {
-      ErrorCode[ErrorCode.RECALL_MESSAGE = 25101] = 'RECALL_MESSAGE'
+       * 关闭邀请。
+       */
+      DiscussionInviteStatus[(DiscussionInviteStatus.CLOSED = 1)] = 'CLOSED'
+    })(
+      RongIMLib.DiscussionInviteStatus ||
+        (RongIMLib.DiscussionInviteStatus = {})
+    )
+    var DiscussionInviteStatus = RongIMLib.DiscussionInviteStatus
+    ;(function (ErrorCode) {
+      ErrorCode[(ErrorCode.RECALL_MESSAGE = 25101)] = 'RECALL_MESSAGE'
       /**
-             * 发送频率过快
-             */
-      ErrorCode[ErrorCode.SEND_FREQUENCY_TOO_FAST = 20604] = 'SEND_FREQUENCY_TOO_FAST'
-      ErrorCode[ErrorCode.RC_MSG_UNAUTHORIZED = 20406] = 'RC_MSG_UNAUTHORIZED'
+       * 发送频率过快
+       */
+      ErrorCode[(ErrorCode.SEND_FREQUENCY_TOO_FAST = 20604)] =
+        'SEND_FREQUENCY_TOO_FAST'
+      ErrorCode[(ErrorCode.RC_MSG_UNAUTHORIZED = 20406)] = 'RC_MSG_UNAUTHORIZED'
       /**
-             * 群组 Id 无效
-             */
-      ErrorCode[ErrorCode.RC_DISCUSSION_GROUP_ID_INVALID = 20407] = 'RC_DISCUSSION_GROUP_ID_INVALID'
+       * 群组 Id 无效
+       */
+      ErrorCode[(ErrorCode.RC_DISCUSSION_GROUP_ID_INVALID = 20407)] =
+        'RC_DISCUSSION_GROUP_ID_INVALID'
       /**
-             * 群组被禁言
-             */
-      ErrorCode[ErrorCode.FORBIDDEN_IN_GROUP = 22408] = 'FORBIDDEN_IN_GROUP'
+       * 群组被禁言
+       */
+      ErrorCode[(ErrorCode.FORBIDDEN_IN_GROUP = 22408)] = 'FORBIDDEN_IN_GROUP'
       /**
-             * 不在讨论组。
-             */
-      ErrorCode[ErrorCode.NOT_IN_DISCUSSION = 21406] = 'NOT_IN_DISCUSSION'
+       * 不在讨论组。
+       */
+      ErrorCode[(ErrorCode.NOT_IN_DISCUSSION = 21406)] = 'NOT_IN_DISCUSSION'
       /**
-             * 不在群组。
-             */
-      ErrorCode[ErrorCode.NOT_IN_GROUP = 22406] = 'NOT_IN_GROUP'
+       * 不在群组。
+       */
+      ErrorCode[(ErrorCode.NOT_IN_GROUP = 22406)] = 'NOT_IN_GROUP'
       /**
-             * 不在聊天室。
-             */
-      ErrorCode[ErrorCode.NOT_IN_CHATROOM = 23406] = 'NOT_IN_CHATROOM'
+       * 不在聊天室。
+       */
+      ErrorCode[(ErrorCode.NOT_IN_CHATROOM = 23406)] = 'NOT_IN_CHATROOM'
       /**
-             *聊天室被禁言
-             */
-      ErrorCode[ErrorCode.FORBIDDEN_IN_CHATROOM = 23408] = 'FORBIDDEN_IN_CHATROOM'
+       *聊天室被禁言
+       */
+      ErrorCode[(ErrorCode.FORBIDDEN_IN_CHATROOM = 23408)] =
+        'FORBIDDEN_IN_CHATROOM'
       /**
-             * 聊天室中成员被踢出
-             */
-      ErrorCode[ErrorCode.RC_CHATROOM_USER_KICKED = 23409] = 'RC_CHATROOM_USER_KICKED'
+       * 聊天室中成员被踢出
+       */
+      ErrorCode[(ErrorCode.RC_CHATROOM_USER_KICKED = 23409)] =
+        'RC_CHATROOM_USER_KICKED'
       /**
-             * 聊天室不存在
-             */
-      ErrorCode[ErrorCode.RC_CHATROOM_NOT_EXIST = 23410] = 'RC_CHATROOM_NOT_EXIST'
+       * 聊天室不存在
+       */
+      ErrorCode[(ErrorCode.RC_CHATROOM_NOT_EXIST = 23410)] =
+        'RC_CHATROOM_NOT_EXIST'
       /**
-             * 聊天室成员已满
-             */
-      ErrorCode[ErrorCode.RC_CHATROOM_IS_FULL = 23411] = 'RC_CHATROOM_IS_FULL'
+       * 聊天室成员已满
+       */
+      ErrorCode[(ErrorCode.RC_CHATROOM_IS_FULL = 23411)] = 'RC_CHATROOM_IS_FULL'
       /**
-             * 获取聊天室信息参数无效
-             */
-      ErrorCode[ErrorCode.RC_CHATROOM_PATAMETER_INVALID = 23412] = 'RC_CHATROOM_PATAMETER_INVALID'
+       * 获取聊天室信息参数无效
+       */
+      ErrorCode[(ErrorCode.RC_CHATROOM_PATAMETER_INVALID = 23412)] =
+        'RC_CHATROOM_PATAMETER_INVALID'
       /**
-             * 聊天室异常
-             */
-      ErrorCode[ErrorCode.CHATROOM_GET_HISTORYMSG_ERROR = 23413] = 'CHATROOM_GET_HISTORYMSG_ERROR'
+       * 聊天室异常
+       */
+      ErrorCode[(ErrorCode.CHATROOM_GET_HISTORYMSG_ERROR = 23413)] =
+        'CHATROOM_GET_HISTORYMSG_ERROR'
       /**
-             * 没有打开聊天室消息存储
-             */
-      ErrorCode[ErrorCode.CHATROOM_NOT_OPEN_HISTORYMSG_STORE = 23414] = 'CHATROOM_NOT_OPEN_HISTORYMSG_STORE'
+       * 没有打开聊天室消息存储
+       */
+      ErrorCode[(ErrorCode.CHATROOM_NOT_OPEN_HISTORYMSG_STORE = 23414)] =
+        'CHATROOM_NOT_OPEN_HISTORYMSG_STORE'
       /**
-             * 敏感词屏蔽
-             */
-      ErrorCode[ErrorCode.SENSITIVE_SHIELD = 21501] = 'SENSITIVE_SHIELD'
-      ErrorCode[ErrorCode.SENSITIVE_REPLACE = 21502] = 'SENSITIVE_REPLACE'
-      ErrorCode[ErrorCode.TIMEOUT = -1] = 'TIMEOUT'
+       * 敏感词屏蔽
+       */
+      ErrorCode[(ErrorCode.SENSITIVE_SHIELD = 21501)] = 'SENSITIVE_SHIELD'
+      ErrorCode[(ErrorCode.SENSITIVE_REPLACE = 21502)] = 'SENSITIVE_REPLACE'
+      ErrorCode[(ErrorCode.TIMEOUT = -1)] = 'TIMEOUT'
       /**
-             * 未知原因失败。
-             */
-      ErrorCode[ErrorCode.UNKNOWN = -2] = 'UNKNOWN'
+       * 未知原因失败。
+       */
+      ErrorCode[(ErrorCode.UNKNOWN = -2)] = 'UNKNOWN'
       /**
-             * 加入讨论失败
-             */
-      ErrorCode[ErrorCode.JOIN_IN_DISCUSSION = 21407] = 'JOIN_IN_DISCUSSION'
+       * 加入讨论失败
+       */
+      ErrorCode[(ErrorCode.JOIN_IN_DISCUSSION = 21407)] = 'JOIN_IN_DISCUSSION'
       /**
-             * 创建讨论组失败
-             */
-      ErrorCode[ErrorCode.CREATE_DISCUSSION = 21408] = 'CREATE_DISCUSSION'
+       * 创建讨论组失败
+       */
+      ErrorCode[(ErrorCode.CREATE_DISCUSSION = 21408)] = 'CREATE_DISCUSSION'
       /**
-             * 设置讨论组邀请状态失败
-             */
-      ErrorCode[ErrorCode.INVITE_DICUSSION = 21409] = 'INVITE_DICUSSION'
+       * 设置讨论组邀请状态失败
+       */
+      ErrorCode[(ErrorCode.INVITE_DICUSSION = 21409)] = 'INVITE_DICUSSION'
       /**
-             *获取用户失败
-             */
-      ErrorCode[ErrorCode.GET_USERINFO_ERROR = 23407] = 'GET_USERINFO_ERROR'
+       *获取用户失败
+       */
+      ErrorCode[(ErrorCode.GET_USERINFO_ERROR = 23407)] = 'GET_USERINFO_ERROR'
       /**
-             * 在黑名单中。
-             */
-      ErrorCode[ErrorCode.REJECTED_BY_BLACKLIST = 405] = 'REJECTED_BY_BLACKLIST'
+       * 在黑名单中。
+       */
+      ErrorCode[(ErrorCode.REJECTED_BY_BLACKLIST = 405)] =
+        'REJECTED_BY_BLACKLIST'
       /**
-             * 通信过程中，当前 Socket 不存在。
-             */
-      ErrorCode[ErrorCode.RC_NET_CHANNEL_INVALID = 30001] = 'RC_NET_CHANNEL_INVALID'
+       * 通信过程中，当前 Socket 不存在。
+       */
+      ErrorCode[(ErrorCode.RC_NET_CHANNEL_INVALID = 30001)] =
+        'RC_NET_CHANNEL_INVALID'
       /**
-             * Socket 连接不可用。
-             */
-      ErrorCode[ErrorCode.RC_NET_UNAVAILABLE = 30002] = 'RC_NET_UNAVAILABLE'
+       * Socket 连接不可用。
+       */
+      ErrorCode[(ErrorCode.RC_NET_UNAVAILABLE = 30002)] = 'RC_NET_UNAVAILABLE'
       /**
-             * 通信超时。
-             */
-      ErrorCode[ErrorCode.RC_MSG_RESP_TIMEOUT = 30003] = 'RC_MSG_RESP_TIMEOUT'
+       * 通信超时。
+       */
+      ErrorCode[(ErrorCode.RC_MSG_RESP_TIMEOUT = 30003)] = 'RC_MSG_RESP_TIMEOUT'
       /**
-             * 导航操作时，Http 请求失败。
-             */
-      ErrorCode[ErrorCode.RC_HTTP_SEND_FAIL = 30004] = 'RC_HTTP_SEND_FAIL'
+       * 导航操作时，Http 请求失败。
+       */
+      ErrorCode[(ErrorCode.RC_HTTP_SEND_FAIL = 30004)] = 'RC_HTTP_SEND_FAIL'
       /**
-             * HTTP 请求失败。
-             */
-      ErrorCode[ErrorCode.RC_HTTP_REQ_TIMEOUT = 30005] = 'RC_HTTP_REQ_TIMEOUT'
+       * HTTP 请求失败。
+       */
+      ErrorCode[(ErrorCode.RC_HTTP_REQ_TIMEOUT = 30005)] = 'RC_HTTP_REQ_TIMEOUT'
       /**
-             * HTTP 接收失败。
-             */
-      ErrorCode[ErrorCode.RC_HTTP_RECV_FAIL = 30006] = 'RC_HTTP_RECV_FAIL'
+       * HTTP 接收失败。
+       */
+      ErrorCode[(ErrorCode.RC_HTTP_RECV_FAIL = 30006)] = 'RC_HTTP_RECV_FAIL'
       /**
-             * 导航操作的 HTTP 请求，返回不是200。
-             */
-      ErrorCode[ErrorCode.RC_NAVI_RESOURCE_ERROR = 30007] = 'RC_NAVI_RESOURCE_ERROR'
+       * 导航操作的 HTTP 请求，返回不是200。
+       */
+      ErrorCode[(ErrorCode.RC_NAVI_RESOURCE_ERROR = 30007)] =
+        'RC_NAVI_RESOURCE_ERROR'
       /**
-             * 导航数据解析后，其中不存在有效数据。
-             */
-      ErrorCode[ErrorCode.RC_NODE_NOT_FOUND = 30008] = 'RC_NODE_NOT_FOUND'
+       * 导航数据解析后，其中不存在有效数据。
+       */
+      ErrorCode[(ErrorCode.RC_NODE_NOT_FOUND = 30008)] = 'RC_NODE_NOT_FOUND'
       /**
-             * 导航数据解析后，其中不存在有效 IP 地址。
-             */
-      ErrorCode[ErrorCode.RC_DOMAIN_NOT_RESOLVE = 30009] = 'RC_DOMAIN_NOT_RESOLVE'
+       * 导航数据解析后，其中不存在有效 IP 地址。
+       */
+      ErrorCode[(ErrorCode.RC_DOMAIN_NOT_RESOLVE = 30009)] =
+        'RC_DOMAIN_NOT_RESOLVE'
       /**
-             * 创建 Socket 失败。
-             */
-      ErrorCode[ErrorCode.RC_SOCKET_NOT_CREATED = 30010] = 'RC_SOCKET_NOT_CREATED'
+       * 创建 Socket 失败。
+       */
+      ErrorCode[(ErrorCode.RC_SOCKET_NOT_CREATED = 30010)] =
+        'RC_SOCKET_NOT_CREATED'
       /**
-             * Socket 被断开。
-             */
-      ErrorCode[ErrorCode.RC_SOCKET_DISCONNECTED = 30011] = 'RC_SOCKET_DISCONNECTED'
+       * Socket 被断开。
+       */
+      ErrorCode[(ErrorCode.RC_SOCKET_DISCONNECTED = 30011)] =
+        'RC_SOCKET_DISCONNECTED'
       /**
-             * PING 操作失败。
-             */
-      ErrorCode[ErrorCode.RC_PING_SEND_FAIL = 30012] = 'RC_PING_SEND_FAIL'
+       * PING 操作失败。
+       */
+      ErrorCode[(ErrorCode.RC_PING_SEND_FAIL = 30012)] = 'RC_PING_SEND_FAIL'
       /**
-             * PING 超时。
-             */
-      ErrorCode[ErrorCode.RC_PONG_RECV_FAIL = 30013] = 'RC_PONG_RECV_FAIL'
+       * PING 超时。
+       */
+      ErrorCode[(ErrorCode.RC_PONG_RECV_FAIL = 30013)] = 'RC_PONG_RECV_FAIL'
       /**
-             * 消息发送失败。
-             */
-      ErrorCode[ErrorCode.RC_MSG_SEND_FAIL = 30014] = 'RC_MSG_SEND_FAIL'
+       * 消息发送失败。
+       */
+      ErrorCode[(ErrorCode.RC_MSG_SEND_FAIL = 30014)] = 'RC_MSG_SEND_FAIL'
       /**
-             * 做 connect 连接时，收到的 ACK 超时。
-             */
-      ErrorCode[ErrorCode.RC_CONN_ACK_TIMEOUT = 31000] = 'RC_CONN_ACK_TIMEOUT'
+       * 做 connect 连接时，收到的 ACK 超时。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_ACK_TIMEOUT = 31000)] = 'RC_CONN_ACK_TIMEOUT'
       /**
-             * 参数错误。
-             */
-      ErrorCode[ErrorCode.RC_CONN_PROTO_VERSION_ERROR = 31001] = 'RC_CONN_PROTO_VERSION_ERROR'
+       * 参数错误。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_PROTO_VERSION_ERROR = 31001)] =
+        'RC_CONN_PROTO_VERSION_ERROR'
       /**
-             * 参数错误，App Id 错误。
-             */
-      ErrorCode[ErrorCode.RC_CONN_ID_REJECT = 31002] = 'RC_CONN_ID_REJECT'
+       * 参数错误，App Id 错误。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_ID_REJECT = 31002)] = 'RC_CONN_ID_REJECT'
       /**
-             * 服务器不可用。
-             */
-      ErrorCode[ErrorCode.RC_CONN_SERVER_UNAVAILABLE = 31003] = 'RC_CONN_SERVER_UNAVAILABLE'
+       * 服务器不可用。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_SERVER_UNAVAILABLE = 31003)] =
+        'RC_CONN_SERVER_UNAVAILABLE'
       /**
-             * Token 错误。
-             */
-      ErrorCode[ErrorCode.RC_CONN_USER_OR_PASSWD_ERROR = 31004] = 'RC_CONN_USER_OR_PASSWD_ERROR'
+       * Token 错误。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_USER_OR_PASSWD_ERROR = 31004)] =
+        'RC_CONN_USER_OR_PASSWD_ERROR'
       /**
-             * App Id 与 Token 不匹配。
-             */
-      ErrorCode[ErrorCode.RC_CONN_NOT_AUTHRORIZED = 31005] = 'RC_CONN_NOT_AUTHRORIZED'
+       * App Id 与 Token 不匹配。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_NOT_AUTHRORIZED = 31005)] =
+        'RC_CONN_NOT_AUTHRORIZED'
       /**
-             * 重定向，地址错误。
-             */
-      ErrorCode[ErrorCode.RC_CONN_REDIRECTED = 31006] = 'RC_CONN_REDIRECTED'
+       * 重定向，地址错误。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_REDIRECTED = 31006)] = 'RC_CONN_REDIRECTED'
       /**
-             * NAME 与后台注册信息不一致。
-             */
-      ErrorCode[ErrorCode.RC_CONN_PACKAGE_NAME_INVALID = 31007] = 'RC_CONN_PACKAGE_NAME_INVALID'
+       * NAME 与后台注册信息不一致。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_PACKAGE_NAME_INVALID = 31007)] =
+        'RC_CONN_PACKAGE_NAME_INVALID'
       /**
-             * APP 被屏蔽、删除或不存在。
-             */
-      ErrorCode[ErrorCode.RC_CONN_APP_BLOCKED_OR_DELETED = 31008] = 'RC_CONN_APP_BLOCKED_OR_DELETED'
+       * APP 被屏蔽、删除或不存在。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_APP_BLOCKED_OR_DELETED = 31008)] =
+        'RC_CONN_APP_BLOCKED_OR_DELETED'
       /**
-             * 用户被屏蔽。
-             */
-      ErrorCode[ErrorCode.RC_CONN_USER_BLOCKED = 31009] = 'RC_CONN_USER_BLOCKED'
+       * 用户被屏蔽。
+       */
+      ErrorCode[(ErrorCode.RC_CONN_USER_BLOCKED = 31009)] =
+        'RC_CONN_USER_BLOCKED'
       /**
-             * Disconnect，由服务器返回，比如用户互踢。
-             */
-      ErrorCode[ErrorCode.RC_DISCONN_KICK = 31010] = 'RC_DISCONN_KICK'
+       * Disconnect，由服务器返回，比如用户互踢。
+       */
+      ErrorCode[(ErrorCode.RC_DISCONN_KICK = 31010)] = 'RC_DISCONN_KICK'
       /**
-             * Disconnect，由服务器返回，比如用户互踢。
-             */
-      ErrorCode[ErrorCode.RC_DISCONN_EXCEPTION = 31011] = 'RC_DISCONN_EXCEPTION'
+       * Disconnect，由服务器返回，比如用户互踢。
+       */
+      ErrorCode[(ErrorCode.RC_DISCONN_EXCEPTION = 31011)] =
+        'RC_DISCONN_EXCEPTION'
       /**
-             * 协议层内部错误。query，上传下载过程中数据错误。
-             */
-      ErrorCode[ErrorCode.RC_QUERY_ACK_NO_DATA = 32001] = 'RC_QUERY_ACK_NO_DATA'
+       * 协议层内部错误。query，上传下载过程中数据错误。
+       */
+      ErrorCode[(ErrorCode.RC_QUERY_ACK_NO_DATA = 32001)] =
+        'RC_QUERY_ACK_NO_DATA'
       /**
-             * 协议层内部错误。
-             */
-      ErrorCode[ErrorCode.RC_MSG_DATA_INCOMPLETE = 32002] = 'RC_MSG_DATA_INCOMPLETE'
+       * 协议层内部错误。
+       */
+      ErrorCode[(ErrorCode.RC_MSG_DATA_INCOMPLETE = 32002)] =
+        'RC_MSG_DATA_INCOMPLETE'
       /**
-             * 未调用 init 初始化函数。
-             */
-      ErrorCode[ErrorCode.BIZ_ERROR_CLIENT_NOT_INIT = 33001] = 'BIZ_ERROR_CLIENT_NOT_INIT'
+       * 未调用 init 初始化函数。
+       */
+      ErrorCode[(ErrorCode.BIZ_ERROR_CLIENT_NOT_INIT = 33001)] =
+        'BIZ_ERROR_CLIENT_NOT_INIT'
       /**
-             * 数据库初始化失败。
-             */
-      ErrorCode[ErrorCode.BIZ_ERROR_DATABASE_ERROR = 33002] = 'BIZ_ERROR_DATABASE_ERROR'
+       * 数据库初始化失败。
+       */
+      ErrorCode[(ErrorCode.BIZ_ERROR_DATABASE_ERROR = 33002)] =
+        'BIZ_ERROR_DATABASE_ERROR'
       /**
-             * 传入参数无效。
-             */
-      ErrorCode[ErrorCode.BIZ_ERROR_INVALID_PARAMETER = 33003] = 'BIZ_ERROR_INVALID_PARAMETER'
+       * 传入参数无效。
+       */
+      ErrorCode[(ErrorCode.BIZ_ERROR_INVALID_PARAMETER = 33003)] =
+        'BIZ_ERROR_INVALID_PARAMETER'
       /**
-             * 通道无效。
-             */
-      ErrorCode[ErrorCode.BIZ_ERROR_NO_CHANNEL = 33004] = 'BIZ_ERROR_NO_CHANNEL'
+       * 通道无效。
+       */
+      ErrorCode[(ErrorCode.BIZ_ERROR_NO_CHANNEL = 33004)] =
+        'BIZ_ERROR_NO_CHANNEL'
       /**
-             * 重新连接成功。
-             */
-      ErrorCode[ErrorCode.BIZ_ERROR_RECONNECT_SUCCESS = 33005] = 'BIZ_ERROR_RECONNECT_SUCCESS'
+       * 重新连接成功。
+       */
+      ErrorCode[(ErrorCode.BIZ_ERROR_RECONNECT_SUCCESS = 33005)] =
+        'BIZ_ERROR_RECONNECT_SUCCESS'
       /**
-             * 连接中，再调用 connect 被拒绝。
-             */
-      ErrorCode[ErrorCode.BIZ_ERROR_CONNECTING = 33006] = 'BIZ_ERROR_CONNECTING'
+       * 连接中，再调用 connect 被拒绝。
+       */
+      ErrorCode[(ErrorCode.BIZ_ERROR_CONNECTING = 33006)] =
+        'BIZ_ERROR_CONNECTING'
       /**
-             * 消息漫游服务未开通
-             */
-      ErrorCode[ErrorCode.MSG_ROAMING_SERVICE_UNAVAILABLE = 33007] = 'MSG_ROAMING_SERVICE_UNAVAILABLE'
-      ErrorCode[ErrorCode.MSG_INSERT_ERROR = 33008] = 'MSG_INSERT_ERROR'
-      ErrorCode[ErrorCode.MSG_DEL_ERROR = 33009] = 'MSG_DEL_ERROR'
+       * 消息漫游服务未开通
+       */
+      ErrorCode[(ErrorCode.MSG_ROAMING_SERVICE_UNAVAILABLE = 33007)] =
+        'MSG_ROAMING_SERVICE_UNAVAILABLE'
+      ErrorCode[(ErrorCode.MSG_INSERT_ERROR = 33008)] = 'MSG_INSERT_ERROR'
+      ErrorCode[(ErrorCode.MSG_DEL_ERROR = 33009)] = 'MSG_DEL_ERROR'
       /**
-             * 删除会话失败
-             */
-      ErrorCode[ErrorCode.CONVER_REMOVE_ERROR = 34001] = 'CONVER_REMOVE_ERROR'
+       * 删除会话失败
+       */
+      ErrorCode[(ErrorCode.CONVER_REMOVE_ERROR = 34001)] = 'CONVER_REMOVE_ERROR'
       /**
-             *拉取历史消息
-             */
-      ErrorCode[ErrorCode.CONVER_GETLIST_ERROR = 34002] = 'CONVER_GETLIST_ERROR'
+       *拉取历史消息
+       */
+      ErrorCode[(ErrorCode.CONVER_GETLIST_ERROR = 34002)] =
+        'CONVER_GETLIST_ERROR'
       /**
-             * 会话指定异常
-             */
-      ErrorCode[ErrorCode.CONVER_SETOP_ERROR = 34003] = 'CONVER_SETOP_ERROR'
+       * 会话指定异常
+       */
+      ErrorCode[(ErrorCode.CONVER_SETOP_ERROR = 34003)] = 'CONVER_SETOP_ERROR'
       /**
-             * 获取会话未读消息总数失败
-             */
-      ErrorCode[ErrorCode.CONVER_TOTAL_UNREAD_ERROR = 34004] = 'CONVER_TOTAL_UNREAD_ERROR'
+       * 获取会话未读消息总数失败
+       */
+      ErrorCode[(ErrorCode.CONVER_TOTAL_UNREAD_ERROR = 34004)] =
+        'CONVER_TOTAL_UNREAD_ERROR'
       /**
-             * 获取指定会话类型未读消息数异常
-             */
-      ErrorCode[ErrorCode.CONVER_TYPE_UNREAD_ERROR = 34005] = 'CONVER_TYPE_UNREAD_ERROR'
+       * 获取指定会话类型未读消息数异常
+       */
+      ErrorCode[(ErrorCode.CONVER_TYPE_UNREAD_ERROR = 34005)] =
+        'CONVER_TYPE_UNREAD_ERROR'
       /**
-             * 获取指定用户ID&会话类型未读消息数异常
-             */
-      ErrorCode[ErrorCode.CONVER_ID_TYPE_UNREAD_ERROR = 34006] = 'CONVER_ID_TYPE_UNREAD_ERROR'
-      ErrorCode[ErrorCode.CONVER_CLEAR_ERROR = 34007] = 'CONVER_CLEAR_ERROR'
-      ErrorCode[ErrorCode.CLEAR_HIS_ERROR = 34010] = 'CLEAR_HIS_ERROR'
-      ErrorCode[ErrorCode.CLEAR_HIS_TYPE_ERROR = 34008] = 'CLEAR_HIS_TYPE_ERROR'
-      ErrorCode[ErrorCode.CLEAR_HIS_TIME_ERROR = 34011] = 'CLEAR_HIS_TIME_ERROR'
+       * 获取指定用户ID&会话类型未读消息数异常
+       */
+      ErrorCode[(ErrorCode.CONVER_ID_TYPE_UNREAD_ERROR = 34006)] =
+        'CONVER_ID_TYPE_UNREAD_ERROR'
+      ErrorCode[(ErrorCode.CONVER_CLEAR_ERROR = 34007)] = 'CONVER_CLEAR_ERROR'
+      ErrorCode[(ErrorCode.CLEAR_HIS_ERROR = 34010)] = 'CLEAR_HIS_ERROR'
+      ErrorCode[(ErrorCode.CLEAR_HIS_TYPE_ERROR = 34008)] =
+        'CLEAR_HIS_TYPE_ERROR'
+      ErrorCode[(ErrorCode.CLEAR_HIS_TIME_ERROR = 34011)] =
+        'CLEAR_HIS_TIME_ERROR'
       /*
 
             */
-      ErrorCode[ErrorCode.CONVER_GET_ERROR = 34009] = 'CONVER_GET_ERROR'
+      ErrorCode[(ErrorCode.CONVER_GET_ERROR = 34009)] = 'CONVER_GET_ERROR'
       // 群组异常信息
       /**
-             *
-             */
-      ErrorCode[ErrorCode.GROUP_SYNC_ERROR = 35001] = 'GROUP_SYNC_ERROR'
+       *
+       */
+      ErrorCode[(ErrorCode.GROUP_SYNC_ERROR = 35001)] = 'GROUP_SYNC_ERROR'
       /**
-             * 匹配群信息异常
-             */
-      ErrorCode[ErrorCode.GROUP_MATCH_ERROR = 35002] = 'GROUP_MATCH_ERROR'
+       * 匹配群信息异常
+       */
+      ErrorCode[(ErrorCode.GROUP_MATCH_ERROR = 35002)] = 'GROUP_MATCH_ERROR'
       // 聊天室异常
       /**
-             * 加入聊天室Id为空
-             */
-      ErrorCode[ErrorCode.CHATROOM_ID_ISNULL = 36001] = 'CHATROOM_ID_ISNULL'
+       * 加入聊天室Id为空
+       */
+      ErrorCode[(ErrorCode.CHATROOM_ID_ISNULL = 36001)] = 'CHATROOM_ID_ISNULL'
       /**
-             * 加入聊天室失败
-             */
-      ErrorCode[ErrorCode.CHARTOOM_JOIN_ERROR = 36002] = 'CHARTOOM_JOIN_ERROR'
+       * 加入聊天室失败
+       */
+      ErrorCode[(ErrorCode.CHARTOOM_JOIN_ERROR = 36002)] = 'CHARTOOM_JOIN_ERROR'
       /**
-             * 拉取聊天室历史消息失败
-             */
-      ErrorCode[ErrorCode.CHATROOM_HISMESSAGE_ERROR = 36003] = 'CHATROOM_HISMESSAGE_ERROR'
+       * 拉取聊天室历史消息失败
+       */
+      ErrorCode[(ErrorCode.CHATROOM_HISMESSAGE_ERROR = 36003)] =
+        'CHATROOM_HISMESSAGE_ERROR'
       // 黑名单异常
       /**
-             * 加入黑名单异常
-             */
-      ErrorCode[ErrorCode.BLACK_ADD_ERROR = 37001] = 'BLACK_ADD_ERROR'
+       * 加入黑名单异常
+       */
+      ErrorCode[(ErrorCode.BLACK_ADD_ERROR = 37001)] = 'BLACK_ADD_ERROR'
       /**
-             * 获得指定人员再黑名单中的状态异常
-             */
-      ErrorCode[ErrorCode.BLACK_GETSTATUS_ERROR = 37002] = 'BLACK_GETSTATUS_ERROR'
+       * 获得指定人员再黑名单中的状态异常
+       */
+      ErrorCode[(ErrorCode.BLACK_GETSTATUS_ERROR = 37002)] =
+        'BLACK_GETSTATUS_ERROR'
       /**
-             * 移除黑名单异常
-             */
-      ErrorCode[ErrorCode.BLACK_REMOVE_ERROR = 37003] = 'BLACK_REMOVE_ERROR'
+       * 移除黑名单异常
+       */
+      ErrorCode[(ErrorCode.BLACK_REMOVE_ERROR = 37003)] = 'BLACK_REMOVE_ERROR'
       /**
-             * 获取草稿失败
-             */
-      ErrorCode[ErrorCode.DRAF_GET_ERROR = 38001] = 'DRAF_GET_ERROR'
+       * 获取草稿失败
+       */
+      ErrorCode[(ErrorCode.DRAF_GET_ERROR = 38001)] = 'DRAF_GET_ERROR'
       /**
-             * 保存草稿失败
-             */
-      ErrorCode[ErrorCode.DRAF_SAVE_ERROR = 38002] = 'DRAF_SAVE_ERROR'
+       * 保存草稿失败
+       */
+      ErrorCode[(ErrorCode.DRAF_SAVE_ERROR = 38002)] = 'DRAF_SAVE_ERROR'
       /**
-             * 删除草稿失败
-             */
-      ErrorCode[ErrorCode.DRAF_REMOVE_ERROR = 38003] = 'DRAF_REMOVE_ERROR'
+       * 删除草稿失败
+       */
+      ErrorCode[(ErrorCode.DRAF_REMOVE_ERROR = 38003)] = 'DRAF_REMOVE_ERROR'
       /**
-             * 关注公众号失败
-             */
-      ErrorCode[ErrorCode.SUBSCRIBE_ERROR = 39001] = 'SUBSCRIBE_ERROR'
+       * 关注公众号失败
+       */
+      ErrorCode[(ErrorCode.SUBSCRIBE_ERROR = 39001)] = 'SUBSCRIBE_ERROR'
       /**
-             * 关注公众号失败
-             */
-      ErrorCode[ErrorCode.QNTKN_FILETYPE_ERROR = 41001] = 'QNTKN_FILETYPE_ERROR'
+       * 关注公众号失败
+       */
+      ErrorCode[(ErrorCode.QNTKN_FILETYPE_ERROR = 41001)] =
+        'QNTKN_FILETYPE_ERROR'
       /**
-             * 获取七牛token失败
-             */
-      ErrorCode[ErrorCode.QNTKN_GET_ERROR = 41002] = 'QNTKN_GET_ERROR'
+       * 获取七牛token失败
+       */
+      ErrorCode[(ErrorCode.QNTKN_GET_ERROR = 41002)] = 'QNTKN_GET_ERROR'
       /**
-             * cookie被禁用
-             */
-      ErrorCode[ErrorCode.COOKIE_ENABLE = 51001] = 'COOKIE_ENABLE'
-      ErrorCode[ErrorCode.GET_MESSAGE_BY_ID_ERROR = 61001] = 'GET_MESSAGE_BY_ID_ERROR'
+       * cookie被禁用
+       */
+      ErrorCode[(ErrorCode.COOKIE_ENABLE = 51001)] = 'COOKIE_ENABLE'
+      ErrorCode[(ErrorCode.GET_MESSAGE_BY_ID_ERROR = 61001)] =
+        'GET_MESSAGE_BY_ID_ERROR'
       // 没有注册DeviveId 也就是用户没有登陆
-      ErrorCode[ErrorCode.HAVNODEVICEID = 24001] = 'HAVNODEVICEID'
+      ErrorCode[(ErrorCode.HAVNODEVICEID = 24001)] = 'HAVNODEVICEID'
       // 已经存在
-      ErrorCode[ErrorCode.DEVICEIDISHAVE = 24002] = 'DEVICEIDISHAVE'
+      ErrorCode[(ErrorCode.DEVICEIDISHAVE = 24002)] = 'DEVICEIDISHAVE'
       // 成功
-      ErrorCode[ErrorCode.SUCCESS = 0] = 'SUCCESS'
+      ErrorCode[(ErrorCode.SUCCESS = 0)] = 'SUCCESS'
       // 没有对应的用户或token
-      ErrorCode[ErrorCode.FEILD = 24009] = 'FEILD'
+      ErrorCode[(ErrorCode.FEILD = 24009)] = 'FEILD'
       // voip为空
-      ErrorCode[ErrorCode.VOIPISNULL = 24013] = 'VOIPISNULL'
+      ErrorCode[(ErrorCode.VOIPISNULL = 24013)] = 'VOIPISNULL'
       // 不支持的Voip引擎
-      ErrorCode[ErrorCode.NOENGINETYPE = 24010] = 'NOENGINETYPE'
+      ErrorCode[(ErrorCode.NOENGINETYPE = 24010)] = 'NOENGINETYPE'
       // channleName 是空
-      ErrorCode[ErrorCode.NULLCHANNELNAME = 24011] = 'NULLCHANNELNAME'
+      ErrorCode[(ErrorCode.NULLCHANNELNAME = 24011)] = 'NULLCHANNELNAME'
       // 生成Voipkey失败
-      ErrorCode[ErrorCode.VOIPDYANMICERROR = 24012] = 'VOIPDYANMICERROR'
+      ErrorCode[(ErrorCode.VOIPDYANMICERROR = 24012)] = 'VOIPDYANMICERROR'
       // 没有配置voip
-      ErrorCode[ErrorCode.NOVOIP = 24014] = 'NOVOIP'
+      ErrorCode[(ErrorCode.NOVOIP = 24014)] = 'NOVOIP'
       // 服务器内部错误
-      ErrorCode[ErrorCode.INTERNALERRROR = 24015] = 'INTERNALERRROR'
+      ErrorCode[(ErrorCode.INTERNALERRROR = 24015)] = 'INTERNALERRROR'
       // VOIP close
-      ErrorCode[ErrorCode.VOIPCLOSE = 24016] = 'VOIPCLOSE'
-      ErrorCode[ErrorCode.CLOSE_BEFORE_OPEN = 51001] = 'CLOSE_BEFORE_OPEN'
-      ErrorCode[ErrorCode.ALREADY_IN_USE = 51002] = 'ALREADY_IN_USE'
-      ErrorCode[ErrorCode.INVALID_CHANNEL_NAME = 51003] = 'INVALID_CHANNEL_NAME'
-      ErrorCode[ErrorCode.VIDEO_CONTAINER_IS_NULL = 51004] = 'VIDEO_CONTAINER_IS_NULL'
+      ErrorCode[(ErrorCode.VOIPCLOSE = 24016)] = 'VOIPCLOSE'
+      ErrorCode[(ErrorCode.CLOSE_BEFORE_OPEN = 51001)] = 'CLOSE_BEFORE_OPEN'
+      ErrorCode[(ErrorCode.ALREADY_IN_USE = 51002)] = 'ALREADY_IN_USE'
+      ErrorCode[(ErrorCode.INVALID_CHANNEL_NAME = 51003)] =
+        'INVALID_CHANNEL_NAME'
+      ErrorCode[(ErrorCode.VIDEO_CONTAINER_IS_NULL = 51004)] =
+        'VIDEO_CONTAINER_IS_NULL'
       /**
-             * 删除消息数组长度为 0 .
-             */
-      ErrorCode[ErrorCode.DELETE_MESSAGE_ID_IS_NULL = 61001] = 'DELETE_MESSAGE_ID_IS_NULL'
+       * 删除消息数组长度为 0 .
+       */
+      ErrorCode[(ErrorCode.DELETE_MESSAGE_ID_IS_NULL = 61001)] =
+        'DELETE_MESSAGE_ID_IS_NULL'
       /*!
             己方取消已发出的通话请求
             */
-      ErrorCode[ErrorCode.CANCEL = 1] = 'CANCEL'
+      ErrorCode[(ErrorCode.CANCEL = 1)] = 'CANCEL'
       /*!
              己方拒绝收到的通话请求
              */
-      ErrorCode[ErrorCode.REJECT = 2] = 'REJECT'
+      ErrorCode[(ErrorCode.REJECT = 2)] = 'REJECT'
       /*!
              己方挂断
              */
-      ErrorCode[ErrorCode.HANGUP = 3] = 'HANGUP'
+      ErrorCode[(ErrorCode.HANGUP = 3)] = 'HANGUP'
       /*!
              己方忙碌
              */
-      ErrorCode[ErrorCode.BUSYLINE = 4] = 'BUSYLINE'
+      ErrorCode[(ErrorCode.BUSYLINE = 4)] = 'BUSYLINE'
       /*!
              己方未接听
              */
-      ErrorCode[ErrorCode.NO_RESPONSE = 5] = 'NO_RESPONSE'
+      ErrorCode[(ErrorCode.NO_RESPONSE = 5)] = 'NO_RESPONSE'
       /*!
              己方不支持当前引擎
              */
-      ErrorCode[ErrorCode.ENGINE_UN_SUPPORTED = 6] = 'ENGINE_UN_SUPPORTED'
+      ErrorCode[(ErrorCode.ENGINE_UN_SUPPORTED = 6)] = 'ENGINE_UN_SUPPORTED'
       /*!
              己方网络出错
              */
-      ErrorCode[ErrorCode.NETWORK_ERROR = 7] = 'NETWORK_ERROR'
+      ErrorCode[(ErrorCode.NETWORK_ERROR = 7)] = 'NETWORK_ERROR'
       /*!
              对方取消已发出的通话请求
              */
-      ErrorCode[ErrorCode.REMOTE_CANCEL = 11] = 'REMOTE_CANCEL'
+      ErrorCode[(ErrorCode.REMOTE_CANCEL = 11)] = 'REMOTE_CANCEL'
       /*!
              对方拒绝收到的通话请求
              */
-      ErrorCode[ErrorCode.REMOTE_REJECT = 12] = 'REMOTE_REJECT'
+      ErrorCode[(ErrorCode.REMOTE_REJECT = 12)] = 'REMOTE_REJECT'
       /*!
              通话过程对方挂断
              */
-      ErrorCode[ErrorCode.REMOTE_HANGUP = 13] = 'REMOTE_HANGUP'
+      ErrorCode[(ErrorCode.REMOTE_HANGUP = 13)] = 'REMOTE_HANGUP'
       /*!
              对方忙碌
              */
-      ErrorCode[ErrorCode.REMOTE_BUSYLINE = 14] = 'REMOTE_BUSYLINE'
+      ErrorCode[(ErrorCode.REMOTE_BUSYLINE = 14)] = 'REMOTE_BUSYLINE'
       /*!
              对方未接听
              */
-      ErrorCode[ErrorCode.REMOTE_NO_RESPONSE = 15] = 'REMOTE_NO_RESPONSE'
+      ErrorCode[(ErrorCode.REMOTE_NO_RESPONSE = 15)] = 'REMOTE_NO_RESPONSE'
       /*!
              对方网络错误
              */
-      ErrorCode[ErrorCode.REMOTE_ENGINE_UN_SUPPORTED = 16] = 'REMOTE_ENGINE_UN_SUPPORTED'
+      ErrorCode[(ErrorCode.REMOTE_ENGINE_UN_SUPPORTED = 16)] =
+        'REMOTE_ENGINE_UN_SUPPORTED'
       /*!
              对方网络错误
              */
-      ErrorCode[ErrorCode.REMOTE_NETWORK_ERROR = 17] = 'REMOTE_NETWORK_ERROR'
+      ErrorCode[(ErrorCode.REMOTE_NETWORK_ERROR = 17)] = 'REMOTE_NETWORK_ERROR'
       /*!
              VoIP 不可用
              */
-      ErrorCode[ErrorCode.VOIP_NOT_AVALIABLE = 18] = 'VOIP_NOT_AVALIABLE'
+      ErrorCode[(ErrorCode.VOIP_NOT_AVALIABLE = 18)] = 'VOIP_NOT_AVALIABLE'
     })(RongIMLib.ErrorCode || (RongIMLib.ErrorCode = {}))
-    var ErrorCode = RongIMLib.ErrorCode;
-    (function (VoIPMediaType) {
-      VoIPMediaType[VoIPMediaType.MEDIA_AUDIO = 1] = 'MEDIA_AUDIO'
-      VoIPMediaType[VoIPMediaType.MEDIA_VEDIO = 2] = 'MEDIA_VEDIO'
-      VoIPMediaType[VoIPMediaType.MEDIA_VIDEO = 2] = 'MEDIA_VIDEO'
+    var ErrorCode = RongIMLib.ErrorCode
+    ;(function (VoIPMediaType) {
+      VoIPMediaType[(VoIPMediaType.MEDIA_AUDIO = 1)] = 'MEDIA_AUDIO'
+      VoIPMediaType[(VoIPMediaType.MEDIA_VEDIO = 2)] = 'MEDIA_VEDIO'
+      VoIPMediaType[(VoIPMediaType.MEDIA_VIDEO = 2)] = 'MEDIA_VIDEO'
     })(RongIMLib.VoIPMediaType || (RongIMLib.VoIPMediaType = {}))
-    var VoIPMediaType = RongIMLib.VoIPMediaType;
-    (function (MediaType) {
+    var VoIPMediaType = RongIMLib.VoIPMediaType
+    ;(function (MediaType) {
       /**
-             * 图片。
-             */
-      MediaType[MediaType.IMAGE = 1] = 'IMAGE'
+       * 图片。
+       */
+      MediaType[(MediaType.IMAGE = 1)] = 'IMAGE'
       /**
-             * 声音。
-             */
-      MediaType[MediaType.AUDIO = 2] = 'AUDIO'
+       * 声音。
+       */
+      MediaType[(MediaType.AUDIO = 2)] = 'AUDIO'
       /**
-             * 视频。
-             */
-      MediaType[MediaType.VIDEO = 3] = 'VIDEO'
+       * 视频。
+       */
+      MediaType[(MediaType.VIDEO = 3)] = 'VIDEO'
       /**
-             * 通用文件。
-             */
-      MediaType[MediaType.FILE = 100] = 'FILE'
+       * 通用文件。
+       */
+      MediaType[(MediaType.FILE = 100)] = 'FILE'
     })(RongIMLib.MediaType || (RongIMLib.MediaType = {}))
-    var MediaType = RongIMLib.MediaType;
-    (function (MessageDirection) {
+    var MediaType = RongIMLib.MediaType
+    ;(function (MessageDirection) {
       /**
-             * 发送消息。
-             */
-      MessageDirection[MessageDirection.SEND = 1] = 'SEND'
+       * 发送消息。
+       */
+      MessageDirection[(MessageDirection.SEND = 1)] = 'SEND'
       /**
-             * 接收消息。
-             */
-      MessageDirection[MessageDirection.RECEIVE = 2] = 'RECEIVE'
+       * 接收消息。
+       */
+      MessageDirection[(MessageDirection.RECEIVE = 2)] = 'RECEIVE'
     })(RongIMLib.MessageDirection || (RongIMLib.MessageDirection = {}))
-    var MessageDirection = RongIMLib.MessageDirection;
-    (function (FileType) {
-      FileType[FileType.IMAGE = 1] = 'IMAGE'
-      FileType[FileType.AUDIO = 2] = 'AUDIO'
-      FileType[FileType.VIDEO = 3] = 'VIDEO'
-      FileType[FileType.FILE = 4] = 'FILE'
+    var MessageDirection = RongIMLib.MessageDirection
+    ;(function (FileType) {
+      FileType[(FileType.IMAGE = 1)] = 'IMAGE'
+      FileType[(FileType.AUDIO = 2)] = 'AUDIO'
+      FileType[(FileType.VIDEO = 3)] = 'VIDEO'
+      FileType[(FileType.FILE = 4)] = 'FILE'
     })(RongIMLib.FileType || (RongIMLib.FileType = {}))
-    var FileType = RongIMLib.FileType;
-    (function (RealTimeLocationErrorCode) {
+    var FileType = RongIMLib.FileType
+    ;(function (RealTimeLocationErrorCode) {
       /**
-             * 未初始化 RealTimeLocation 实例
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_NOT_INIT = -1] = 'RC_REAL_TIME_LOCATION_NOT_INIT'
+       * 未初始化 RealTimeLocation 实例
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_NOT_INIT = -1)
+      ] = 'RC_REAL_TIME_LOCATION_NOT_INIT'
       /**
-             * 执行成功。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_SUCCESS = 0] = 'RC_REAL_TIME_LOCATION_SUCCESS'
+       * 执行成功。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_SUCCESS = 0)
+      ] = 'RC_REAL_TIME_LOCATION_SUCCESS'
       /**
-             * 获取 RealTimeLocation 实例时返回
-             * GPS 未打开。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_GPS_DISABLED = 1] = 'RC_REAL_TIME_LOCATION_GPS_DISABLED'
+       * 获取 RealTimeLocation 实例时返回
+       * GPS 未打开。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_GPS_DISABLED = 1)
+      ] = 'RC_REAL_TIME_LOCATION_GPS_DISABLED'
       /**
-             * 获取 RealTimeLocation 实例时返回
-             * 当前会话不支持位置共享。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_CONVERSATION_NOT_SUPPORT = 2] = 'RC_REAL_TIME_LOCATION_CONVERSATION_NOT_SUPPORT'
+       * 获取 RealTimeLocation 实例时返回
+       * 当前会话不支持位置共享。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_CONVERSATION_NOT_SUPPORT = 2)
+      ] = 'RC_REAL_TIME_LOCATION_CONVERSATION_NOT_SUPPORT'
       /**
-             * 获取 RealTimeLocation 实例时返回
-             * 对方已发起位置共享。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_IS_ON_GOING = 3] = 'RC_REAL_TIME_LOCATION_IS_ON_GOING'
+       * 获取 RealTimeLocation 实例时返回
+       * 对方已发起位置共享。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_IS_ON_GOING = 3)
+      ] = 'RC_REAL_TIME_LOCATION_IS_ON_GOING'
       /**
-             * Join 时返回
-             * 当前位置共享已超过最大支持人数。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_EXCEED_MAX_PARTICIPANT = 4] = 'RC_REAL_TIME_LOCATION_EXCEED_MAX_PARTICIPANT'
+       * Join 时返回
+       * 当前位置共享已超过最大支持人数。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_EXCEED_MAX_PARTICIPANT = 4)
+      ] = 'RC_REAL_TIME_LOCATION_EXCEED_MAX_PARTICIPANT'
       /**
-             * Join 时返回
-             * 加入位置共享失败。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_JOIN_FAILURE = 5] = 'RC_REAL_TIME_LOCATION_JOIN_FAILURE'
+       * Join 时返回
+       * 加入位置共享失败。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_JOIN_FAILURE = 5)
+      ] = 'RC_REAL_TIME_LOCATION_JOIN_FAILURE'
       /**
-             * Start 时返回
-             * 发起位置共享失败。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_START_FAILURE = 6] = 'RC_REAL_TIME_LOCATION_START_FAILURE'
+       * Start 时返回
+       * 发起位置共享失败。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_START_FAILURE = 6)
+      ] = 'RC_REAL_TIME_LOCATION_START_FAILURE'
       /**
-             * 网络不可用。
-             */
-      RealTimeLocationErrorCode[RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_NETWORK_UNAVAILABLE = 7] = 'RC_REAL_TIME_LOCATION_NETWORK_UNAVAILABLE'
-    })(RongIMLib.RealTimeLocationErrorCode || (RongIMLib.RealTimeLocationErrorCode = {}))
-    var RealTimeLocationErrorCode = RongIMLib.RealTimeLocationErrorCode;
-    (function (RealTimeLocationStatus) {
+       * 网络不可用。
+       */
+      RealTimeLocationErrorCode[
+        (RealTimeLocationErrorCode.RC_REAL_TIME_LOCATION_NETWORK_UNAVAILABLE = 7)
+      ] = 'RC_REAL_TIME_LOCATION_NETWORK_UNAVAILABLE'
+    })(
+      RongIMLib.RealTimeLocationErrorCode ||
+        (RongIMLib.RealTimeLocationErrorCode = {})
+    )
+    var RealTimeLocationErrorCode = RongIMLib.RealTimeLocationErrorCode
+    ;(function (RealTimeLocationStatus) {
       /**
-             * 空闲状态 （默认状态）
-             * 对方或者自己都未发起位置共享业务，或者位置共享业务已结束。
-             */
-      RealTimeLocationStatus[RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_IDLE = 0] = 'RC_REAL_TIME_LOCATION_STATUS_IDLE'
+       * 空闲状态 （默认状态）
+       * 对方或者自己都未发起位置共享业务，或者位置共享业务已结束。
+       */
+      RealTimeLocationStatus[
+        (RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_IDLE = 0)
+      ] = 'RC_REAL_TIME_LOCATION_STATUS_IDLE'
       /**
-             * 呼入状态 （待加入）
-             * 1. 对方发起了位置共享业务，此状态下，自己只能选择加入。
-             * 2. 自己从已连接的位置共享中退出。
-             */
-      RealTimeLocationStatus[RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_INCOMING = 1] = 'RC_REAL_TIME_LOCATION_STATUS_INCOMING'
+       * 呼入状态 （待加入）
+       * 1. 对方发起了位置共享业务，此状态下，自己只能选择加入。
+       * 2. 自己从已连接的位置共享中退出。
+       */
+      RealTimeLocationStatus[
+        (RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_INCOMING = 1)
+      ] = 'RC_REAL_TIME_LOCATION_STATUS_INCOMING'
       /**
-             * 呼出状态 =（自己创建）
-             * 1. 自己发起位置共享业务，对方只能选择加入。
-             * 2. 对方从已连接的位置共享业务中退出。
-             */
-      RealTimeLocationStatus[RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_OUTGOING = 2] = 'RC_REAL_TIME_LOCATION_STATUS_OUTGOING'
+       * 呼出状态 =（自己创建）
+       * 1. 自己发起位置共享业务，对方只能选择加入。
+       * 2. 对方从已连接的位置共享业务中退出。
+       */
+      RealTimeLocationStatus[
+        (RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_OUTGOING = 2)
+      ] = 'RC_REAL_TIME_LOCATION_STATUS_OUTGOING'
       /**
-             * 连接状态 （自己加入）
-             * 对方加入了自己发起的位置共享，或者自己加入了对方发起的位置共享。
-             */
-      RealTimeLocationStatus[RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_CONNECTED = 3] = 'RC_REAL_TIME_LOCATION_STATUS_CONNECTED'
-    })(RongIMLib.RealTimeLocationStatus || (RongIMLib.RealTimeLocationStatus = {}))
-    var RealTimeLocationStatus = RongIMLib.RealTimeLocationStatus;
-    (function (ReceivedStatus) {
-      ReceivedStatus[ReceivedStatus.READ = 1] = 'READ'
-      ReceivedStatus[ReceivedStatus.LISTENED = 2] = 'LISTENED'
-      ReceivedStatus[ReceivedStatus.DOWNLOADED = 4] = 'DOWNLOADED'
-      ReceivedStatus[ReceivedStatus.RETRIEVED = 8] = 'RETRIEVED'
-      ReceivedStatus[ReceivedStatus.UNREAD = 0] = 'UNREAD'
+       * 连接状态 （自己加入）
+       * 对方加入了自己发起的位置共享，或者自己加入了对方发起的位置共享。
+       */
+      RealTimeLocationStatus[
+        (RealTimeLocationStatus.RC_REAL_TIME_LOCATION_STATUS_CONNECTED = 3)
+      ] = 'RC_REAL_TIME_LOCATION_STATUS_CONNECTED'
+    })(
+      RongIMLib.RealTimeLocationStatus ||
+        (RongIMLib.RealTimeLocationStatus = {})
+    )
+    var RealTimeLocationStatus = RongIMLib.RealTimeLocationStatus
+    ;(function (ReceivedStatus) {
+      ReceivedStatus[(ReceivedStatus.READ = 1)] = 'READ'
+      ReceivedStatus[(ReceivedStatus.LISTENED = 2)] = 'LISTENED'
+      ReceivedStatus[(ReceivedStatus.DOWNLOADED = 4)] = 'DOWNLOADED'
+      ReceivedStatus[(ReceivedStatus.RETRIEVED = 8)] = 'RETRIEVED'
+      ReceivedStatus[(ReceivedStatus.UNREAD = 0)] = 'UNREAD'
     })(RongIMLib.ReceivedStatus || (RongIMLib.ReceivedStatus = {}))
-    var ReceivedStatus = RongIMLib.ReceivedStatus;
-    (function (ReadStatus) {
-      ReadStatus[ReadStatus.READ = 1] = 'READ'
-      ReadStatus[ReadStatus.LISTENED = 2] = 'LISTENED'
-      ReadStatus[ReadStatus.DOWNLOADED = 4] = 'DOWNLOADED'
-      ReadStatus[ReadStatus.RETRIEVED = 8] = 'RETRIEVED'
-      ReadStatus[ReadStatus.UNREAD = 0] = 'UNREAD'
+    var ReceivedStatus = RongIMLib.ReceivedStatus
+    ;(function (ReadStatus) {
+      ReadStatus[(ReadStatus.READ = 1)] = 'READ'
+      ReadStatus[(ReadStatus.LISTENED = 2)] = 'LISTENED'
+      ReadStatus[(ReadStatus.DOWNLOADED = 4)] = 'DOWNLOADED'
+      ReadStatus[(ReadStatus.RETRIEVED = 8)] = 'RETRIEVED'
+      ReadStatus[(ReadStatus.UNREAD = 0)] = 'UNREAD'
     })(RongIMLib.ReadStatus || (RongIMLib.ReadStatus = {}))
-    var ReadStatus = RongIMLib.ReadStatus;
-    (function (SearchType) {
+    var ReadStatus = RongIMLib.ReadStatus
+    ;(function (SearchType) {
       /**
-             * 精确。
-             */
-      SearchType[SearchType.EXACT = 0] = 'EXACT'
+       * 精确。
+       */
+      SearchType[(SearchType.EXACT = 0)] = 'EXACT'
       /**
-             * 模糊。
-             */
-      SearchType[SearchType.FUZZY = 1] = 'FUZZY'
+       * 模糊。
+       */
+      SearchType[(SearchType.FUZZY = 1)] = 'FUZZY'
     })(RongIMLib.SearchType || (RongIMLib.SearchType = {}))
-    var SearchType = RongIMLib.SearchType;
-    (function (SentStatus) {
+    var SearchType = RongIMLib.SearchType
+    ;(function (SentStatus) {
       /**
-             * 发送中。
-             */
-      SentStatus[SentStatus.SENDING = 10] = 'SENDING'
+       * 发送中。
+       */
+      SentStatus[(SentStatus.SENDING = 10)] = 'SENDING'
       /**
-             * 发送失败。
-             */
-      SentStatus[SentStatus.FAILED = 20] = 'FAILED'
+       * 发送失败。
+       */
+      SentStatus[(SentStatus.FAILED = 20)] = 'FAILED'
       /**
-             * 已发送。
-             */
-      SentStatus[SentStatus.SENT = 30] = 'SENT'
+       * 已发送。
+       */
+      SentStatus[(SentStatus.SENT = 30)] = 'SENT'
       /**
-             * 对方已接收。
-             */
-      SentStatus[SentStatus.RECEIVED = 40] = 'RECEIVED'
+       * 对方已接收。
+       */
+      SentStatus[(SentStatus.RECEIVED = 40)] = 'RECEIVED'
       /**
-             * 对方已读。
-             */
-      SentStatus[SentStatus.READ = 50] = 'READ'
+       * 对方已读。
+       */
+      SentStatus[(SentStatus.READ = 50)] = 'READ'
       /**
-             * 对方已销毁。
-             */
-      SentStatus[SentStatus.DESTROYED = 60] = 'DESTROYED'
+       * 对方已销毁。
+       */
+      SentStatus[(SentStatus.DESTROYED = 60)] = 'DESTROYED'
     })(RongIMLib.SentStatus || (RongIMLib.SentStatus = {}))
-    var SentStatus = RongIMLib.SentStatus;
-    (function (ConnectionState) {
-      ConnectionState[ConnectionState.ACCEPTED = 0] = 'ACCEPTED'
-      ConnectionState[ConnectionState.UNACCEPTABLE_PROTOCOL_VERSION = 1] = 'UNACCEPTABLE_PROTOCOL_VERSION'
-      ConnectionState[ConnectionState.IDENTIFIER_REJECTED = 2] = 'IDENTIFIER_REJECTED'
-      ConnectionState[ConnectionState.SERVER_UNAVAILABLE = 3] = 'SERVER_UNAVAILABLE'
+    var SentStatus = RongIMLib.SentStatus
+    ;(function (ConnectionState) {
+      ConnectionState[(ConnectionState.ACCEPTED = 0)] = 'ACCEPTED'
+      ConnectionState[(ConnectionState.UNACCEPTABLE_PROTOCOL_VERSION = 1)] =
+        'UNACCEPTABLE_PROTOCOL_VERSION'
+      ConnectionState[(ConnectionState.IDENTIFIER_REJECTED = 2)] =
+        'IDENTIFIER_REJECTED'
+      ConnectionState[(ConnectionState.SERVER_UNAVAILABLE = 3)] =
+        'SERVER_UNAVAILABLE'
       /**
-             * token无效
-             */
-      ConnectionState[ConnectionState.TOKEN_INCORRECT = 4] = 'TOKEN_INCORRECT'
-      ConnectionState[ConnectionState.NOT_AUTHORIZED = 5] = 'NOT_AUTHORIZED'
-      ConnectionState[ConnectionState.REDIRECT = 6] = 'REDIRECT'
-      ConnectionState[ConnectionState.PACKAGE_ERROR = 7] = 'PACKAGE_ERROR'
-      ConnectionState[ConnectionState.APP_BLOCK_OR_DELETE = 8] = 'APP_BLOCK_OR_DELETE'
-      ConnectionState[ConnectionState.BLOCK = 9] = 'BLOCK'
-      ConnectionState[ConnectionState.TOKEN_EXPIRE = 10] = 'TOKEN_EXPIRE'
-      ConnectionState[ConnectionState.DEVICE_ERROR = 11] = 'DEVICE_ERROR'
+       * token无效
+       */
+      ConnectionState[(ConnectionState.TOKEN_INCORRECT = 4)] = 'TOKEN_INCORRECT'
+      ConnectionState[(ConnectionState.NOT_AUTHORIZED = 5)] = 'NOT_AUTHORIZED'
+      ConnectionState[(ConnectionState.REDIRECT = 6)] = 'REDIRECT'
+      ConnectionState[(ConnectionState.PACKAGE_ERROR = 7)] = 'PACKAGE_ERROR'
+      ConnectionState[(ConnectionState.APP_BLOCK_OR_DELETE = 8)] =
+        'APP_BLOCK_OR_DELETE'
+      ConnectionState[(ConnectionState.BLOCK = 9)] = 'BLOCK'
+      ConnectionState[(ConnectionState.TOKEN_EXPIRE = 10)] = 'TOKEN_EXPIRE'
+      ConnectionState[(ConnectionState.DEVICE_ERROR = 11)] = 'DEVICE_ERROR'
     })(RongIMLib.ConnectionState || (RongIMLib.ConnectionState = {}))
-    var ConnectionState = RongIMLib.ConnectionState;
-    (function (RTCAPIType) {
-      RTCAPIType[RTCAPIType.ROOM = 1] = 'ROOM'
-      RTCAPIType[RTCAPIType.PERSON = 2] = 'PERSON'
+    var ConnectionState = RongIMLib.ConnectionState
+    ;(function (RTCAPIType) {
+      RTCAPIType[(RTCAPIType.ROOM = 1)] = 'ROOM'
+      RTCAPIType[(RTCAPIType.PERSON = 2)] = 'PERSON'
     })(RongIMLib.RTCAPIType || (RongIMLib.RTCAPIType = {}))
     var RTCAPIType = RongIMLib.RTCAPIType
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var RongIMClient = (function () {
-      function RongIMClient () {}
+      function RongIMClient() {}
       RongIMClient.getInstance = function () {
         if (!RongIMClient._instance) {
-          throw new Error('RongIMClient is not initialized. Call .init() method first.')
+          throw new Error(
+            'RongIMClient is not initialized. Call .init() method first.'
+          )
         }
         return RongIMClient._instance
       }
       RongIMClient.showError = function (errorInfo) {
-        var hasConsole = (console && console.error)
+        var hasConsole = console && console.error
         if (hasConsole) {
           console.error(JSON.stringify(errorInfo))
         }
@@ -2100,10 +2211,10 @@
           onError: function (errorCode) {
             RongIMClient.logger({
               code: errorCode,
-              funcName: funcName
+              funcName: funcName,
             })
             callback.onError(errorCode)
-          }
+          },
         }
       }
       RongIMClient.logSendCallback = function (callback, funcName) {
@@ -2112,19 +2223,24 @@
           onError: function (errorCode, result) {
             RongIMClient.logger({
               code: errorCode,
-              funcName: funcName
+              funcName: funcName,
             })
             callback.onError(errorCode, result)
           },
-          onBefore: callback.onBefore
+          onBefore: callback.onBefore,
         }
       }
       /**
-             * 初始化 SDK，在整个应用全局只需要调用一次。
-             * @param appKey    开发者后台申请的 AppKey，用来标识应用。
-             * @param dataAccessProvider 必须是DataAccessProvider的实例
-             */
-      RongIMClient.init = function (appKey, dataAccessProvider, options, callback) {
+       * 初始化 SDK，在整个应用全局只需要调用一次。
+       * @param appKey    开发者后台申请的 AppKey，用来标识应用。
+       * @param dataAccessProvider 必须是DataAccessProvider的实例
+       */
+      RongIMClient.init = function (
+        appKey,
+        dataAccessProvider,
+        options,
+        callback
+      ) {
         if (RongIMClient._instance) {
           return RongIMClient._memoryStore.sdkInfo
         }
@@ -2142,9 +2258,9 @@
         }
         var isIntegrity = function () {
           // iOS 9
-          var hasWS = (typeof WebSocket)
-          var integrity = (typeof WebSocket.OPEN === 'number')
-          return (hasWS && integrity)
+          var hasWS = typeof WebSocket
+          var integrity = typeof WebSocket.OPEN === 'number'
+          return hasWS && integrity
         }
         if (typeof WebSocket === 'object' && isIntegrity()) {
           isPolling = false
@@ -2164,18 +2280,21 @@
         RongIMClient.serverStore.index = serverIndex || 0
         var pathTmpl = '{0}{1}'
         var _serverPath = {
-          api: 'api.cn.ronghub.com'
+          api: 'api.cn.ronghub.com',
         }
         RongIMLib.RongUtil.forEach(_serverPath, function (path, key) {
-          _serverPath[key] = RongIMLib.RongUtil.stringFormat(pathTmpl, [protocol, path])
+          _serverPath[key] = RongIMLib.RongUtil.stringFormat(pathTmpl, [
+            protocol,
+            path,
+          ])
         })
         RongIMLib.RongUtil.forEach(_serverPath, function (path, key) {
-          var hasProto = (key in options)
+          var hasProto = key in options
           var config = {
             path: options[key],
             tmpl: pathTmpl,
             protocol: protocol,
-            sub: true
+            sub: true,
           }
           path = hasProto ? RongIMLib.RongUtil.formatProtoclPath(config) : path
           options[key] = path
@@ -2192,16 +2311,19 @@
             path: navi,
             tmpl: pathTmpl,
             protocol: protocol,
-            sub: true
+            sub: true,
           }
           navi = RongIMLib.RongUtil.formatProtoclPath(config)
           navigaters[index] = navi
         })
         var _sourcePath = {
-          protobuf: 'cdn.ronghub.com/protobuf-2.3.6.min.js'
+          protobuf: 'cdn.ronghub.com/protobuf-2.3.6.min.js',
         }
         RongIMLib.RongUtil.forEach(_sourcePath, function (path, key) {
-          _sourcePath[key] = RongIMLib.RongUtil.stringFormat(pathTmpl, [protocol, path])
+          _sourcePath[key] = RongIMLib.RongUtil.stringFormat(pathTmpl, [
+            protocol,
+            path,
+          ])
         })
         RongIMLib.RongUtil.extend(_sourcePath, options)
         var _defaultOpts = {
@@ -2214,7 +2336,7 @@
           naviTimeout: 5000,
           navigaters: navigaters,
           maxNaviRetry: 10,
-          isNaviJSONP: false
+          isNaviJSONP: false,
         }
         delete options.navigaters
         RongIMLib.RongUtil.extend(_defaultOpts, options)
@@ -2237,17 +2359,21 @@
           otherDevice: false,
           custStore: {},
           converStore: {
-            latestMessage: {}
+            latestMessage: {},
           },
           connectAckTime: 0,
           voipStategy: 0,
           isFirstPingMsg: true,
           depend: options,
           listenerList: RongIMClient._memoryStore.listenerList,
-          notification: {}
+          notification: {},
         }
         RongIMClient._memoryStore = tempStore
-        if (dataAccessProvider && Object.prototype.toString.call(dataAccessProvider) == '[object Object]') {
+        if (
+          dataAccessProvider &&
+          Object.prototype.toString.call(dataAccessProvider) ==
+            '[object Object]'
+        ) {
           RongIMClient._dataAccessProvider = dataAccessProvider
         } else {
           RongIMClient._dataAccessProvider = new RongIMLib.ServerDataProvider()
@@ -2257,185 +2383,185 @@
         RongIMClient._memoryStore.sdkInfo = sdkInfo
         // 兼容 c++ 设置导航，Web 端不生效
         RongIMClient._dataAccessProvider.setServerInfo({
-          navi: location.protocol + options.navi + '/navi.xml'
+          navi: location.protocol + options.navi + '/navi.xml',
         })
         RongIMClient.MessageParams = {
           TextMessage: {
             objectName: 'RC:TxtMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           ImageMessage: {
             objectName: 'RC:ImgMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           DiscussionNotificationMessage: {
             objectName: 'RC:DizNtf',
-            msgTag: new RongIMLib.MessageTag(false, true)
+            msgTag: new RongIMLib.MessageTag(false, true),
           },
           VoiceMessage: {
             objectName: 'RC:VcMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           RichContentMessage: {
             objectName: 'RC:ImgTextMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           FileMessage: {
             objectName: 'RC:FileMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           HQVoiceMessage: {
             objectName: 'RC:HQVCMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           HandshakeMessage: {
             objectName: '',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           UnknownMessage: {
             objectName: '',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           LocationMessage: {
             objectName: 'RC:LBSMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           InformationNotificationMessage: {
             objectName: 'RC:InfoNtf',
-            msgTag: new RongIMLib.MessageTag(false, true)
+            msgTag: new RongIMLib.MessageTag(false, true),
           },
           ContactNotificationMessage: {
             objectName: 'RC:ContactNtf',
-            msgTag: new RongIMLib.MessageTag(false, true)
+            msgTag: new RongIMLib.MessageTag(false, true),
           },
           ProfileNotificationMessage: {
             objectName: 'RC:ProfileNtf',
-            msgTag: new RongIMLib.MessageTag(false, true)
+            msgTag: new RongIMLib.MessageTag(false, true),
           },
           CommandNotificationMessage: {
             objectName: 'RC:CmdNtf',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           PublicServiceRichContentMessage: {
             objectName: 'RC:PSImgTxtMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           PublicServiceMultiRichContentMessage: {
             objectName: 'RC:PSMultiImgTxtMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           JrmfRedPacketMessage: {
             objectName: 'RCJrmf:RpMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           JrmfRedPacketOpenedMessage: {
             objectName: 'RCJrmf:RpOpendMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
+            msgTag: new RongIMLib.MessageTag(true, true),
           },
           GroupNotificationMessage: {
             objectName: 'RC:GrpNtf',
-            msgTag: new RongIMLib.MessageTag(false, true)
+            msgTag: new RongIMLib.MessageTag(false, true),
           },
           CommandMessage: {
             objectName: 'RC:CmdMsg',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           TypingStatusMessage: {
             objectName: 'RC:TypSts',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           PublicServiceCommandMessage: {
             objectName: 'RC:PSCmd',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           RecallCommandMessage: {
             objectName: 'RC:RcCmd',
-            msgTag: new RongIMLib.MessageTag(false, true)
+            msgTag: new RongIMLib.MessageTag(false, true),
           },
           SyncReadStatusMessage: {
             objectName: 'RC:SRSMsg',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           ReadReceiptRequestMessage: {
             objectName: 'RC:RRReqMsg',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           ReadReceiptResponseMessage: {
             objectName: 'RC:RRRspMsg',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           ChangeModeResponseMessage: {
             objectName: 'RC:CsChaR',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           ChangeModeMessage: {
             objectName: 'RC:CSCha',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           EvaluateMessage: {
             objectName: 'RC:CsEva',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           CustomerContact: {
             objectName: 'RC:CsContact',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           HandShakeMessage: {
             objectName: 'RC:CsHs',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           HandShakeResponseMessage: {
             objectName: 'RC:CsHsR',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           SuspendMessage: {
             objectName: 'RC:CsSp',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           TerminateMessage: {
             objectName: 'RC:CsEnd',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           CustomerStatusUpdateMessage: {
             objectName: 'RC:CsUpdate',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           ReadReceiptMessage: {
             objectName: 'RC:ReadNtf',
-            msgTag: new RongIMLib.MessageTag(false, false)
+            msgTag: new RongIMLib.MessageTag(false, false),
           },
           RCCombineMessage: {
             objectName: 'RC:CombineMsg',
-            msgTag: new RongIMLib.MessageTag(true, true)
-          }
+            msgTag: new RongIMLib.MessageTag(true, true),
+          },
         }
         RongIMClient.MessageParams.AcceptMessage = {
           objectName: 'RC:VCAccept',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageParams.RingingMessage = {
           objectName: 'RC:VCRinging',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageParams.SummaryMessage = {
           objectName: 'RC:VCSummary',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageParams.HungupMessage = {
           objectName: 'RC:VCHangup',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageParams.InviteMessage = {
           objectName: 'RC:VCInvite',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageParams.MediaModifyMessage = {
           objectName: 'RC:VCModifyMedia',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageParams.MemberModifyMessage = {
           objectName: 'RC:VCModifyMem',
-          msgTag: new RongIMLib.MessageTag(false, false)
+          msgTag: new RongIMLib.MessageTag(false, false),
         }
         RongIMClient.MessageType = {
           TextMessage: 'TextMessage',
@@ -2477,475 +2603,478 @@
           JrmfRedPacketOpenedMessage: 'JrmfRedPacketOpenedMessage',
           GroupNotificationMessage: 'GroupNotificationMessage',
           PublicServiceRichContentMessage: 'PublicServiceRichContentMessage',
-          PublicServiceMultiRichContentMessage: 'PublicServiceMultiRichContentMessage',
+          PublicServiceMultiRichContentMessage:
+            'PublicServiceMultiRichContentMessage',
           PublicServiceCommandMessage: 'PublicServiceCommandMessage',
           RecallCommandMessage: 'RecallCommandMessage',
           ReadReceiptMessage: 'ReadReceiptMessage',
-          RCCombineMessage: 'RCCombineMessage'
+          RCCombineMessage: 'RCCombineMessage',
         }
         RongIMClient.LogFactory = {
           /**
-                     * 个人
-                     */
+           * 个人
+           */
           '-1': {
             code: '-1',
-            msg: '服务器超时'
+            msg: '服务器超时',
           },
           '-2': {
             code: '-2',
-            msg: '未知原因失败'
+            msg: '未知原因失败',
           },
           '-3': {
             code: '-3',
-            msg: '参数错误'
+            msg: '参数错误',
           },
           '-4': {
             code: '-4',
-            msg: '参数不正确或尚未实例化'
+            msg: '参数不正确或尚未实例化',
           },
           25101: {
             code: '25101',
             msg: '撤回消息参数错误',
-            desc: '请检查撤回消息参数 https://rongcloud.github.io/websdk-demo/api-test.html'
+            desc:
+              '请检查撤回消息参数 https://rongcloud.github.io/websdk-demo/api-test.html',
           },
           25102: {
             code: '25101',
-            msg: '只能撤回自发发送的消息'
+            msg: '只能撤回自发发送的消息',
           },
           20604: {
             code: '20604',
             msg: '发送频率过快',
-            desc: 'https://developer.rongcloud.cn/ticket/info/9Q3L6vRKd1cLS7rycA==?type=1'
+            desc:
+              'https://developer.rongcloud.cn/ticket/info/9Q3L6vRKd1cLS7rycA==?type=1',
           },
           20406: {
             code: '20406',
-            msg: '被禁言'
+            msg: '被禁言',
           },
           23407: {
             code: '23407',
-            msg: '获取用户失败'
+            msg: '获取用户失败',
           },
           /**
-                     * 群组
-                     */
+           * 群组
+           */
           20407: {
             code: '20407',
-            msg: '群组Id无效'
+            msg: '群组Id无效',
           },
           22408: {
             code: '22408',
-            msg: '群组被禁言'
+            msg: '群组被禁言',
           },
           22406: {
             code: '22406',
-            msg: '不在群组'
+            msg: '不在群组',
           },
           35001: {
             code: '35001',
-            msg: '群组同步异常'
+            msg: '群组同步异常',
           },
           35002: {
             code: '35002',
-            msg: '匹配群信息异常'
+            msg: '匹配群信息异常',
           },
           /**
-                     * 讨论组
-                     */
+           * 讨论组
+           */
           21406: {
             code: '21406',
-            msg: '不在讨论组'
+            msg: '不在讨论组',
           },
           21407: {
             code: '21407',
-            msg: '加入讨论失败'
+            msg: '加入讨论失败',
           },
           21408: {
             code: '21408',
-            msg: '创建讨论组失败'
+            msg: '创建讨论组失败',
           },
           21409: {
             code: '21409',
-            msg: '设置讨论组邀请状态失败'
+            msg: '设置讨论组邀请状态失败',
           },
           /**
-                     * 聊天室
-                     */
+           * 聊天室
+           */
           23406: {
             code: '23406',
-            msg: '不在聊天室'
+            msg: '不在聊天室',
           },
           23408: {
             code: '23408',
-            msg: '聊天室被禁言'
+            msg: '聊天室被禁言',
           },
           23409: {
             code: '23409',
-            msg: '聊天室中成员被踢出'
+            msg: '聊天室中成员被踢出',
           },
           23410: {
             code: '23410',
-            msg: '聊天室不存在'
+            msg: '聊天室不存在',
           },
           23411: {
             code: '23411',
-            msg: '聊天室成员已满'
+            msg: '聊天室成员已满',
           },
           23412: {
             code: '23412',
-            msg: '获取聊天室信息参数无效'
+            msg: '获取聊天室信息参数无效',
           },
           23413: {
             code: '23413',
-            msg: '聊天室异常'
+            msg: '聊天室异常',
           },
           23414: {
             code: '23414',
-            msg: '没有打开聊天室消息存储'
+            msg: '没有打开聊天室消息存储',
           },
           36001: {
             code: '36001',
-            msg: '加入聊天室Id为空'
+            msg: '加入聊天室Id为空',
           },
           36002: {
             code: '36002',
-            msg: '加入聊天室失败'
+            msg: '加入聊天室失败',
           },
           36003: {
             code: '36003',
-            msg: '拉取聊天室历史消息失败'
+            msg: '拉取聊天室历史消息失败',
           },
           /**
-                     * voip
-                     */
+           * voip
+           */
           24001: {
             code: '24001',
-            msg: '没有注册DeviveId 也就是用户没有登陆'
+            msg: '没有注册DeviveId 也就是用户没有登陆',
           },
           24002: {
             code: '24002',
-            msg: '用户已经存在'
+            msg: '用户已经存在',
           },
           0: {
             code: '0',
-            msg: '成功'
+            msg: '成功',
           },
           24009: {
             code: '24009',
-            msg: '没有对应的用户或token'
+            msg: '没有对应的用户或token',
           },
           24013: {
             code: '24013',
-            msg: 'voip为空'
+            msg: 'voip为空',
           },
           24010: {
             code: '24010',
-            msg: '不支持的Voip引擎'
+            msg: '不支持的Voip引擎',
           },
           24011: {
             code: '24011',
-            msg: 'channelName 是空'
+            msg: 'channelName 是空',
           },
           24012: {
             code: '24012',
-            msg: '生成Voipkey失败'
+            msg: '生成Voipkey失败',
           },
           24014: {
             code: '24014',
-            msg: '没有配置voip'
+            msg: '没有配置voip',
           },
           24015: {
             code: '24015',
-            msg: '服务器内部错误'
+            msg: '服务器内部错误',
           },
           24016: {
             code: '24016',
-            msg: 'VOIP close'
+            msg: 'VOIP close',
           },
           /**
-                     * 通讯、导航
-                     */
+           * 通讯、导航
+           */
           30001: {
             code: '30001',
-            msg: '通信过程中，当前Socket不存在'
+            msg: '通信过程中，当前Socket不存在',
           },
           30002: {
             code: '30002',
-            msg: 'Socket连接不可用'
+            msg: 'Socket连接不可用',
           },
           30003: {
             code: '30003',
-            msg: '通信超时'
+            msg: '通信超时',
           },
           30004: {
             code: '30004',
-            msg: '导航操作时，Http请求失败'
+            msg: '导航操作时，Http请求失败',
           },
           30005: {
             code: '30005',
-            msg: 'HTTP请求失败'
+            msg: 'HTTP请求失败',
           },
           30006: {
             code: '30006',
-            msg: 'HTTP接收失败'
+            msg: 'HTTP接收失败',
           },
           30007: {
             code: '30007',
-            msg: '导航资源错误'
+            msg: '导航资源错误',
           },
           30008: {
             code: '30008',
-            msg: '没有有效数据'
+            msg: '没有有效数据',
           },
           30009: {
             code: '30009',
-            msg: '不存在有效 IP 地址'
+            msg: '不存在有效 IP 地址',
           },
           30010: {
             code: '30010',
-            msg: '创建 Socket 失败'
+            msg: '创建 Socket 失败',
           },
           30011: {
             code: '30011',
-            msg: ' Socket 被断开'
+            msg: ' Socket 被断开',
           },
           30012: {
             code: '30012',
-            msg: 'PING 操作失败'
+            msg: 'PING 操作失败',
           },
           30013: {
             code: '30013',
-            msg: 'PING 超时'
+            msg: 'PING 超时',
           },
           30014: {
             code: '30014',
-            msg: '消息发送失败'
+            msg: '消息发送失败',
           },
           30016: {
             code: '30016',
-            msg: '消息大小超限，最大 128 KB'
+            msg: '消息大小超限，最大 128 KB',
           },
           /**
-                     * 连接
-                     */
+           * 连接
+           */
           31000: {
             code: '31000',
-            msg: '做 connect 连接时，收到的 ACK 超时'
+            msg: '做 connect 连接时，收到的 ACK 超时',
           },
           31001: {
             code: '31001',
-            msg: '参数错误'
+            msg: '参数错误',
           },
           31002: {
             code: '31002',
-            msg: '参数错误，App Id 错误'
+            msg: '参数错误，App Id 错误',
           },
           31003: {
             code: '31003',
-            msg: '服务器不可用'
+            msg: '服务器不可用',
           },
           31004: {
             code: '31004',
-            msg: 'Token 错误'
+            msg: 'Token 错误',
           },
           31005: {
             code: '31005',
-            msg: 'App Id 与 Token 不匹配'
+            msg: 'App Id 与 Token 不匹配',
           },
           31006: {
             code: '31006',
-            msg: '重定向，地址错误'
+            msg: '重定向，地址错误',
           },
           31007: {
             code: '31007',
-            msg: 'NAME 与后台注册信息不一致'
+            msg: 'NAME 与后台注册信息不一致',
           },
           31008: {
             code: '31008',
-            msg: 'APP 被屏蔽、删除或不存在'
+            msg: 'APP 被屏蔽、删除或不存在',
           },
           31009: {
             code: '31009',
-            msg: '用户被屏蔽'
+            msg: '用户被屏蔽',
           },
           31010: {
             code: '31010',
-            msg: 'Disconnect，由服务器返回，比如用户互踢'
+            msg: 'Disconnect，由服务器返回，比如用户互踢',
           },
           31011: {
             code: '31011',
-            msg: 'Disconnect，由服务器返回，比如用户互踢'
+            msg: 'Disconnect，由服务器返回，比如用户互踢',
           },
           /**
-                     * 协议
-                     */
+           * 协议
+           */
           32001: {
             code: '32001',
-            msg: '协议层内部错误。query，上传下载过程中数据错误'
+            msg: '协议层内部错误。query，上传下载过程中数据错误',
           },
           32002: {
             code: '32002',
-            msg: '协议层内部错误'
+            msg: '协议层内部错误',
           },
           /**
-                     * BIZ
-                     */
+           * BIZ
+           */
           33001: {
             code: '33001',
-            msg: '未调用 init 初始化函数'
+            msg: '未调用 init 初始化函数',
           },
           33002: {
             code: '33002',
-            msg: '数据库初始化失败'
+            msg: '数据库初始化失败',
           },
           33003: {
             code: '33003',
-            msg: '传入参数无效'
+            msg: '传入参数无效',
           },
           33004: {
             code: '33004',
-            msg: '通道无效'
+            msg: '通道无效',
           },
           33005: {
             code: '33005',
-            msg: '重新连接成功'
+            msg: '重新连接成功',
           },
           33006: {
             code: '33006',
-            msg: '连接中，再调用 connect 被拒绝'
+            msg: '连接中，再调用 connect 被拒绝',
           },
           33007: {
             code: '33007',
-            msg: '消息漫游服务未开通'
+            msg: '消息漫游服务未开通',
           },
           33008: {
             code: '33008',
-            msg: '消息添加失败'
+            msg: '消息添加失败',
           },
           33009: {
             code: '33009',
-            msg: '消息删除失败'
+            msg: '消息删除失败',
           },
           /**
-                     * 会话
-                     */
+           * 会话
+           */
           34001: {
             code: '34001',
-            msg: '删除会话失败'
+            msg: '删除会话失败',
           },
           34002: {
             code: '34002',
-            msg: '拉取历史消息失败'
+            msg: '拉取历史消息失败',
           },
           34003: {
             code: '34003',
-            msg: '会话指定异常'
+            msg: '会话指定异常',
           },
           34004: {
             code: '34004',
-            msg: '获取会话未读消息总数失败'
+            msg: '获取会话未读消息总数失败',
           },
           34005: {
             code: '34005',
-            msg: '获取指定会话类型未读消息数异常'
+            msg: '获取指定会话类型未读消息数异常',
           },
           34006: {
             code: '34006',
-            msg: '获取指定用户ID&会话类型未读消息数异常'
+            msg: '获取指定用户ID&会话类型未读消息数异常',
           },
           34007: {
             code: '34007',
-            msg: '清除会话消息异常'
+            msg: '清除会话消息异常',
           },
           34008: {
             code: '34008',
-            msg: '获取会话消息异常'
+            msg: '获取会话消息异常',
           },
           34009: {
             code: '34009',
-            msg: '清除历史消息会话类型不正确'
+            msg: '清除历史消息会话类型不正确',
           },
           34010: {
             code: '34010',
-            msg: '清除历史消息失败，请检查传入参数'
+            msg: '清除历史消息失败，请检查传入参数',
           },
           /**
-                     * 黑名单异常
-                     */
+           * 黑名单异常
+           */
           37001: {
             code: '37001',
-            msg: '加入黑名单异常'
+            msg: '加入黑名单异常',
           },
           37002: {
             code: '37002',
-            msg: '获得指定人员再黑名单中的状态异常'
+            msg: '获得指定人员再黑名单中的状态异常',
           },
           37003: {
             code: '37003',
-            msg: '移除黑名单异常'
+            msg: '移除黑名单异常',
           },
           405: {
             code: '405',
-            msg: '在黑名单中'
+            msg: '在黑名单中',
           },
           /**
-                     * 草稿
-                     */
+           * 草稿
+           */
           38001: {
             code: '38001',
-            msg: '获取草稿失败'
+            msg: '获取草稿失败',
           },
           38002: {
             code: '38002',
-            msg: '保存草稿失败'
+            msg: '保存草稿失败',
           },
           38003: {
             code: '38003',
-            msg: '删除草稿失败'
+            msg: '删除草稿失败',
           },
           /**
-                     * 公众号
-                     */
+           * 公众号
+           */
           39001: {
             code: '39001',
-            msg: '关注公众号失败'
+            msg: '关注公众号失败',
           },
           /**
-                     * 文件
-                     */
+           * 文件
+           */
           41001: {
             code: '41001',
-            msg: '文件类型错误'
+            msg: '文件类型错误',
           },
           41002: {
             code: '41002',
-            msg: '获取七牛token失败'
+            msg: '获取七牛token失败',
           },
           /**
-                     *
-                     */
+           *
+           */
           51001: {
             code: '51001',
-            msg: '未安装或未启动插件'
+            msg: '未安装或未启动插件',
           },
           51002: {
             code: '51002',
-            msg: '视频已经存在'
+            msg: '视频已经存在',
           },
           51003: {
             code: '51003',
-            msg: '无效的channelName'
+            msg: '无效的channelName',
           },
           51004: {
             code: '51004',
-            msg: '视频内容为空'
+            msg: '视频内容为空',
           },
           /**
-                     *
-                     */
+           *
+           */
           61001: {
             code: '61001',
-            msg: '删除消息数组长度为 0'
-          }
+            msg: '删除消息数组长度为 0',
+          },
         }
         var handler = function (message, uris, callback) {
           var userId = message.senderUserId
@@ -2994,7 +3123,7 @@
             var UserState = {
               JOINED: 0,
               LEFT: 1,
-              OFFLINE: 2
+              OFFLINE: 2,
             }
             RongIMLib.RongUtil.forEach(users, function (user) {
               var state = user.state
@@ -3009,7 +3138,7 @@
                   break
               }
             })
-          }
+          },
         }
         RongIMClient.RTCInnerListener = function (message) {
           var func = RTCMessage[message.messageType] || function () {}
@@ -3029,33 +3158,53 @@
                 callback(_instance, userId);
             */
       RongIMClient.initApp = function (config, callback) {
-        RongIMClient.init(config.appkey, config.dataAccessProvider, config.opts, function () {
-          var instance = RongIMClient._instance
-          // 备用
-          var error = null
-          callback(error, instance)
-        })
+        RongIMClient.init(
+          config.appkey,
+          config.dataAccessProvider,
+          config.opts,
+          function () {
+            var instance = RongIMClient._instance
+            // 备用
+            var error = null
+            callback(error, instance)
+          }
+        )
       }
       /**
-             * 连接服务器，在整个应用全局只需要调用一次，断线后 SDK 会自动重连。
-             *
-             * @param token     从服务端获取的用户身份令牌（Token）。
-             * @param callback  连接回调，返回连接的成功或者失败状态。
-             */
+       * 连接服务器，在整个应用全局只需要调用一次，断线后 SDK 会自动重连。
+       *
+       * @param token     从服务端获取的用户身份令牌（Token）。
+       * @param callback  连接回调，返回连接的成功或者失败状态。
+       */
       RongIMClient.connect = function (token, _callback, userId, serverConf) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'object', 'string|null|object|global|undefined', 'object|null|global|undefined'], 'connect', true, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'string',
+            'object',
+            'string|null|object|global|undefined',
+            'object|null|global|undefined',
+          ],
+          'connect',
+          true,
+          arguments
+        )
         var connectCallback = {
           onSuccess: _callback.onSuccess,
           onTokenIncorrect: _callback.onTokenIncorrect,
           onError: function (errorCode) {
             RongIMClient.logger({
               code: errorCode,
-              funcName: 'connect'
+              funcName: 'connect',
             })
             _callback.onError(errorCode)
-          }
+          },
         }
-        RongIMClient._dataAccessProvider.connect(token, connectCallback, userId, serverConf)
+        RongIMClient._dataAccessProvider.connect(
+          token,
+          connectCallback,
+          userId,
+          serverConf
+        )
       }
       RongIMClient.reconnect = function (callback, config) {
         var connectCallback = {
@@ -3064,26 +3213,38 @@
           onError: function (errorCode) {
             RongIMClient.logger({
               code: errorCode,
-              funcName: 'connect'
+              funcName: 'connect',
             })
             callback.onError(errorCode)
-          }
+          },
         }
         RongIMClient._dataAccessProvider.reconnect(connectCallback, config)
       }
       /**
-             * 注册消息类型，用于注册用户自定义的消息。
-             * 内建的消息类型已经注册过，不需要再次注册。
-             * 自定义消息声明需放在执行顺序最高的位置（在RongIMClient.init(appkey)之后即可）
-             * @param objectName  消息内置名称
-             */
-      RongIMClient.registerMessageType = function (messageType, objectName, messageTag, messageContent, searchProps) {
-        RongIMClient._dataAccessProvider.registerMessageType(messageType, objectName, messageTag, messageContent, searchProps)
+       * 注册消息类型，用于注册用户自定义的消息。
+       * 内建的消息类型已经注册过，不需要再次注册。
+       * 自定义消息声明需放在执行顺序最高的位置（在RongIMClient.init(appkey)之后即可）
+       * @param objectName  消息内置名称
+       */
+      RongIMClient.registerMessageType = function (
+        messageType,
+        objectName,
+        messageTag,
+        messageContent,
+        searchProps
+      ) {
+        RongIMClient._dataAccessProvider.registerMessageType(
+          messageType,
+          objectName,
+          messageTag,
+          messageContent,
+          searchProps
+        )
         RongIMClient.RegisterMessage[messageType].messageName = messageType
         RongIMClient.MessageType[messageType] = messageType
         RongIMClient.MessageParams[messageType] = {
           objectName: objectName,
-          msgTag: messageTag
+          msgTag: messageTag,
         }
       }
       RongIMClient.prototype.registerMessageTypes = function (types) {
@@ -3091,10 +3252,10 @@
         RongIMClient._dataAccessProvider.registerMessageTypes(types)
       }
       /**
-             * 设置连接状态变化的监听器。
-             *
-             * @param listener  连接状态变化的监听器。
-             */
+       * 设置连接状态变化的监听器。
+       *
+       * @param listener  连接状态变化的监听器。
+       */
       RongIMClient.setConnectionStatusListener = function (listener) {
         if (RongIMClient._dataAccessProvider) {
           RongIMClient._dataAccessProvider.setConnectionStatusListener(listener)
@@ -3108,10 +3269,10 @@
         }
       }
       /**
-             * 设置接收消息的监听器。
-             *
-             * @param listener  接收消息的监听器。
-             */
+       * 设置接收消息的监听器。
+       *
+       * @param listener  接收消息的监听器。
+       */
       RongIMClient.setOnReceiveMessageListener = function (listener) {
         if (RongIMClient._dataAccessProvider) {
           RongIMClient._dataAccessProvider.setOnReceiveMessageListener(listener)
@@ -3120,48 +3281,63 @@
         }
       }
       /**
-             * 清理所有连接相关的变量
-             */
+       * 清理所有连接相关的变量
+       */
       RongIMClient.prototype.logout = function () {
         RongIMClient._dataAccessProvider.logout()
       }
       /**
-             * 断开连接。
-             */
+       * 断开连接。
+       */
       RongIMClient.prototype.disconnect = function () {
         RongIMClient._dataAccessProvider.disconnect()
       }
-      RongIMClient.prototype.startCustomService = function (custId, callback, content) {
-        if (!custId || !callback) { return }
+      RongIMClient.prototype.startCustomService = function (
+        custId,
+        callback,
+        content
+      ) {
+        if (!custId || !callback) {
+          return
+        }
         var msg = new RongIMLib.HandShakeMessage(content)
         var me = this
         RongIMLib.RongIMClient._memoryStore.custStore.isInit = true
-        RongIMClient.getInstance().sendMessage(RongIMLib.ConversationType.CUSTOMER_SERVICE, custId, msg, {
-          onSuccess: function (data) {
-            if (data.isBlack) {
+        RongIMClient.getInstance().sendMessage(
+          RongIMLib.ConversationType.CUSTOMER_SERVICE,
+          custId,
+          msg,
+          {
+            onSuccess: function (data) {
+              if (data.isBlack) {
+                callback.onError()
+                me.stopCustomeService(custId, {
+                  onSuccess: function () {},
+                  onError: function () {},
+                })
+              } else {
+                callback.onSuccess()
+              }
+            },
+            onError: function () {
               callback.onError()
-              me.stopCustomeService(custId, {
-                onSuccess: function () {},
-                onError: function () {}
-              })
-            } else {
-              callback.onSuccess()
-            }
-          },
-          onError: function () {
-            callback.onError()
-          },
-          onBefore: function () {}
-        })
+            },
+            onBefore: function () {},
+          }
+        )
       }
       RongIMClient.prototype.stopCustomeService = function (custId, callback) {
-        if (!custId || !callback) { return }
+        if (!custId || !callback) {
+          return
+        }
         var session = RongIMClient._memoryStore.custStore[custId]
-        if (!session) { return }
+        if (!session) {
+          return
+        }
         var msg = new RongIMLib.SuspendMessage({
           sid: session.sid,
           uid: session.uid,
-          pid: session.pid
+          pid: session.pid,
         })
         this.sendCustMessage(custId, msg, {
           onSuccess: function () {
@@ -3174,78 +3350,114 @@
             setTimeout(function () {
               callback.onError()
             })
-          }
+          },
         })
       }
       RongIMClient.prototype.switchToHumanMode = function (custId, callback) {
-        if (!custId || !callback) { return }
+        if (!custId || !callback) {
+          return
+        }
         var session = RongIMClient._memoryStore.custStore[custId]
-        if (!session) { return }
+        if (!session) {
+          return
+        }
         var msg = new RongIMLib.ChangeModeMessage({
           sid: session.sid,
           uid: session.uid,
-          pid: session.pid
+          pid: session.pid,
         })
         this.sendCustMessage(custId, msg, callback)
       }
-      RongIMClient.prototype.evaluateRebotCustomService = function (custId, isRobotResolved, sugest, callback) {
-        if (!custId || !callback) { return }
+      RongIMClient.prototype.evaluateRebotCustomService = function (
+        custId,
+        isRobotResolved,
+        sugest,
+        callback
+      ) {
+        if (!custId || !callback) {
+          return
+        }
         var session = RongIMClient._memoryStore.custStore[custId]
-        if (!session) { return }
+        if (!session) {
+          return
+        }
         var msg = new RongIMLib.EvaluateMessage({
           sid: session.sid,
           uid: session.uid,
           pid: session.pid,
           isRobotResolved: isRobotResolved,
           sugest: sugest,
-          type: 0
+          type: 0,
         })
         this.sendCustMessage(custId, msg, callback)
       }
-      RongIMClient.prototype.evaluateHumanCustomService = function (custId, humanValue, sugest, callback) {
-        if (!custId || !callback) { return }
+      RongIMClient.prototype.evaluateHumanCustomService = function (
+        custId,
+        humanValue,
+        sugest,
+        callback
+      ) {
+        if (!custId || !callback) {
+          return
+        }
         var session = RongIMClient._memoryStore.custStore[custId]
-        if (!session) { return }
+        if (!session) {
+          return
+        }
         var msg = new RongIMLib.EvaluateMessage({
           sid: session.sid,
           uid: session.uid,
           pid: session.pid,
           humanValue: humanValue,
           sugest: sugest,
-          type: 1
+          type: 1,
         })
         this.sendCustMessage(custId, msg, callback)
       }
-      RongIMClient.prototype.sendCustMessage = function (custId, msg, callback) {
-        RongIMClient.getInstance().sendMessage(RongIMLib.ConversationType.CUSTOMER_SERVICE, custId, msg, {
-          onSuccess: function (data) {
-            callback.onSuccess()
-          },
-          onError: function () {
-            callback.onError()
-          },
-          onBefore: function () {}
-        })
+      RongIMClient.prototype.sendCustMessage = function (
+        custId,
+        msg,
+        callback
+      ) {
+        RongIMClient.getInstance().sendMessage(
+          RongIMLib.ConversationType.CUSTOMER_SERVICE,
+          custId,
+          msg,
+          {
+            onSuccess: function (data) {
+              callback.onSuccess()
+            },
+            onError: function () {
+              callback.onError()
+            },
+            onBefore: function () {},
+          }
+        )
       }
       /**
-             * 获取当前连接的状态。
-             */
+       * 获取当前连接的状态。
+       */
       RongIMClient.prototype.getCurrentConnectionStatus = function () {
         return RongIMClient._dataAccessProvider.getCurrentConnectionStatus()
       }
       /**
-             * 获取当前使用的连接通道。
-             */
+       * 获取当前使用的连接通道。
+       */
       RongIMClient.prototype.getConnectionChannel = function () {
-        if (RongIMLib.Transportations._TransportType == RongIMLib.Socket.XHR_POLLING) {
+        if (
+          RongIMLib.Transportations._TransportType ==
+          RongIMLib.Socket.XHR_POLLING
+        ) {
           return RongIMLib.ConnectionChannel.XHR_POLLING
-        } else if (RongIMLib.Transportations._TransportType == RongIMLib.Socket.WEBSOCKET) {
+        } else if (
+          RongIMLib.Transportations._TransportType == RongIMLib.Socket.WEBSOCKET
+        ) {
           return RongIMLib.ConnectionChannel.WEBSOCKET
         }
       }
       /**
-             * 获取当前使用的本地储存提供者。 TODO
-             */
+       * 获取当前使用的本地储存提供者。 TODO
+       */
       RongIMClient.prototype.getStorageProvider = function () {
         if (RongIMClient._memoryStore.providerType == 1) {
           return 'ServerDataProvider'
@@ -3254,93 +3466,147 @@
         }
       }
       /**
-             * 过滤聊天室消息（拉取最近聊天消息）
-             * @param {string[]} msgFilterNames
-             */
+       * 过滤聊天室消息（拉取最近聊天消息）
+       * @param {string[]} msgFilterNames
+       */
       RongIMClient.prototype.setFilterMessages = function (msgFilterNames) {
-        if (Object.prototype.toString.call(msgFilterNames) == '[object Array]') {
+        if (
+          Object.prototype.toString.call(msgFilterNames) == '[object Array]'
+        ) {
           RongIMClient._memoryStore.filterMessages = msgFilterNames
         }
       }
-      RongIMClient.prototype.getAgoraDynamicKey = function (engineType, channelName, callback) {
-        RongIMClient._dataAccessProvider.getAgoraDynamicKey(engineType, channelName, callback)
+      RongIMClient.prototype.getAgoraDynamicKey = function (
+        engineType,
+        channelName,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.getAgoraDynamicKey(
+          engineType,
+          channelName,
+          callback
+        )
       }
       /**
-             * 获取当前连接用户的 UserId。
-             */
+       * 获取当前连接用户的 UserId。
+       */
       RongIMClient.prototype.getCurrentUserId = function () {
         return RongIMLib.Bridge._client.userId
       }
       /**
-             * 获取服务器时间与本地时间的差值，单位为毫秒。
-             * 计算公式：差值 = 本地时间毫秒数 - 服务器时间毫秒数
-             * @param callback  获取的回调，返回差值。
-             */
+       * 获取服务器时间与本地时间的差值，单位为毫秒。
+       * 计算公式：差值 = 本地时间毫秒数 - 服务器时间毫秒数
+       * @param callback  获取的回调，返回差值。
+       */
       RongIMClient.prototype.getDeltaTime = function () {
         return RongIMClient._dataAccessProvider.getDelaTime()
       }
       // #region Message
       RongIMClient.prototype.getMessage = function (messageId, callback) {
-        RongIMClient._dataAccessProvider.getMessage(messageId, RongIMClient.logCallback(callback, 'getMessage'))
+        RongIMClient._dataAccessProvider.getMessage(
+          messageId,
+          RongIMClient.logCallback(callback, 'getMessage')
+        )
       }
-      RongIMClient.prototype.deleteLocalMessages = function (conversationType, targetId, messageIds, callback) {
-        RongIMClient._dataAccessProvider.removeLocalMessage(conversationType, targetId, messageIds, RongIMClient.logCallback(callback, 'deleteLocalMessages'))
+      RongIMClient.prototype.deleteLocalMessages = function (
+        conversationType,
+        targetId,
+        messageIds,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.removeLocalMessage(
+          conversationType,
+          targetId,
+          messageIds,
+          RongIMClient.logCallback(callback, 'deleteLocalMessages')
+        )
       }
       RongIMClient.prototype.updateMessage = function (message, callback) {
-        RongIMClient._dataAccessProvider.updateMessage(message, RongIMClient.logCallback(callback, 'updateMessage'))
+        RongIMClient._dataAccessProvider.updateMessage(
+          message,
+          RongIMClient.logCallback(callback, 'updateMessage')
+        )
       }
       RongIMClient.prototype.clearData = function () {
         return RongIMClient._dataAccessProvider.clearData()
       }
-      RongIMClient.prototype.clearMessages = function (conversationType, targetId, callback) {
-        RongIMClient._dataAccessProvider.clearMessages(conversationType, targetId, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'clearMessages'
+      RongIMClient.prototype.clearMessages = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.clearMessages(
+          conversationType,
+          targetId,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'clearMessages',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
       /** TODO 清楚本地存储的未读消息，目前清空内存中的未读消息
-             * [clearMessagesUnreadStatus 清空指定会话未读消息]
-             * @param  {ConversationType}        conversationType [会话类型]
-             * @param  {string}                  targetId         [用户id]
-             * @param  {ResultCallback<boolean>} callback         [返回值，参数回调]
-             */
-      RongIMClient.prototype.clearMessagesUnreadStatus = function (conversationType, targetId, callback) {
-        RongIMClient._dataAccessProvider.updateMessages(conversationType, targetId, 'readStatus', null, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'clearMessagesUnreadStatus'
+       * [clearMessagesUnreadStatus 清空指定会话未读消息]
+       * @param  {ConversationType}        conversationType [会话类型]
+       * @param  {string}                  targetId         [用户id]
+       * @param  {ResultCallback<boolean>} callback         [返回值，参数回调]
+       */
+      RongIMClient.prototype.clearMessagesUnreadStatus = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.updateMessages(
+          conversationType,
+          targetId,
+          'readStatus',
+          null,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'clearMessagesUnreadStatus',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
-      RongIMClient.prototype.deleteRemoteMessages = function (conversationType, targetId, delMsgs, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'array', 'object'], 'deleteRemoteMessages', false, arguments)
+      RongIMClient.prototype.deleteRemoteMessages = function (
+        conversationType,
+        targetId,
+        delMsgs,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'array', 'object'],
+          'deleteRemoteMessages',
+          false,
+          arguments
+        )
         if (delMsgs.length == 0) {
           var errorCode = RongIMLib.ErrorCode.DELETE_MESSAGE_ID_IS_NULL
           RongIMClient.logger({
             code: errorCode,
-            funcName: 'deleteRemoteMessages'
+            funcName: 'deleteRemoteMessages',
           })
           callback.onError(RongIMLib.ErrorCode.DELETE_MESSAGE_ID_IS_NULL)
           return
@@ -3363,134 +3629,306 @@
         // }, "DeleteMsgOutput");
       }
       /**
-             * [deleteMessages 删除消息记录。]
-             * @param  {ConversationType}        conversationType [description]
-             * @param  {string}                  targetId         [description]
-             * @param  {number[]}                messageIds       [description]
-             * @param  {ResultCallback<boolean>} callback         [description]
-             */
-      RongIMClient.prototype.deleteMessages = function (conversationType, targetId, delMsgs, callback) {
-        RongIMClient._dataAccessProvider.removeMessage(conversationType, targetId, delMsgs, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'deleteMessages'
+       * [deleteMessages 删除消息记录。]
+       * @param  {ConversationType}        conversationType [description]
+       * @param  {string}                  targetId         [description]
+       * @param  {number[]}                messageIds       [description]
+       * @param  {ResultCallback<boolean>} callback         [description]
+       */
+      RongIMClient.prototype.deleteMessages = function (
+        conversationType,
+        targetId,
+        delMsgs,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.removeMessage(
+          conversationType,
+          targetId,
+          delMsgs,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'deleteMessages',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
       RongIMClient.prototype.sendLocalMessage = function (message, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'sendLocalMessage', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'sendLocalMessage',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.updateMessage(message)
-        this.sendMessage(message.conversationType, message.targetId, message.content, RongIMClient.logSendCallback(callback, 'sendLocalMessage'))
+        this.sendMessage(
+          message.conversationType,
+          message.targetId,
+          message.content,
+          RongIMClient.logSendCallback(callback, 'sendLocalMessage')
+        )
       }
       /**
-             * [sendMessage 发送消息。]
-             * @param  {ConversationType}        conversationType [会话类型]
-             * @param  {string}                  targetId         [目标Id]
-             * @param  {MessageContent}          messageContent   [消息类型]
-             * @param  {SendMessageCallback}     sendCallback     []
-             * @param  {ResultCallback<Message>} resultCallback   [返回值，函数回调]
-             * @param  {string}                  pushContent      []
-             * @param  {string}                  pushData         []
-             */
-      RongIMClient.prototype.sendMessage = function (conversationType, targetId, messageContent, sendCallback, mentiondMsg, pushText, appData, methodType, params) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object', 'object', 'undefined|object|null|global|boolean', 'undefined|object|null|global|string', 'undefined|object|null|global|string', 'undefined|object|null|global|number', 'undefined|object|null|global'], 'sendMessage', false, arguments)
-        RongIMClient._dataAccessProvider.sendMessage(conversationType, targetId, messageContent, RongIMClient.logSendCallback(sendCallback, 'sendMessage'), mentiondMsg, pushText, appData, methodType, params)
+       * [sendMessage 发送消息。]
+       * @param  {ConversationType}        conversationType [会话类型]
+       * @param  {string}                  targetId         [目标Id]
+       * @param  {MessageContent}          messageContent   [消息类型]
+       * @param  {SendMessageCallback}     sendCallback     []
+       * @param  {ResultCallback<Message>} resultCallback   [返回值，函数回调]
+       * @param  {string}                  pushContent      []
+       * @param  {string}                  pushData         []
+       */
+      RongIMClient.prototype.sendMessage = function (
+        conversationType,
+        targetId,
+        messageContent,
+        sendCallback,
+        mentiondMsg,
+        pushText,
+        appData,
+        methodType,
+        params
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'number',
+            'string|number',
+            'object',
+            'object',
+            'undefined|object|null|global|boolean',
+            'undefined|object|null|global|string',
+            'undefined|object|null|global|string',
+            'undefined|object|null|global|number',
+            'undefined|object|null|global',
+          ],
+          'sendMessage',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.sendMessage(
+          conversationType,
+          targetId,
+          messageContent,
+          RongIMClient.logSendCallback(sendCallback, 'sendMessage'),
+          mentiondMsg,
+          pushText,
+          appData,
+          methodType,
+          params
+        )
       }
-      RongIMClient.prototype.sendReceiptResponse = function (conversationType, targetId, sendCallback) {
-        RongIMClient._dataAccessProvider.sendReceiptResponse(conversationType, targetId, RongIMClient.logSendCallback(sendCallback, 'sendReceiptResponse'))
+      RongIMClient.prototype.sendReceiptResponse = function (
+        conversationType,
+        targetId,
+        sendCallback
+      ) {
+        RongIMClient._dataAccessProvider.sendReceiptResponse(
+          conversationType,
+          targetId,
+          RongIMClient.logSendCallback(sendCallback, 'sendReceiptResponse')
+        )
       }
-      RongIMClient.prototype.sendTypingStatusMessage = function (conversationType, targetId, messageName, sendCallback) {
-        RongIMClient._dataAccessProvider.sendTypingStatusMessage(conversationType, targetId, messageName, RongIMClient.logSendCallback(sendCallback, 'sendTypingStatusMessage'))
+      RongIMClient.prototype.sendTypingStatusMessage = function (
+        conversationType,
+        targetId,
+        messageName,
+        sendCallback
+      ) {
+        RongIMClient._dataAccessProvider.sendTypingStatusMessage(
+          conversationType,
+          targetId,
+          messageName,
+          RongIMClient.logSendCallback(sendCallback, 'sendTypingStatusMessage')
+        )
       }
       /**
-             * [sendStatusMessage description]
-             * @param  {MessageContent}          messageContent [description]
-             * @param  {SendMessageCallback}     sendCallback   [description]
-             * @param  {ResultCallback<Message>} resultCallback [description]
-             */
-      RongIMClient.prototype.sendStatusMessage = function (messageContent, sendCallback, resultCallback) {
+       * [sendStatusMessage description]
+       * @param  {MessageContent}          messageContent [description]
+       * @param  {SendMessageCallback}     sendCallback   [description]
+       * @param  {ResultCallback<Message>} resultCallback [description]
+       */
+      RongIMClient.prototype.sendStatusMessage = function (
+        messageContent,
+        sendCallback,
+        resultCallback
+      ) {
         throw new Error('Not implemented yet')
       }
       /**
-             * [sendTextMessage 发送TextMessage快捷方式]
-             * @param  {string}                  content        [消息内容]
-             * @param  {ResultCallback<Message>} resultCallback [返回值，参数回调]
-             */
-      RongIMClient.prototype.sendTextMessage = function (conversationType, targetId, content, sendMessageCallback) {
-        RongIMClient._dataAccessProvider.sendTextMessage(conversationType, targetId, content, RongIMClient.logSendCallback(sendMessageCallback, 'sendTextMessage'))
+       * [sendTextMessage 发送TextMessage快捷方式]
+       * @param  {string}                  content        [消息内容]
+       * @param  {ResultCallback<Message>} resultCallback [返回值，参数回调]
+       */
+      RongIMClient.prototype.sendTextMessage = function (
+        conversationType,
+        targetId,
+        content,
+        sendMessageCallback
+      ) {
+        RongIMClient._dataAccessProvider.sendTextMessage(
+          conversationType,
+          targetId,
+          content,
+          RongIMClient.logSendCallback(sendMessageCallback, 'sendTextMessage')
+        )
       }
-      RongIMClient.prototype.sendRecallMessage = function (content, sendMessageCallback) {
-        var callback = RongIMClient.logSendCallback(sendMessageCallback, 'sendRecallMessage')
+      RongIMClient.prototype.sendRecallMessage = function (
+        content,
+        sendMessageCallback
+      ) {
+        var callback = RongIMClient.logSendCallback(
+          sendMessageCallback,
+          'sendRecallMessage'
+        )
         var senderUserId = content.senderUserId
         var userId = RongIMLib.Bridge._client.userId
-        var isOther = (senderUserId != userId)
+        var isOther = senderUserId != userId
         if (isOther) {
-          var callback = RongIMClient.logSendCallback(sendMessageCallback, 'sendRecallMessage')
+          var callback = RongIMClient.logSendCallback(
+            sendMessageCallback,
+            'sendRecallMessage'
+          )
           callback.onError(RongIMLib.ErrorCode.RECALL_MESSAGE, content)
           return
         }
         RongIMClient._dataAccessProvider.sendRecallMessage(content, callback)
       }
       /**
-             * [insertMessage 向本地插入一条消息，不发送到服务器。]
-             * @param  {ConversationType}        conversationType [description]
-             * @param  {string}                  targetId         [description]
-             * @param  {string}                  senderUserId     [description]
-             * @param  {MessageContent}          content          [description]
-             * @param  {ResultCallback<Message>} callback         [description]
-             */
-      RongIMClient.prototype.insertMessage = function (conversationType, targetId, content, callback) {
-        RongIMClient._dataAccessProvider.addMessage(conversationType, targetId, content, RongIMClient.logCallback(callback, 'insertMessage'))
+       * [insertMessage 向本地插入一条消息，不发送到服务器。]
+       * @param  {ConversationType}        conversationType [description]
+       * @param  {string}                  targetId         [description]
+       * @param  {string}                  senderUserId     [description]
+       * @param  {MessageContent}          content          [description]
+       * @param  {ResultCallback<Message>} callback         [description]
+       */
+      RongIMClient.prototype.insertMessage = function (
+        conversationType,
+        targetId,
+        content,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.addMessage(
+          conversationType,
+          targetId,
+          content,
+          RongIMClient.logCallback(callback, 'insertMessage')
+        )
       }
-      RongIMClient.prototype.setMessageContent = function (messageId, content, objectName) {
-        RongIMClient._dataAccessProvider.setMessageContent(messageId, content, objectName)
+      RongIMClient.prototype.setMessageContent = function (
+        messageId,
+        content,
+        objectName
+      ) {
+        RongIMClient._dataAccessProvider.setMessageContent(
+          messageId,
+          content,
+          objectName
+        )
       }
-      RongIMClient.prototype.setMessageSearchField = function (messageId, content, searchFiles) {
-        RongIMClient._dataAccessProvider.setMessageContent(messageId, content, searchFiles)
+      RongIMClient.prototype.setMessageSearchField = function (
+        messageId,
+        content,
+        searchFiles
+      ) {
+        RongIMClient._dataAccessProvider.setMessageContent(
+          messageId,
+          content,
+          searchFiles
+        )
       }
       /**
-             * [getHistoryMessages 拉取历史消息记录。]
-             * @param  {ConversationType}          conversationType [会话类型]
-             * @param  {string}                    targetId         [用户Id]
-             * @param  {number|null}               pullMessageTime  [拉取历史消息起始位置(格式为毫秒数)，可以为null]
-             * @param  {number}                    count            [历史消息数量]
-             * @param  {ResultCallback<Message[]>} callback         [回调函数]
-             * @param  {string}                    objectName       [objectName]
-             */
-      RongIMClient.prototype.getHistoryMessages = function (conversationType, targetId, timestamp, count, callback, objectname, order) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'number|null|global|object', 'number', 'object', 'undefined|object|null|global|string', 'number|null|global|object'], 'getHistoryMessages', false, arguments)
+       * [getHistoryMessages 拉取历史消息记录。]
+       * @param  {ConversationType}          conversationType [会话类型]
+       * @param  {string}                    targetId         [用户Id]
+       * @param  {number|null}               pullMessageTime  [拉取历史消息起始位置(格式为毫秒数)，可以为null]
+       * @param  {number}                    count            [历史消息数量]
+       * @param  {ResultCallback<Message[]>} callback         [回调函数]
+       * @param  {string}                    objectName       [objectName]
+       */
+      RongIMClient.prototype.getHistoryMessages = function (
+        conversationType,
+        targetId,
+        timestamp,
+        count,
+        callback,
+        objectname,
+        order
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'number',
+            'string|number',
+            'number|null|global|object',
+            'number',
+            'object',
+            'undefined|object|null|global|string',
+            'number|null|global|object',
+          ],
+          'getHistoryMessages',
+          false,
+          arguments
+        )
         if (count > 20) {
-          throw new Error('HistroyMessage count must be less than or equal to 20!')
+          throw new Error(
+            'HistroyMessage count must be less than or equal to 20!'
+          )
         }
         if (conversationType.valueOf() < 0) {
           throw new Error('ConversationType must be greater than -1')
         }
-        RongIMClient._dataAccessProvider.getHistoryMessages(conversationType, targetId, timestamp, count, RongIMClient.logCallback(callback, 'getHistoryMessages'), objectname, order)
+        RongIMClient._dataAccessProvider.getHistoryMessages(
+          conversationType,
+          targetId,
+          timestamp,
+          count,
+          RongIMClient.logCallback(callback, 'getHistoryMessages'),
+          objectname,
+          order
+        )
       }
       /**
-             * [getRemoteHistoryMessages 拉取某个时间戳之前的消息]
-             * @param  {ConversationType}          conversationType [description]
-             * @param  {string}                    targetId         [description]
-             * @param  {Date}                      dateTime         [description]
-             * @param  {number}                    count            [description]
-             * @param  {ResultCallback<Message[]>} callback         [description]
-             */
-      RongIMClient.prototype.getRemoteHistoryMessages = function (conversationType, targetId, timestamp, count, callback, config) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'number|null|global|object', 'number', 'object', 'undefined|null|global|object'], 'getRemoteHistoryMessages', false, arguments)
+       * [getRemoteHistoryMessages 拉取某个时间戳之前的消息]
+       * @param  {ConversationType}          conversationType [description]
+       * @param  {string}                    targetId         [description]
+       * @param  {Date}                      dateTime         [description]
+       * @param  {number}                    count            [description]
+       * @param  {ResultCallback<Message[]>} callback         [description]
+       */
+      RongIMClient.prototype.getRemoteHistoryMessages = function (
+        conversationType,
+        targetId,
+        timestamp,
+        count,
+        callback,
+        config
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'number',
+            'string|number',
+            'number|null|global|object',
+            'number',
+            'object',
+            'undefined|null|global|object',
+          ],
+          'getRemoteHistoryMessages',
+          false,
+          arguments
+        )
         var funcName = 'getRemoteHistoryMessages'
         var log = {
           errorCode: RongIMLib.ErrorCode.RC_CONN_PROTO_VERSION_ERROR,
-          funcName: 'getRemoteHistoryMessages'
+          funcName: 'getRemoteHistoryMessages',
         }
         if (count > 20) {
           RongIMClient.logger(log)
@@ -3502,117 +3940,190 @@
           callback.onError(RongIMLib.ErrorCode.RC_CONN_PROTO_VERSION_ERROR)
           return
         }
-        RongIMClient._dataAccessProvider.getRemoteHistoryMessages(conversationType, targetId, timestamp, count, RongIMClient.logCallback(callback, funcName), config)
+        RongIMClient._dataAccessProvider.getRemoteHistoryMessages(
+          conversationType,
+          targetId,
+          timestamp,
+          count,
+          RongIMClient.logCallback(callback, funcName),
+          config
+        )
       }
-      RongIMClient.prototype.clearHistoryMessages = function (params, callback) {
+      RongIMClient.prototype.clearHistoryMessages = function (
+        params,
+        callback
+      ) {
         RongIMClient._dataAccessProvider.clearHistoryMessages(params, callback)
       }
-      RongIMClient.prototype.clearRemoteHistoryMessages = function (params, callback) {
-        RongIMClient._dataAccessProvider.clearRemoteHistoryMessages(params, RongIMClient.logCallback(callback, 'clearRemoteHistoryMessages'))
+      RongIMClient.prototype.clearRemoteHistoryMessages = function (
+        params,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.clearRemoteHistoryMessages(
+          params,
+          RongIMClient.logCallback(callback, 'clearRemoteHistoryMessages')
+        )
       }
       /**
-             * [hasRemoteUnreadMessages 是否有未接收的消息，jsonp方法]
-             * @param  {string}          appkey   [appkey]
-             * @param  {string}          token    [token]
-             * @param  {ConnectCallback} callback [返回值，参数回调]
-             */
-      RongIMClient.prototype.hasRemoteUnreadMessages = function (token, callback) {
-        RongIMClient._dataAccessProvider.hasRemoteUnreadMessages(token, RongIMClient.logCallback(callback, 'hasRemoteUnreadMessages'))
+       * [hasRemoteUnreadMessages 是否有未接收的消息，jsonp方法]
+       * @param  {string}          appkey   [appkey]
+       * @param  {string}          token    [token]
+       * @param  {ConnectCallback} callback [返回值，参数回调]
+       */
+      RongIMClient.prototype.hasRemoteUnreadMessages = function (
+        token,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.hasRemoteUnreadMessages(
+          token,
+          RongIMClient.logCallback(callback, 'hasRemoteUnreadMessages')
+        )
       }
-      RongIMClient.prototype.getTotalUnreadCount = function (callback, conversationTypes) {
-        RongIMClient._dataAccessProvider.getTotalUnreadCount({
-          onSuccess: function (count) {
-            setTimeout(function () {
-              callback.onSuccess(count)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'getTotalUnreadCount'
+      RongIMClient.prototype.getTotalUnreadCount = function (
+        callback,
+        conversationTypes
+      ) {
+        RongIMClient._dataAccessProvider.getTotalUnreadCount(
+          {
+            onSuccess: function (count) {
+              setTimeout(function () {
+                callback.onSuccess(count)
               })
-              callback.onError(errorCode)
-            })
-          }
-        }, conversationTypes)
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'getTotalUnreadCount',
+                })
+                callback.onError(errorCode)
+              })
+            },
+          },
+          conversationTypes
+        )
       }
       /**
-             * [getConversationUnreadCount 指定多种会话类型获取未读消息数]
-             * @param  {ResultCallback<number>} callback             [返回值，参数回调。]
-             * @param  {ConversationType[]}     ...conversationTypes [会话类型。]
-             */
-      RongIMClient.prototype.getConversationUnreadCount = function (conversationTypes, callback) {
-        RongIMClient._dataAccessProvider.getConversationUnreadCount(conversationTypes, {
-          onSuccess: function (count) {
-            setTimeout(function () {
-              callback.onSuccess(count)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'getConversationUnreadCount'
+       * [getConversationUnreadCount 指定多种会话类型获取未读消息数]
+       * @param  {ResultCallback<number>} callback             [返回值，参数回调。]
+       * @param  {ConversationType[]}     ...conversationTypes [会话类型。]
+       */
+      RongIMClient.prototype.getConversationUnreadCount = function (
+        conversationTypes,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.getConversationUnreadCount(
+          conversationTypes,
+          {
+            onSuccess: function (count) {
+              setTimeout(function () {
+                callback.onSuccess(count)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'getConversationUnreadCount',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
       /**
-             * [getUnreadCount 指定用户、会话类型的未读消息总数。]
-             * @param  {ConversationType} conversationType [会话类型]
-             * @param  {string}           targetId         [用户Id]
-             */
-      RongIMClient.prototype.getUnreadCount = function (conversationType, targetId, callback) {
-        RongIMClient._dataAccessProvider.getUnreadCount(conversationType, targetId, {
-          onSuccess: function (count) {
-            setTimeout(function () {
-              callback.onSuccess(count)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'getUnreadCount'
+       * [getUnreadCount 指定用户、会话类型的未读消息总数。]
+       * @param  {ConversationType} conversationType [会话类型]
+       * @param  {string}           targetId         [用户Id]
+       */
+      RongIMClient.prototype.getUnreadCount = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.getUnreadCount(
+          conversationType,
+          targetId,
+          {
+            onSuccess: function (count) {
+              setTimeout(function () {
+                callback.onSuccess(count)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'getUnreadCount',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
-      RongIMClient.prototype.setUnreadCount = function (conversationType, targetId, count) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string', 'number'], 'setUnreadCount', false, arguments)
-        RongIMClient._dataAccessProvider.setUnreadCount(conversationType, targetId, count)
+      RongIMClient.prototype.setUnreadCount = function (
+        conversationType,
+        targetId,
+        count
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string', 'number'],
+          'setUnreadCount',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setUnreadCount(
+          conversationType,
+          targetId,
+          count
+        )
       }
-      RongIMClient.prototype.clearUnreadCountByTimestamp = function (conversationType, targetId, timestamp, callback) {
-        RongIMClient._dataAccessProvider.clearUnreadCountByTimestamp(conversationType, targetId, timestamp, RongIMClient.logCallback(callback, 'clearUnreadCountByTimestamp'))
+      RongIMClient.prototype.clearUnreadCountByTimestamp = function (
+        conversationType,
+        targetId,
+        timestamp,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.clearUnreadCountByTimestamp(
+          conversationType,
+          targetId,
+          timestamp,
+          RongIMClient.logCallback(callback, 'clearUnreadCountByTimestamp')
+        )
       }
       /**
-             * 清楚会话未读消息数
-             * @param  {ConversationType}        conversationType 会话类型
-             * @param  {string}                  targetId         目标Id
-             * @param  {ResultCallback<boolean>} callback         返回值，函数回调
-             */
-      RongIMClient.prototype.clearUnreadCount = function (conversationType, targetId, callback) {
-        RongIMClient._dataAccessProvider.clearUnreadCount(conversationType, targetId, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'clearUnreadCount'
+       * 清楚会话未读消息数
+       * @param  {ConversationType}        conversationType 会话类型
+       * @param  {string}                  targetId         目标Id
+       * @param  {ResultCallback<boolean>} callback         返回值，函数回调
+       */
+      RongIMClient.prototype.clearUnreadCount = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.clearUnreadCount(
+          conversationType,
+          targetId,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'clearUnreadCount',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
       RongIMClient.prototype.clearTotalUnreadCount = function (callback) {
         RongIMClient._dataAccessProvider.clearTotalUnreadCount({
@@ -3623,18 +4134,22 @@
             setTimeout(function () {
               RongIMClient.logger({
                 code: errorCode,
-                funcName: 'clearTotalUnreadCount'
+                funcName: 'clearTotalUnreadCount',
               })
               callback.onError(errorCode)
             })
-          }
+          },
         })
       }
       RongIMClient.prototype.clearLocalStorage = function (callback) {
         RongIMClient._storageProvider.clearItem()
         callback()
       }
-      RongIMClient.prototype.setMessageExtra = function (messageId, value, callback) {
+      RongIMClient.prototype.setMessageExtra = function (
+        messageId,
+        value,
+        callback
+      ) {
         RongIMClient._dataAccessProvider.setMessageExtra(messageId, value, {
           onSuccess: function (bool) {
             setTimeout(function () {
@@ -3645,97 +4160,176 @@
             setTimeout(function () {
               RongIMClient.logger({
                 code: errorCode,
-                funcName: 'setMessageExtra'
+                funcName: 'setMessageExtra',
               })
               callback.onError(errorCode)
-            })
-          }
-        })
-      }
-      RongIMClient.prototype.setMessageReceivedStatus = function (messageUId, receivedStatus, callback) {
-        RongIMClient._dataAccessProvider.setMessageReceivedStatus(messageUId, receivedStatus, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
             })
           },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'setMessageReceivedStatus'
-              })
-              callback.onError(errorCode)
-            })
-          }
         })
       }
-      RongIMClient.prototype.setMessageStatus = function (conersationType, targetId, timestamp, status, callback) {
-        RongIMClient._dataAccessProvider.setMessageStatus(conersationType, targetId, timestamp, status, RongIMClient.logCallback(callback, 'setMessageStatus'))
-      }
-      RongIMClient.prototype.setMessageSentStatus = function (messageId, sentStatus, callback) {
-        RongIMClient._dataAccessProvider.setMessageSentStatus(messageId, sentStatus, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'setMessageSentStatus'
+      RongIMClient.prototype.setMessageReceivedStatus = function (
+        messageUId,
+        receivedStatus,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.setMessageReceivedStatus(
+          messageUId,
+          receivedStatus,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'setMessageReceivedStatus',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
+      }
+      RongIMClient.prototype.setMessageStatus = function (
+        conersationType,
+        targetId,
+        timestamp,
+        status,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.setMessageStatus(
+          conersationType,
+          targetId,
+          timestamp,
+          status,
+          RongIMClient.logCallback(callback, 'setMessageStatus')
+        )
+      }
+      RongIMClient.prototype.setMessageSentStatus = function (
+        messageId,
+        sentStatus,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.setMessageSentStatus(
+          messageId,
+          sentStatus,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
+              })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'setMessageSentStatus',
+                })
+                callback.onError(errorCode)
+              })
+            },
+          }
+        )
       }
       // #endregion Message
       // #region TextMessage Draft
       /**
-             * clearTextMessageDraft 清除指定会话和消息类型的草稿。
-             * @param  {ConversationType}        conversationType 会话类型
-             * @param  {string}                  targetId         目标Id
-             */
-      RongIMClient.prototype.clearTextMessageDraft = function (conversationType, targetId) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'clearTextMessageDraft', false, arguments)
+       * clearTextMessageDraft 清除指定会话和消息类型的草稿。
+       * @param  {ConversationType}        conversationType 会话类型
+       * @param  {string}                  targetId         目标Id
+       */
+      RongIMClient.prototype.clearTextMessageDraft = function (
+        conversationType,
+        targetId
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'object'],
+          'clearTextMessageDraft',
+          false,
+          arguments
+        )
         var key = 'darf_' + conversationType + '_' + targetId
         delete RongIMClient._memoryStore[key]
         return true
       }
       /**
-             * [getTextMessageDraft 获取指定消息和会话的草稿。]
-             * @param  {ConversationType}       conversationType [会话类型]
-             * @param  {string}                 targetId         [目标Id]
-             */
-      RongIMClient.prototype.getTextMessageDraft = function (conversationType, targetId) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'getTextMessageDraft', false, arguments)
+       * [getTextMessageDraft 获取指定消息和会话的草稿。]
+       * @param  {ConversationType}       conversationType [会话类型]
+       * @param  {string}                 targetId         [目标Id]
+       */
+      RongIMClient.prototype.getTextMessageDraft = function (
+        conversationType,
+        targetId
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'object'],
+          'getTextMessageDraft',
+          false,
+          arguments
+        )
         if (targetId == '' || conversationType < 0) {
-          throw new Error('params error : ' + RongIMLib.ErrorCode.DRAF_GET_ERROR)
+          throw new Error(
+            'params error : ' + RongIMLib.ErrorCode.DRAF_GET_ERROR
+          )
         }
         var key = 'darf_' + conversationType + '_' + targetId
         return RongIMClient._memoryStore[key]
       }
       /**
-             * [saveTextMessageDraft description]
-             * @param  {ConversationType}        conversationType [会话类型]
-             * @param  {string}                  targetId         [目标Id]
-             * @param  {string}                  value            [草稿值]
-             */
-      RongIMClient.prototype.saveTextMessageDraft = function (conversationType, targetId, value) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'string', 'object'], 'saveTextMessageDraft', false, arguments)
+       * [saveTextMessageDraft description]
+       * @param  {ConversationType}        conversationType [会话类型]
+       * @param  {string}                  targetId         [目标Id]
+       * @param  {string}                  value            [草稿值]
+       */
+      RongIMClient.prototype.saveTextMessageDraft = function (
+        conversationType,
+        targetId,
+        value
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'string', 'object'],
+          'saveTextMessageDraft',
+          false,
+          arguments
+        )
         var key = 'darf_' + conversationType + '_' + targetId
         RongIMClient._memoryStore[key] = value
         return true
       }
       // #endregion TextMessage Draft
       // #region Conversation
-      RongIMClient.prototype.searchConversationByContent = function (keyword, callback, conversationTypes) {
-        RongIMClient._dataAccessProvider.searchConversationByContent(keyword, RongIMClient.logCallback(callback, 'searchConversationByContent'), conversationTypes)
+      RongIMClient.prototype.searchConversationByContent = function (
+        keyword,
+        callback,
+        conversationTypes
+      ) {
+        RongIMClient._dataAccessProvider.searchConversationByContent(
+          keyword,
+          RongIMClient.logCallback(callback, 'searchConversationByContent'),
+          conversationTypes
+        )
       }
-      RongIMClient.prototype.searchMessageByContent = function (conversationType, targetId, keyword, timestamp, count, total, callback) {
-        RongIMClient._dataAccessProvider.searchMessageByContent(conversationType, targetId, keyword, timestamp, count, total, RongIMClient.logCallback(callback, 'searchMessageByContent'))
+      RongIMClient.prototype.searchMessageByContent = function (
+        conversationType,
+        targetId,
+        keyword,
+        timestamp,
+        count,
+        total,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.searchMessageByContent(
+          conversationType,
+          targetId,
+          keyword,
+          timestamp,
+          count,
+          total,
+          RongIMClient.logCallback(callback, 'searchMessageByContent')
+        )
       }
       RongIMClient.prototype.clearCache = function () {
         RongIMClient._dataAccessProvider.clearCache()
@@ -3746,14 +4340,15 @@
           conversationTypes[_i - 1] = arguments[_i]
         }
         if (conversationTypes.length == 0) {
-          conversationTypes = [RongIMLib.ConversationType.CHATROOM,
+          conversationTypes = [
+            RongIMLib.ConversationType.CHATROOM,
             RongIMLib.ConversationType.CUSTOMER_SERVICE,
             RongIMLib.ConversationType.DISCUSSION,
             RongIMLib.ConversationType.GROUP,
             RongIMLib.ConversationType.PRIVATE,
             RongIMLib.ConversationType.SYSTEM,
             RongIMLib.ConversationType.PUBLIC_SERVICE,
-            RongIMLib.ConversationType.APP_PUBLIC_SERVICE
+            RongIMLib.ConversationType.APP_PUBLIC_SERVICE,
           ]
         }
         RongIMClient._dataAccessProvider.clearConversations(conversationTypes, {
@@ -3766,95 +4361,134 @@
             setTimeout(function () {
               RongIMClient.logger({
                 code: errorCode,
-                funcName: 'clearConversations'
+                funcName: 'clearConversations',
               })
               callback.onError(errorCode)
             })
-          }
-        })
-      }
-      /**
-             * [getConversation 获取指定会话，此方法需在getConversationList之后执行]
-             * @param  {ConversationType}             conversationType [会话类型]
-             * @param  {string}                       targetId         [目标Id]
-             * @param  {ResultCallback<Conversation>} callback         [返回值，函数回调]
-             */
-      RongIMClient.prototype.getConversation = function (conversationType, targetId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'getConversation', false, arguments)
-        RongIMClient._dataAccessProvider.getConversation(conversationType, targetId, {
-          onSuccess: function (conver) {
-            setTimeout(function () {
-              callback.onSuccess(conver)
-            })
           },
-          onError: function (error) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: error,
-                funcName: 'getConversation'
-              })
-              callback.onError(error)
-            })
-          }
         })
       }
       /**
-             * [pottingConversation 组装会话列表]
-             * @param {any} tempConver [临时会话]
-             * conver_conversationType_targetId_no.
-             * msg_conversationType_targetId_no.
-             */
+       * [getConversation 获取指定会话，此方法需在getConversationList之后执行]
+       * @param  {ConversationType}             conversationType [会话类型]
+       * @param  {string}                       targetId         [目标Id]
+       * @param  {ResultCallback<Conversation>} callback         [返回值，函数回调]
+       */
+      RongIMClient.prototype.getConversation = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'object'],
+          'getConversation',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getConversation(
+          conversationType,
+          targetId,
+          {
+            onSuccess: function (conver) {
+              setTimeout(function () {
+                callback.onSuccess(conver)
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: error,
+                  funcName: 'getConversation',
+                })
+                callback.onError(error)
+              })
+            },
+          }
+        )
+      }
+      /**
+       * [pottingConversation 组装会话列表]
+       * @param {any} tempConver [临时会话]
+       * conver_conversationType_targetId_no.
+       * msg_conversationType_targetId_no.
+       */
       RongIMClient.prototype.pottingConversation = function (tempConver) {
         var self = this
         var isUseReplace = false
-        RongIMClient._dataAccessProvider.getConversation(tempConver.type, tempConver.userId, {
-          onSuccess: function (conver) {
-            if (!conver) {
-              conver = new RongIMLib.Conversation()
-            } else {
-              isUseReplace = true
-            }
-            conver.conversationType = tempConver.type
-            conver.targetId = tempConver.userId
-            conver.latestMessage = RongIMLib.MessageUtil.messageParser(tempConver.msg)
-            conver.latestMessageId = conver.latestMessage.messageId
-            conver.objectName = conver.latestMessage.objectName
-            conver.receivedStatus = conver.latestMessage.receivedStatus
-            conver.receivedTime = conver.latestMessage.receiveTime
-            conver.sentStatus = conver.latestMessage.sentStatus
-            conver.sentTime = conver.latestMessage.sentTime
-            var mentioneds = RongIMClient._storageProvider.getItem('mentioneds_' + RongIMLib.Bridge._client.userId + '_' + conver.conversationType + '_' + conver.targetId)
-            if (mentioneds) {
-              var info = JSON.parse(mentioneds)
-              conver.mentionedMsg = info[tempConver.type + '_' + tempConver.userId]
-            }
-            if (!isUseReplace) {
-              if (RongIMLib.RongUtil.supportLocalStorage()) {
-                var count = RongIMClient._storageProvider.getItem('cu' + RongIMLib.Bridge._client.userId + tempConver.type + tempConver.userId)
-                conver.unreadMessageCount = Number(count)
+        RongIMClient._dataAccessProvider.getConversation(
+          tempConver.type,
+          tempConver.userId,
+          {
+            onSuccess: function (conver) {
+              if (!conver) {
+                conver = new RongIMLib.Conversation()
               } else {
-                conver.unreadMessageCount = 0
+                isUseReplace = true
               }
-            }
-            if (conver.conversationType == RongIMLib.ConversationType.DISCUSSION) {
-              self.getDiscussion(tempConver.userId, {
-                onSuccess: function (info) {
-                  conver.conversationTitle = info.name
-                },
-                onError: function (error) {}
+              conver.conversationType = tempConver.type
+              conver.targetId = tempConver.userId
+              conver.latestMessage = RongIMLib.MessageUtil.messageParser(
+                tempConver.msg
+              )
+              conver.latestMessageId = conver.latestMessage.messageId
+              conver.objectName = conver.latestMessage.objectName
+              conver.receivedStatus = conver.latestMessage.receivedStatus
+              conver.receivedTime = conver.latestMessage.receiveTime
+              conver.sentStatus = conver.latestMessage.sentStatus
+              conver.sentTime = conver.latestMessage.sentTime
+              var mentioneds = RongIMClient._storageProvider.getItem(
+                'mentioneds_' +
+                  RongIMLib.Bridge._client.userId +
+                  '_' +
+                  conver.conversationType +
+                  '_' +
+                  conver.targetId
+              )
+              if (mentioneds) {
+                var info = JSON.parse(mentioneds)
+                conver.mentionedMsg =
+                  info[tempConver.type + '_' + tempConver.userId]
+              }
+              if (!isUseReplace) {
+                if (RongIMLib.RongUtil.supportLocalStorage()) {
+                  var count = RongIMClient._storageProvider.getItem(
+                    'cu' +
+                      RongIMLib.Bridge._client.userId +
+                      tempConver.type +
+                      tempConver.userId
+                  )
+                  conver.unreadMessageCount = Number(count)
+                } else {
+                  conver.unreadMessageCount = 0
+                }
+              }
+              if (
+                conver.conversationType == RongIMLib.ConversationType.DISCUSSION
+              ) {
+                self.getDiscussion(tempConver.userId, {
+                  onSuccess: function (info) {
+                    conver.conversationTitle = info.name
+                  },
+                  onError: function (error) {},
+                })
+              }
+              RongIMClient._dataAccessProvider.addConversation(conver, {
+                onSuccess: function (data) {},
               })
-            }
-            RongIMClient._dataAccessProvider.addConversation(conver, {
-              onSuccess: function (data) {}
-            })
-          },
-          onError: function (error) {}
-        })
+            },
+            onError: function (error) {},
+          }
+        )
       }
-      RongIMClient.prototype.addConversation = function (conversation, callback) {
+      RongIMClient.prototype.addConversation = function (
+        conversation,
+        callback
+      ) {
         RongIMClient._dataAccessProvider.addConversation(conversation, callback)
       }
-      RongIMClient.prototype.sortConversationList = function (conversationList) {
+      RongIMClient.prototype.sortConversationList = function (
+        conversationList
+      ) {
         var convers = []
         for (var i = 0, len = conversationList.length; i < len; i++) {
           if (!conversationList[i]) {
@@ -3866,57 +4500,110 @@
             continue
           }
           for (var j = 0; j < len - i - 1; j++) {
-            if (conversationList[j].sentTime < conversationList[j + 1].sentTime) {
+            if (
+              conversationList[j].sentTime < conversationList[j + 1].sentTime
+            ) {
               var swap = conversationList[j]
               conversationList[j] = conversationList[j + 1]
               conversationList[j + 1] = swap
             }
           }
         }
-        return RongIMClient._memoryStore.conversationList = convers.concat(conversationList)
+        return (RongIMClient._memoryStore.conversationList = convers.concat(
+          conversationList
+        ))
       }
-      RongIMClient.prototype.getConversationList = function (callback, conversationTypes, count, isGetHiddenConvers) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'null|undefined|array|object|global', 'number|undefined|null|object|global', 'boolean|undefined|null|object|global'], 'getConversationList', false, arguments)
+      RongIMClient.prototype.getConversationList = function (
+        callback,
+        conversationTypes,
+        count,
+        isGetHiddenConvers
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'object',
+            'null|undefined|array|object|global',
+            'number|undefined|null|object|global',
+            'boolean|undefined|null|object|global',
+          ],
+          'getConversationList',
+          false,
+          arguments
+        )
         var me = this
-        RongIMClient._dataAccessProvider.getConversationList({
-          onSuccess: function (data) {
-            if (conversationTypes || RongIMClient._dataAccessProvider) {
+        RongIMClient._dataAccessProvider.getConversationList(
+          {
+            onSuccess: function (data) {
+              if (conversationTypes || RongIMClient._dataAccessProvider) {
+                setTimeout(function () {
+                  callback.onSuccess(data)
+                })
+              } else {
+                setTimeout(function () {
+                  callback.onSuccess(RongIMClient._memoryStore.conversationList)
+                })
+              }
+            },
+            onError: function (error) {
               setTimeout(function () {
-                callback.onSuccess(data)
+                RongIMClient.logger({
+                  code: error,
+                  funcName: 'getConversationList',
+                })
+                callback.onError(error)
               })
-            } else {
-              setTimeout(function () {
-                callback.onSuccess(RongIMClient._memoryStore.conversationList)
-              })
-            }
+            },
           },
-          onError: function (error) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: error,
-                funcName: 'getConversationList'
-              })
-              callback.onError(error)
-            })
-          }
-        }, conversationTypes, count, isGetHiddenConvers)
+          conversationTypes,
+          count,
+          isGetHiddenConvers
+        )
       }
-      RongIMClient.prototype.getRemoteConversationList = function (callback, conversationTypes, count, isGetHiddenConvers) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'null|array|object|global', 'number|undefined|null|object|global', 'boolean|undefined|null|object|global'], 'getRemoteConversationList', false, arguments)
-        RongIMClient._dataAccessProvider.getRemoteConversationList(RongIMClient.logCallback(callback, 'getRemoteConversationList'), conversationTypes, count, isGetHiddenConvers)
+      RongIMClient.prototype.getRemoteConversationList = function (
+        callback,
+        conversationTypes,
+        count,
+        isGetHiddenConvers
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'object',
+            'null|array|object|global',
+            'number|undefined|null|object|global',
+            'boolean|undefined|null|object|global',
+          ],
+          'getRemoteConversationList',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getRemoteConversationList(
+          RongIMClient.logCallback(callback, 'getRemoteConversationList'),
+          conversationTypes,
+          count,
+          isGetHiddenConvers
+        )
       }
       RongIMClient.prototype.updateConversation = function (conversation) {
         return RongIMClient._dataAccessProvider.updateConversation(conversation)
       }
       /**
-             * [createConversation 创建会话。]
-             * @param  {number}  conversationType [会话类型]
-             * @param  {string}  targetId         [目标Id]
-             * @param  {string}  converTitle      [会话标题]
-             * @param  {boolean} islocal          [是否同步到服务器，ture：同步，false:不同步]
-             */
-      RongIMClient.prototype.createConversation = function (conversationType, targetId, converTitle) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'string'], 'createConversation', false, arguments)
+       * [createConversation 创建会话。]
+       * @param  {number}  conversationType [会话类型]
+       * @param  {string}  targetId         [目标Id]
+       * @param  {string}  converTitle      [会话标题]
+       * @param  {boolean} islocal          [是否同步到服务器，ture：同步，false:不同步]
+       */
+      RongIMClient.prototype.createConversation = function (
+        conversationType,
+        targetId,
+        converTitle
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'string'],
+          'createConversation',
+          false,
+          arguments
+        )
         var conver = new RongIMLib.Conversation()
         // var unreadContent: string = RongIMClient._storageProvider.getItem("cu" + Bridge._client.userId + conversationType + targetId);
         // var unreadCount = Number(unreadContent) || 0;
@@ -3928,233 +4615,476 @@
         return conver
       }
       // TODO 删除本地和服务器、删除本地和服务器分开
-      RongIMClient.prototype.removeConversation = function (conversationType, targetId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'removeConversation', false, arguments)
-        RongIMClient._dataAccessProvider.removeConversation(conversationType, targetId, RongIMClient.logCallback(callback, 'removeConversation'))
+      RongIMClient.prototype.removeConversation = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'object'],
+          'removeConversation',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.removeConversation(
+          conversationType,
+          targetId,
+          RongIMClient.logCallback(callback, 'removeConversation')
+        )
       }
-      RongIMClient.prototype.setConversationHidden = function (conversationType, targetId, isHidden) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'boolean'], 'setConversationHidden', false, arguments)
-        RongIMClient._dataAccessProvider.setConversationHidden(conversationType, targetId, isHidden)
+      RongIMClient.prototype.setConversationHidden = function (
+        conversationType,
+        targetId,
+        isHidden
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'boolean'],
+          'setConversationHidden',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setConversationHidden(
+          conversationType,
+          targetId,
+          isHidden
+        )
       }
-      RongIMClient.prototype.setConversationToTop = function (conversationType, targetId, isTop, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'boolean', 'object'], 'setConversationToTop', false, arguments)
-        RongIMClient._dataAccessProvider.setConversationToTop(conversationType, targetId, isTop, {
-          onSuccess: function (bool) {
-            setTimeout(function () {
-              callback.onSuccess(bool)
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'setConversationToTop'
+      RongIMClient.prototype.setConversationToTop = function (
+        conversationType,
+        targetId,
+        isTop,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'boolean', 'object'],
+          'setConversationToTop',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setConversationToTop(
+          conversationType,
+          targetId,
+          isTop,
+          {
+            onSuccess: function (bool) {
+              setTimeout(function () {
+                callback.onSuccess(bool)
               })
-              callback.onError(errorCode)
-            })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'setConversationToTop',
+                })
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
       // #endregion Conversation
       // #region Notifications
       /**
-             * [getConversationNotificationStatus 获取指定用户和会话类型免提醒。]
-             * @param  {ConversationType}                               conversationType [会话类型]
-             * @param  {string}                                         targetId         [目标Id]
-             * @param  {ResultCallback<ConversationNotificationStatus>} callback         [返回值，函数回调]
-             */
-      RongIMClient.prototype.getConversationNotificationStatus = function (conversationType, targetId, callback) {
-        var params = {
-          conversationType: conversationType,
-          targetId: targetId
-        }
-        RongIMClient._dataAccessProvider.getConversationNotificationStatus(params, RongIMClient.logCallback(callback, 'getConversationNotificationStatus'))
-      }
-      /**
-             * [setConversationNotificationStatus 设置指定用户和会话类型免提醒。]
-             * @param  {ConversationType}                               conversationType [会话类型]
-             * @param  {string}                                         targetId         [目标Id]
-             * @param  {ResultCallback<ConversationNotificationStatus>} callback         [返回值，函数回调]
-             */
-      RongIMClient.prototype.setConversationNotificationStatus = function (conversationType, targetId, notificationStatus, callback) {
+       * [getConversationNotificationStatus 获取指定用户和会话类型免提醒。]
+       * @param  {ConversationType}                               conversationType [会话类型]
+       * @param  {string}                                         targetId         [目标Id]
+       * @param  {ResultCallback<ConversationNotificationStatus>} callback         [返回值，函数回调]
+       */
+      RongIMClient.prototype.getConversationNotificationStatus = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         var params = {
           conversationType: conversationType,
           targetId: targetId,
-          status: status
         }
-        RongIMClient._dataAccessProvider.setConversationNotificationStatus(params, RongIMClient.logCallback(callback, 'setConversationNotificationStatus'))
+        RongIMClient._dataAccessProvider.getConversationNotificationStatus(
+          params,
+          RongIMClient.logCallback(
+            callback,
+            'getConversationNotificationStatus'
+          )
+        )
       }
       /**
-             * [getNotificationQuietHours 获取免提醒消息时间。]
-             * @param  {GetNotificationQuietHoursCallback} callback [返回值，函数回调]
-             */
+       * [setConversationNotificationStatus 设置指定用户和会话类型免提醒。]
+       * @param  {ConversationType}                               conversationType [会话类型]
+       * @param  {string}                                         targetId         [目标Id]
+       * @param  {ResultCallback<ConversationNotificationStatus>} callback         [返回值，函数回调]
+       */
+      RongIMClient.prototype.setConversationNotificationStatus = function (
+        conversationType,
+        targetId,
+        notificationStatus,
+        callback
+      ) {
+        var params = {
+          conversationType: conversationType,
+          targetId: targetId,
+          status: status,
+        }
+        RongIMClient._dataAccessProvider.setConversationNotificationStatus(
+          params,
+          RongIMClient.logCallback(
+            callback,
+            'setConversationNotificationStatus'
+          )
+        )
+      }
+      /**
+       * [getNotificationQuietHours 获取免提醒消息时间。]
+       * @param  {GetNotificationQuietHoursCallback} callback [返回值，函数回调]
+       */
       RongIMClient.prototype.getNotificationQuietHours = function (callback) {
         throw new Error('Not implemented yet')
       }
       /**
-             * [removeNotificationQuietHours 移除免提醒消息时间。]
-             * @param  {GetNotificationQuietHoursCallback} callback [返回值，函数回调]
-             */
-      RongIMClient.prototype.removeNotificationQuietHours = function (callback) {
+       * [removeNotificationQuietHours 移除免提醒消息时间。]
+       * @param  {GetNotificationQuietHoursCallback} callback [返回值，函数回调]
+       */
+      RongIMClient.prototype.removeNotificationQuietHours = function (
+        callback
+      ) {
         throw new Error('Not implemented yet')
       }
       /**
-             * [setNotificationQuietHours 设置免提醒消息时间。]
-             * @param  {GetNotificationQuietHoursCallback} callback [返回值，函数回调]
-             */
-      RongIMClient.prototype.setNotificationQuietHours = function (startTime, spanMinutes, callback) {
+       * [setNotificationQuietHours 设置免提醒消息时间。]
+       * @param  {GetNotificationQuietHoursCallback} callback [返回值，函数回调]
+       */
+      RongIMClient.prototype.setNotificationQuietHours = function (
+        startTime,
+        spanMinutes,
+        callback
+      ) {
         throw new Error('Not implemented yet')
       }
       // #endregion Notifications
       // #region Discussion
       /**
-             * [addMemberToDiscussion   加入讨论组]
-             * @param  {string}            discussionId [讨论组Id]
-             * @param  {string[]}          userIdList   [讨论中成员]
-             * @param  {OperationCallback} callback     [返回值，函数回调]
-             */
-      RongIMClient.prototype.addMemberToDiscussion = function (discussionId, userIdList, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'array', 'object'], 'addMemberToDiscussion', false, arguments)
-        RongIMClient._dataAccessProvider.addMemberToDiscussion(discussionId, userIdList, RongIMClient.logCallback(callback, 'addMemberToDiscussion'))
+       * [addMemberToDiscussion   加入讨论组]
+       * @param  {string}            discussionId [讨论组Id]
+       * @param  {string[]}          userIdList   [讨论中成员]
+       * @param  {OperationCallback} callback     [返回值，函数回调]
+       */
+      RongIMClient.prototype.addMemberToDiscussion = function (
+        discussionId,
+        userIdList,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'array', 'object'],
+          'addMemberToDiscussion',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.addMemberToDiscussion(
+          discussionId,
+          userIdList,
+          RongIMClient.logCallback(callback, 'addMemberToDiscussion')
+        )
       }
       /**
-             * [createDiscussion 创建讨论组]
-             * @param  {string}                   name       [讨论组名称]
-             * @param  {string[]}                 userIdList [讨论组成员]
-             * @param  {CreateDiscussionCallback} callback   [返回值，函数回调]
-             */
-      RongIMClient.prototype.createDiscussion = function (name, userIdList, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'array', 'object'], 'createDiscussion', false, arguments)
-        RongIMClient._dataAccessProvider.createDiscussion(name, userIdList, callback)
+       * [createDiscussion 创建讨论组]
+       * @param  {string}                   name       [讨论组名称]
+       * @param  {string[]}                 userIdList [讨论组成员]
+       * @param  {CreateDiscussionCallback} callback   [返回值，函数回调]
+       */
+      RongIMClient.prototype.createDiscussion = function (
+        name,
+        userIdList,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'array', 'object'],
+          'createDiscussion',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.createDiscussion(
+          name,
+          userIdList,
+          callback
+        )
       }
       /**
-             * [getDiscussion 获取讨论组信息]
-             * @param  {string}                     discussionId [讨论组Id]
-             * @param  {ResultCallback<Discussion>} callback     [返回值，函数回调]
-             */
+       * [getDiscussion 获取讨论组信息]
+       * @param  {string}                     discussionId [讨论组Id]
+       * @param  {ResultCallback<Discussion>} callback     [返回值，函数回调]
+       */
       RongIMClient.prototype.getDiscussion = function (discussionId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'object'], 'getDiscussion', false, arguments)
-        RongIMClient._dataAccessProvider.getDiscussion(discussionId, RongIMClient.logCallback(callback, 'getDiscussion'))
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'object'],
+          'getDiscussion',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getDiscussion(
+          discussionId,
+          RongIMClient.logCallback(callback, 'getDiscussion')
+        )
       }
       /**
-             * [quitDiscussion 退出讨论组]
-             * @param  {string}            discussionId [讨论组Id]
-             * @param  {OperationCallback} callback     [返回值，函数回调]
-             */
-      RongIMClient.prototype.quitDiscussion = function (discussionId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'object'], 'quitDiscussion', false, arguments)
-        RongIMClient._dataAccessProvider.quitDiscussion(discussionId, RongIMClient.logCallback(callback, 'quitDiscussion'))
+       * [quitDiscussion 退出讨论组]
+       * @param  {string}            discussionId [讨论组Id]
+       * @param  {OperationCallback} callback     [返回值，函数回调]
+       */
+      RongIMClient.prototype.quitDiscussion = function (
+        discussionId,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'object'],
+          'quitDiscussion',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.quitDiscussion(
+          discussionId,
+          RongIMClient.logCallback(callback, 'quitDiscussion')
+        )
       }
       /**
-             * [removeMemberFromDiscussion 将指定成员移除讨论租]
-             * @param  {string}            discussionId [讨论组Id]
-             * @param  {string}            userId       [被移除的用户Id]
-             * @param  {OperationCallback} callback     [返回值，参数回调]
-             */
-      RongIMClient.prototype.removeMemberFromDiscussion = function (discussionId, userId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'string', 'object'], 'removeMemberFromDiscussion', false, arguments)
-        RongIMClient._dataAccessProvider.removeMemberFromDiscussion(discussionId, userId, RongIMClient.logCallback(callback, 'removeMemberFromDiscussion'))
+       * [removeMemberFromDiscussion 将指定成员移除讨论租]
+       * @param  {string}            discussionId [讨论组Id]
+       * @param  {string}            userId       [被移除的用户Id]
+       * @param  {OperationCallback} callback     [返回值，参数回调]
+       */
+      RongIMClient.prototype.removeMemberFromDiscussion = function (
+        discussionId,
+        userId,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'string', 'object'],
+          'removeMemberFromDiscussion',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.removeMemberFromDiscussion(
+          discussionId,
+          userId,
+          RongIMClient.logCallback(callback, 'removeMemberFromDiscussion')
+        )
       }
       /**
-             * [setDiscussionInviteStatus 设置讨论组邀请状态]
-             * @param  {string}                 discussionId [讨论组Id]
-             * @param  {DiscussionInviteStatus} status       [邀请状态]
-             * @param  {OperationCallback}      callback     [返回值，函数回调]
-             */
-      RongIMClient.prototype.setDiscussionInviteStatus = function (discussionId, status, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'number', 'object'], 'setDiscussionInviteStatus', false, arguments)
-        RongIMClient._dataAccessProvider.setDiscussionInviteStatus(discussionId, status, RongIMClient.logCallback(callback, 'setDiscussionInviteStatus'))
+       * [setDiscussionInviteStatus 设置讨论组邀请状态]
+       * @param  {string}                 discussionId [讨论组Id]
+       * @param  {DiscussionInviteStatus} status       [邀请状态]
+       * @param  {OperationCallback}      callback     [返回值，函数回调]
+       */
+      RongIMClient.prototype.setDiscussionInviteStatus = function (
+        discussionId,
+        status,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'number', 'object'],
+          'setDiscussionInviteStatus',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setDiscussionInviteStatus(
+          discussionId,
+          status,
+          RongIMClient.logCallback(callback, 'setDiscussionInviteStatus')
+        )
       }
       /**
-             * [setDiscussionName 设置讨论组名称]
-             * @param  {string}            discussionId [讨论组Id]
-             * @param  {string}            name         [讨论组名称]
-             * @param  {OperationCallback} callback     [返回值，函数回调]
-             */
-      RongIMClient.prototype.setDiscussionName = function (discussionId, name, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'string', 'object'], 'setDiscussionName', false, arguments)
-        RongIMClient._dataAccessProvider.setDiscussionName(discussionId, name, RongIMClient.logCallback(callback, 'setDiscussionName'))
+       * [setDiscussionName 设置讨论组名称]
+       * @param  {string}            discussionId [讨论组Id]
+       * @param  {string}            name         [讨论组名称]
+       * @param  {OperationCallback} callback     [返回值，函数回调]
+       */
+      RongIMClient.prototype.setDiscussionName = function (
+        discussionId,
+        name,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'string', 'object'],
+          'setDiscussionName',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setDiscussionName(
+          discussionId,
+          name,
+          RongIMClient.logCallback(callback, 'setDiscussionName')
+        )
       }
       // #endregion Discussion
       // #region ChatRoom
       /**
-             * [加入聊天室。]
-             * @param  {string}            chatroomId   [聊天室Id]
-             * @param  {number}            messageCount [拉取消息数量，-1为不拉去消息]
-             * @param  {OperationCallback} callback     [返回值，函数回调]
-             */
-      RongIMClient.prototype.joinChatRoom = function (chatroomId, messageCount, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'number', 'object'], 'joinChatRoom', false, arguments)
+       * [加入聊天室。]
+       * @param  {string}            chatroomId   [聊天室Id]
+       * @param  {number}            messageCount [拉取消息数量，-1为不拉去消息]
+       * @param  {OperationCallback} callback     [返回值，函数回调]
+       */
+      RongIMClient.prototype.joinChatRoom = function (
+        chatroomId,
+        messageCount,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'number', 'object'],
+          'joinChatRoom',
+          false,
+          arguments
+        )
         if (chatroomId == '') {
           setTimeout(function () {
             var errorCode = RongIMLib.ErrorCode.CHATROOM_ID_ISNULL
             RongIMClient.logger({
               code: errorCode,
-              funcName: 'joinChatRoom'
+              funcName: 'joinChatRoom',
             })
             callback.onError(RongIMLib.ErrorCode.CHATROOM_ID_ISNULL)
           })
           return
         }
-        RongIMClient._dataAccessProvider.joinChatRoom(chatroomId, messageCount, RongIMClient.logCallback(callback, 'joinChatRoom'))
+        RongIMClient._dataAccessProvider.joinChatRoom(
+          chatroomId,
+          messageCount,
+          RongIMClient.logCallback(callback, 'joinChatRoom')
+        )
       }
       RongIMClient.prototype.setDeviceInfo = function (device) {
         RongIMClient._dataAccessProvider.setDeviceInfo(device)
       }
-      RongIMClient.prototype.setChatroomHisMessageTimestamp = function (chatRoomId, timestamp) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'number'], 'setChatroomHisMessageTimestamp', false, arguments)
-        RongIMClient._dataAccessProvider.setChatroomHisMessageTimestamp(chatRoomId, timestamp)
+      RongIMClient.prototype.setChatroomHisMessageTimestamp = function (
+        chatRoomId,
+        timestamp
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'number'],
+          'setChatroomHisMessageTimestamp',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setChatroomHisMessageTimestamp(
+          chatRoomId,
+          timestamp
+        )
       }
-      RongIMClient.prototype.getChatRoomHistoryMessages = function (chatRoomId, count, order, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'number', 'number', 'object'], 'getChatRoomHistoryMessages', false, arguments)
-        RongIMClient._dataAccessProvider.getChatRoomHistoryMessages(chatRoomId, count, order, RongIMClient.logCallback(callback, 'getChatRoomHistoryMessages'))
+      RongIMClient.prototype.getChatRoomHistoryMessages = function (
+        chatRoomId,
+        count,
+        order,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'number', 'number', 'object'],
+          'getChatRoomHistoryMessages',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getChatRoomHistoryMessages(
+          chatRoomId,
+          count,
+          order,
+          RongIMClient.logCallback(callback, 'getChatRoomHistoryMessages')
+        )
       }
-      RongIMClient.prototype.getChatRoomInfo = function (chatRoomId, count, order, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'number', 'number', 'object'], 'getChatRoomInfo', false, arguments)
-        RongIMClient._dataAccessProvider.getChatRoomInfo(chatRoomId, count, order, RongIMClient.logCallback(callback, 'getChatRoomInfo'))
+      RongIMClient.prototype.getChatRoomInfo = function (
+        chatRoomId,
+        count,
+        order,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'number', 'number', 'object'],
+          'getChatRoomInfo',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getChatRoomInfo(
+          chatRoomId,
+          count,
+          order,
+          RongIMClient.logCallback(callback, 'getChatRoomInfo')
+        )
       }
       /**
-             * [退出聊天室]
-             * @param  {string}            chatroomId [聊天室Id]
-             * @param  {OperationCallback} callback   [返回值，函数回调]
-             */
+       * [退出聊天室]
+       * @param  {string}            chatroomId [聊天室Id]
+       * @param  {OperationCallback} callback   [返回值，函数回调]
+       */
       RongIMClient.prototype.quitChatRoom = function (chatroomId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'object'], 'quitChatRoom', false, arguments)
-        RongIMClient._dataAccessProvider.quitChatRoom(chatroomId, RongIMClient.logCallback(callback, 'quitChatRoom'))
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'object'],
+          'quitChatRoom',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.quitChatRoom(
+          chatroomId,
+          RongIMClient.logCallback(callback, 'quitChatRoom')
+        )
       }
       // #endregion ChatRoom
       // #region Public Service
-      RongIMClient.prototype.getRemotePublicServiceList = function (callback, pullMessageTime) {
-        RongIMClient._dataAccessProvider.getRemotePublicServiceList(RongIMClient.logCallback(callback, 'getRemotePublicServiceList'), pullMessageTime)
+      RongIMClient.prototype.getRemotePublicServiceList = function (
+        callback,
+        pullMessageTime
+      ) {
+        RongIMClient._dataAccessProvider.getRemotePublicServiceList(
+          RongIMClient.logCallback(callback, 'getRemotePublicServiceList'),
+          pullMessageTime
+        )
       }
       /**
-             * [getPublicServiceList ]获取本地的公共账号列表
-             * @param  {ResultCallback<PublicServiceProfile[]>} callback [返回值，参数回调]
-             */
+       * [getPublicServiceList ]获取本地的公共账号列表
+       * @param  {ResultCallback<PublicServiceProfile[]>} callback [返回值，参数回调]
+       */
       RongIMClient.prototype.getPublicServiceList = function (callback) {
         if (RongIMClient._memoryStore.depend.openMp) {
-          RongIMLib.CheckParam.getInstance().check(['object'], 'getPublicServiceList', false, arguments)
-          this.getRemotePublicServiceList(RongIMClient.logCallback(callback, 'getPublicServiceList'))
+          RongIMLib.CheckParam.getInstance().check(
+            ['object'],
+            'getPublicServiceList',
+            false,
+            arguments
+          )
+          this.getRemotePublicServiceList(
+            RongIMClient.logCallback(callback, 'getPublicServiceList')
+          )
         }
       }
       /**
-             * [getPublicServiceProfile ]   获取某公共服务信息。
-             * @param  {PublicServiceType}                    publicServiceType [公众服务类型。]
-             * @param  {string}                               publicServiceId   [公共服务 Id。]
-             * @param  {ResultCallback<PublicServiceProfile>} callback          [公共账号信息回调。]
-             */
-      RongIMClient.prototype.getPublicServiceProfile = function (publicServiceType, publicServiceId, callback) {
+       * [getPublicServiceProfile ]   获取某公共服务信息。
+       * @param  {PublicServiceType}                    publicServiceType [公众服务类型。]
+       * @param  {string}                               publicServiceId   [公共服务 Id。]
+       * @param  {ResultCallback<PublicServiceProfile>} callback          [公共账号信息回调。]
+       */
+      RongIMClient.prototype.getPublicServiceProfile = function (
+        publicServiceType,
+        publicServiceId,
+        callback
+      ) {
         if (RongIMClient._memoryStore.depend.openMp) {
-          RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'getPublicServiceProfile', false, arguments)
-          RongIMClient._dataAccessProvider.getPublicServiceProfile(publicServiceType, publicServiceId, RongIMClient.logCallback(callback, 'getPublicServiceProfile'))
+          RongIMLib.CheckParam.getInstance().check(
+            ['number', 'string|number', 'object'],
+            'getPublicServiceProfile',
+            false,
+            arguments
+          )
+          RongIMClient._dataAccessProvider.getPublicServiceProfile(
+            publicServiceType,
+            publicServiceId,
+            RongIMClient.logCallback(callback, 'getPublicServiceProfile')
+          )
         }
       }
       /**
-             * [pottingPublicSearchType ] 公众好查询类型
-             * @param  {number} bussinessType [ 0-all 1-mp 2-mc]
-             * @param  {number} searchType    [0-exact 1-fuzzy]
-             */
-      RongIMClient.prototype.pottingPublicSearchType = function (bussinessType, searchType) {
+       * [pottingPublicSearchType ] 公众好查询类型
+       * @param  {number} bussinessType [ 0-all 1-mp 2-mc]
+       * @param  {number} searchType    [0-exact 1-fuzzy]
+       */
+      RongIMClient.prototype.pottingPublicSearchType = function (
+        bussinessType,
+        searchType
+      ) {
         if (RongIMClient._memoryStore.depend.openMp) {
           var bits = 0
           if (bussinessType == 0) {
@@ -4183,238 +5113,456 @@
         }
       }
       /**
-             * [searchPublicService ]按公众服务类型搜索公众服务。
-             * @param  {SearchType}                             searchType [搜索类型枚举。]
-             * @param  {string}                                 keywords   [搜索关键字。]
-             * @param  {ResultCallback<PublicServiceProfile[]>} callback   [搜索结果回调。]
-             */
-      RongIMClient.prototype.searchPublicService = function (searchType, keywords, callback) {
+       * [searchPublicService ]按公众服务类型搜索公众服务。
+       * @param  {SearchType}                             searchType [搜索类型枚举。]
+       * @param  {string}                                 keywords   [搜索关键字。]
+       * @param  {ResultCallback<PublicServiceProfile[]>} callback   [搜索结果回调。]
+       */
+      RongIMClient.prototype.searchPublicService = function (
+        searchType,
+        keywords,
+        callback
+      ) {
         if (RongIMClient._memoryStore.depend.openMp) {
-          RongIMLib.CheckParam.getInstance().check(['number', 'string', 'object'], 'searchPublicService', false, arguments)
+          RongIMLib.CheckParam.getInstance().check(
+            ['number', 'string', 'object'],
+            'searchPublicService',
+            false,
+            arguments
+          )
           var modules = new RongIMClient.Protobuf.SearchMpInput()
           modules.setType(this.pottingPublicSearchType(0, searchType))
           modules.setId(keywords)
-          RongIMClient.bridge.queryMsg(29, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, RongIMClient.logCallback(callback, 'searchPublicService'), 'SearchMpOutput')
+          RongIMClient.bridge.queryMsg(
+            29,
+            RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+            RongIMLib.Bridge._client.userId,
+            RongIMClient.logCallback(callback, 'searchPublicService'),
+            'SearchMpOutput'
+          )
         }
       }
       /**
-             * [searchPublicServiceByType ]按公众服务类型搜索公众服务。
-             * @param  {PublicServiceType}                      publicServiceType [公众服务类型。]
-             * @param  {SearchType}                             searchType        [搜索类型枚举。]
-             * @param  {string}                                 keywords          [搜索关键字。]
-             * @param  {ResultCallback<PublicServiceProfile[]>} callback          [搜索结果回调。]
-             */
-      RongIMClient.prototype.searchPublicServiceByType = function (publicServiceType, searchType, keywords, callback) {
+       * [searchPublicServiceByType ]按公众服务类型搜索公众服务。
+       * @param  {PublicServiceType}                      publicServiceType [公众服务类型。]
+       * @param  {SearchType}                             searchType        [搜索类型枚举。]
+       * @param  {string}                                 keywords          [搜索关键字。]
+       * @param  {ResultCallback<PublicServiceProfile[]>} callback          [搜索结果回调。]
+       */
+      RongIMClient.prototype.searchPublicServiceByType = function (
+        publicServiceType,
+        searchType,
+        keywords,
+        callback
+      ) {
         if (RongIMClient._memoryStore.depend.openMp) {
-          RongIMLib.CheckParam.getInstance().check(['number', 'number', 'string', 'object'], 'searchPublicServiceByType', false, arguments)
-          var type = publicServiceType == RongIMLib.ConversationType.APP_PUBLIC_SERVICE ? 2 : 1
+          RongIMLib.CheckParam.getInstance().check(
+            ['number', 'number', 'string', 'object'],
+            'searchPublicServiceByType',
+            false,
+            arguments
+          )
+          var type =
+            publicServiceType == RongIMLib.ConversationType.APP_PUBLIC_SERVICE
+              ? 2
+              : 1
           var modules = new RongIMClient.Protobuf.SearchMpInput()
           modules.setType(this.pottingPublicSearchType(type, searchType))
           modules.setId(keywords)
-          RongIMClient.bridge.queryMsg(29, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, RongIMClient.logCallback(callback, 'searchPublicServiceByType'), 'SearchMpOutput')
+          RongIMClient.bridge.queryMsg(
+            29,
+            RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+            RongIMLib.Bridge._client.userId,
+            RongIMClient.logCallback(callback, 'searchPublicServiceByType'),
+            'SearchMpOutput'
+          )
         }
       }
       /**
-             * [subscribePublicService ] 订阅公众号。
-             * @param  {PublicServiceType} publicServiceType [公众服务类型。]
-             * @param  {string}            publicServiceId   [公共服务 Id。]
-             * @param  {OperationCallback} callback          [订阅公众号回调。]
-             */
-      RongIMClient.prototype.subscribePublicService = function (publicServiceType, publicServiceId, callback) {
+       * [subscribePublicService ] 订阅公众号。
+       * @param  {PublicServiceType} publicServiceType [公众服务类型。]
+       * @param  {string}            publicServiceId   [公共服务 Id。]
+       * @param  {OperationCallback} callback          [订阅公众号回调。]
+       */
+      RongIMClient.prototype.subscribePublicService = function (
+        publicServiceType,
+        publicServiceId,
+        callback
+      ) {
         if (RongIMClient._memoryStore.depend.openMp) {
-          RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'subscribePublicService', false, arguments)
+          RongIMLib.CheckParam.getInstance().check(
+            ['number', 'string|number', 'object'],
+            'subscribePublicService',
+            false,
+            arguments
+          )
           var modules = new RongIMClient.Protobuf.MPFollowInput()
           var me = this
-          var follow = publicServiceType == RongIMLib.ConversationType.APP_PUBLIC_SERVICE ? 'mcFollow' : 'mpFollow'
+          var follow =
+            publicServiceType == RongIMLib.ConversationType.APP_PUBLIC_SERVICE
+              ? 'mcFollow'
+              : 'mpFollow'
           modules.setId(publicServiceId)
-          RongIMClient.bridge.queryMsg(follow, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-            onSuccess: function () {
-              me.getRemotePublicServiceList({
-                onSuccess: function () {},
-                onError: function () {}
-              })
-              callback.onSuccess()
+          RongIMClient.bridge.queryMsg(
+            follow,
+            RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+            RongIMLib.Bridge._client.userId,
+            {
+              onSuccess: function () {
+                me.getRemotePublicServiceList({
+                  onSuccess: function () {},
+                  onError: function () {},
+                })
+                callback.onSuccess()
+              },
+              onError: function (code) {
+                var errorCode = code
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'subscribePublicService',
+                })
+                callback.onError(code)
+              },
             },
-            onError: function (code) {
-              var errorCode = code
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'subscribePublicService'
-              })
-              callback.onError(code)
-            }
-          }, 'MPFollowOutput')
+            'MPFollowOutput'
+          )
         }
       }
       /**
-             * [unsubscribePublicService ] 取消订阅公众号。
-             * @param  {PublicServiceType} publicServiceType [公众服务类型。]
-             * @param  {string}            publicServiceId   [公共服务 Id。]
-             * @param  {OperationCallback} callback          [取消订阅公众号回调。]
-             */
-      RongIMClient.prototype.unsubscribePublicService = function (publicServiceType, publicServiceId, callback) {
+       * [unsubscribePublicService ] 取消订阅公众号。
+       * @param  {PublicServiceType} publicServiceType [公众服务类型。]
+       * @param  {string}            publicServiceId   [公共服务 Id。]
+       * @param  {OperationCallback} callback          [取消订阅公众号回调。]
+       */
+      RongIMClient.prototype.unsubscribePublicService = function (
+        publicServiceType,
+        publicServiceId,
+        callback
+      ) {
         if (RongIMClient._memoryStore.depend.openMp) {
-          RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'object'], 'unsubscribePublicService', false, arguments)
+          RongIMLib.CheckParam.getInstance().check(
+            ['number', 'string|number', 'object'],
+            'unsubscribePublicService',
+            false,
+            arguments
+          )
           var modules = new RongIMClient.Protobuf.MPFollowInput()
           var me = this
-          var follow = publicServiceType == RongIMLib.ConversationType.APP_PUBLIC_SERVICE ? 'mcUnFollow' : 'mpUnFollow'
+          var follow =
+            publicServiceType == RongIMLib.ConversationType.APP_PUBLIC_SERVICE
+              ? 'mcUnFollow'
+              : 'mpUnFollow'
           modules.setId(publicServiceId)
-          RongIMClient.bridge.queryMsg(follow, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-            onSuccess: function () {
-              RongIMClient._memoryStore.publicServiceMap.remove(publicServiceType, publicServiceId)
-              callback.onSuccess()
+          RongIMClient.bridge.queryMsg(
+            follow,
+            RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+            RongIMLib.Bridge._client.userId,
+            {
+              onSuccess: function () {
+                RongIMClient._memoryStore.publicServiceMap.remove(
+                  publicServiceType,
+                  publicServiceId
+                )
+                callback.onSuccess()
+              },
+              onError: function (code) {
+                var errorCode = code
+                RongIMClient.logger({
+                  code: errorCode,
+                  funcName: 'unsubscribePublicService',
+                })
+                callback.onError(code)
+              },
             },
-            onError: function (code) {
-              var errorCode = code
-              RongIMClient.logger({
-                code: errorCode,
-                funcName: 'unsubscribePublicService'
-              })
-              callback.onError(code)
-            }
-          }, 'MPFollowOutput')
+            'MPFollowOutput'
+          )
         }
       }
       // #endregion Public Service
       // #region Blacklist
       /**
-             * [加入黑名单]
-             * @param  {string}            userId   [将被加入黑名单的用户Id]
-             * @param  {OperationCallback} callback [返回值，函数回调]
-             */
+       * [加入黑名单]
+       * @param  {string}            userId   [将被加入黑名单的用户Id]
+       * @param  {OperationCallback} callback [返回值，函数回调]
+       */
       RongIMClient.prototype.addToBlacklist = function (userId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'object'], 'addToBlacklist', false, arguments)
-        RongIMClient._dataAccessProvider.addToBlacklist(userId, RongIMClient.logCallback(callback, 'addToBlacklist'))
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'object'],
+          'addToBlacklist',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.addToBlacklist(
+          userId,
+          RongIMClient.logCallback(callback, 'addToBlacklist')
+        )
       }
       /**
-             * [获取黑名单列表]
-             * @param  {GetBlacklistCallback} callback [返回值，函数回调]
-             */
+       * [获取黑名单列表]
+       * @param  {GetBlacklistCallback} callback [返回值，函数回调]
+       */
       RongIMClient.prototype.getBlacklist = function (callback) {
-        RongIMLib.CheckParam.getInstance().check(['object'], 'getBlacklist', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object'],
+          'getBlacklist',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.getBlacklist(callback)
       }
       /**
-             * [得到指定人员再黑名单中的状态]
-             * @param  {string}                          userId   [description]
-             * @param  {ResultCallback<BlacklistStatus>} callback [返回值，函数回调]
-             */
+       * [得到指定人员再黑名单中的状态]
+       * @param  {string}                          userId   [description]
+       * @param  {ResultCallback<BlacklistStatus>} callback [返回值，函数回调]
+       */
       // TODO 如果人员不在黑名单中，获取状态会出现异常
       RongIMClient.prototype.getBlacklistStatus = function (userId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'object'], 'getBlacklistStatus', false, arguments)
-        RongIMClient._dataAccessProvider.getBlacklistStatus(userId, RongIMClient.logCallback(callback, 'getBlacklistStatus'))
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'object'],
+          'getBlacklistStatus',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getBlacklistStatus(
+          userId,
+          RongIMClient.logCallback(callback, 'getBlacklistStatus')
+        )
       }
       /**
-             * [将指定用户移除黑名单]
-             * @param  {string}            userId   [将被移除的用户Id]
-             * @param  {OperationCallback} callback [返回值，函数回调]
-             */
+       * [将指定用户移除黑名单]
+       * @param  {string}            userId   [将被移除的用户Id]
+       * @param  {OperationCallback} callback [返回值，函数回调]
+       */
       RongIMClient.prototype.removeFromBlacklist = function (userId, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string|number', 'object'], 'removeFromBlacklist', false, arguments)
-        RongIMClient._dataAccessProvider.removeFromBlacklist(userId, RongIMClient.logCallback(callback, 'removeFromBlacklist'))
+        RongIMLib.CheckParam.getInstance().check(
+          ['string|number', 'object'],
+          'removeFromBlacklist',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.removeFromBlacklist(
+          userId,
+          RongIMClient.logCallback(callback, 'removeFromBlacklist')
+        )
       }
       RongIMClient.prototype.getFileToken = function (fileType, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'object'], 'getQngetFileTokenTkn', false, arguments)
-        RongIMClient._dataAccessProvider.getFileToken(fileType, RongIMClient.logCallback(callback, 'getFileToken'))
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'object'],
+          'getQngetFileTokenTkn',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getFileToken(
+          fileType,
+          RongIMClient.logCallback(callback, 'getFileToken')
+        )
       }
-      RongIMClient.prototype.getFileUrl = function (fileType, fileName, oriName, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string', 'string|global|object|null', 'object'], 'getFileUrl', false, arguments)
-        RongIMClient._dataAccessProvider.getFileUrl(fileType, fileName, oriName, RongIMClient.logCallback(callback, 'getFileUrl'))
+      RongIMClient.prototype.getFileUrl = function (
+        fileType,
+        fileName,
+        oriName,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string', 'string|global|object|null', 'object'],
+          'getFileUrl',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getFileUrl(
+          fileType,
+          fileName,
+          oriName,
+          RongIMClient.logCallback(callback, 'getFileUrl')
+        )
       }
       // #endregion Blacklist
       // #region Real-time Location Service
-      RongIMClient.prototype.addRealTimeLocationListener = function (conversationType, targetId, listener) {
+      RongIMClient.prototype.addRealTimeLocationListener = function (
+        conversationType,
+        targetId,
+        listener
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.getRealTimeLocation = function (conversationType, targetId) {
+      RongIMClient.prototype.getRealTimeLocation = function (
+        conversationType,
+        targetId
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.getRealTimeLocationCurrentState = function (conversationType, targetId) {
+      RongIMClient.prototype.getRealTimeLocationCurrentState = function (
+        conversationType,
+        targetId
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.getRealTimeLocationParticipants = function (conversationType, targetId) {
+      RongIMClient.prototype.getRealTimeLocationParticipants = function (
+        conversationType,
+        targetId
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.joinRealTimeLocation = function (conversationType, targetId) {
+      RongIMClient.prototype.joinRealTimeLocation = function (
+        conversationType,
+        targetId
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.quitRealTimeLocation = function (conversationType, targetId) {
+      RongIMClient.prototype.quitRealTimeLocation = function (
+        conversationType,
+        targetId
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.startRealTimeLocation = function (conversationType, targetId) {
+      RongIMClient.prototype.startRealTimeLocation = function (
+        conversationType,
+        targetId
+      ) {
         throw new Error('Not implemented yet')
       }
-      RongIMClient.prototype.updateRealTimeLocationStatus = function (conversationType, targetId, latitude, longitude) {
+      RongIMClient.prototype.updateRealTimeLocationStatus = function (
+        conversationType,
+        targetId,
+        latitude,
+        longitude
+      ) {
         throw new Error('Not implemented yet')
       }
       // #endregion Real-time Location Service
       // # startVoIP
-      RongIMClient.prototype.startCall = function (converType, targetId, userIds, mediaType, extra, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string|number', 'array', 'number', 'string', 'object'], 'startCall', false, arguments)
+      RongIMClient.prototype.startCall = function (
+        converType,
+        targetId,
+        userIds,
+        mediaType,
+        extra,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string|number', 'array', 'number', 'string', 'object'],
+          'startCall',
+          false,
+          arguments
+        )
         if (RongIMClient._memoryStore.voipStategy) {
-          RongIMClient._voipProvider.startCall(converType, targetId, userIds, mediaType, extra, RongIMClient.logCallback(callback, 'startCall'))
+          RongIMClient._voipProvider.startCall(
+            converType,
+            targetId,
+            userIds,
+            mediaType,
+            extra,
+            RongIMClient.logCallback(callback, 'startCall')
+          )
         } else {
           var errorCode = RongIMLib.ErrorCode.VOIP_NOT_AVALIABLE
           RongIMClient.logger({
             code: errorCode,
-            funcName: 'startCall'
+            funcName: 'startCall',
           })
           callback.onError(RongIMLib.ErrorCode.VOIP_NOT_AVALIABLE)
         }
       }
       RongIMClient.prototype.joinCall = function (mediaType, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'object'], 'joinCall', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'object'],
+          'joinCall',
+          false,
+          arguments
+        )
         if (RongIMClient._memoryStore.voipStategy) {
-          RongIMClient._voipProvider.joinCall(mediaType, RongIMClient.logCallback(callback, 'joinCall'))
+          RongIMClient._voipProvider.joinCall(
+            mediaType,
+            RongIMClient.logCallback(callback, 'joinCall')
+          )
         } else {
           var errorCode = RongIMLib.ErrorCode.VOIP_NOT_AVALIABLE
           RongIMClient.logger({
             code: errorCode,
-            funcName: 'joinCall'
+            funcName: 'joinCall',
           })
           callback.onError(RongIMLib.ErrorCode.VOIP_NOT_AVALIABLE)
         }
       }
-      RongIMClient.prototype.hungupCall = function (converType, targetId, reason) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string', 'number'], 'hungupCall', false, arguments)
+      RongIMClient.prototype.hungupCall = function (
+        converType,
+        targetId,
+        reason
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string', 'number'],
+          'hungupCall',
+          false,
+          arguments
+        )
         if (RongIMClient._memoryStore.voipStategy) {
           RongIMClient._voipProvider.hungupCall(converType, targetId, reason)
         }
       }
-      RongIMClient.prototype.changeMediaType = function (converType, targetId, mediaType, callback) {
-        RongIMLib.CheckParam.getInstance().check(['number', 'string', 'number', 'object'], 'changeMediaType', false, arguments)
+      RongIMClient.prototype.changeMediaType = function (
+        converType,
+        targetId,
+        mediaType,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['number', 'string', 'number', 'object'],
+          'changeMediaType',
+          false,
+          arguments
+        )
         if (RongIMClient._memoryStore.voipStategy) {
-          RongIMClient._voipProvider.changeMediaType(converType, targetId, mediaType, RongIMClient.logCallback(callback, 'changeMediaType'))
+          RongIMClient._voipProvider.changeMediaType(
+            converType,
+            targetId,
+            mediaType,
+            RongIMClient.logCallback(callback, 'changeMediaType')
+          )
         } else {
           var errorCode = RongIMLib.ErrorCode.VOIP_NOT_AVALIABLE
           RongIMClient.logger({
             code: errorCode,
-            funcName: 'changeMediaType'
+            funcName: 'changeMediaType',
           })
           callback.onError(RongIMLib.ErrorCode.VOIP_NOT_AVALIABLE)
         }
       }
       // # endVoIP
-      RongIMClient.prototype.getUnreadMentionedMessages = function (conversationType, targetId) {
-        return RongIMClient._dataAccessProvider.getUnreadMentionedMessages(conversationType, targetId)
+      RongIMClient.prototype.getUnreadMentionedMessages = function (
+        conversationType,
+        targetId
+      ) {
+        return RongIMClient._dataAccessProvider.getUnreadMentionedMessages(
+          conversationType,
+          targetId
+        )
       }
       RongIMClient.prototype.clearListeners = function () {
         RongIMClient._dataAccessProvider.clearListeners()
       }
       // UserStatus start
       RongIMClient.prototype.getUserStatus = function (userId, callback) {
-        RongIMClient._dataAccessProvider.getUserStatus(userId, RongIMClient.logCallback(callback, 'getUserStatus'))
+        RongIMClient._dataAccessProvider.getUserStatus(
+          userId,
+          RongIMClient.logCallback(callback, 'getUserStatus')
+        )
       }
       RongIMClient.prototype.setUserStatus = function (status, callback) {
-        RongIMClient._dataAccessProvider.setUserStatus(status, RongIMClient.logCallback(callback, 'setUserStatus'))
+        RongIMClient._dataAccessProvider.setUserStatus(
+          status,
+          RongIMClient.logCallback(callback, 'setUserStatus')
+        )
       }
-      RongIMClient.prototype.setUserStatusListener = function (params, callback) {
+      RongIMClient.prototype.setUserStatusListener = function (
+        params,
+        callback
+      ) {
         var userIds = params.userIds
         var multiple = params.multiple
         RongIMClient.userStatusObserver.watch({
           key: userIds,
           func: callback,
-          multiple: multiple
+          multiple: multiple,
         })
         RongIMClient._dataAccessProvider.setUserStatusListener(params, callback)
       }
@@ -4433,35 +5581,83 @@
                 };
             */
       RongIMClient.prototype.getRTCUserInfoList = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'getRTCUserInfoList', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'getRTCUserInfoList',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.getRTCUserInfoList(room, callback)
       }
       RongIMClient.prototype.getRTCUserList = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'getRTCUserList', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'getRTCUserList',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.getRTCUserList(room, callback)
       }
       RongIMClient.prototype.setRTCUserInfo = function (room, info, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object', 'object'], 'setRTCUserInfo', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object', 'object'],
+          'setRTCUserInfo',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.setRTCUserInfo(room, info, callback)
       }
-      RongIMClient.prototype.removeRTCUserInfo = function (room, info, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object', 'object'], 'removeRTCUserInfo', false, arguments)
+      RongIMClient.prototype.removeRTCUserInfo = function (
+        room,
+        info,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object', 'object'],
+          'removeRTCUserInfo',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.removeRTCUserInfo(room, info, callback)
       }
       RongIMClient.prototype.getRTCRoomInfo = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'getRTCRoomInfo', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'getRTCRoomInfo',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.getRTCRoomInfo(room, callback)
       }
       RongIMClient.prototype.setRTCRoomInfo = function (room, info, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object', 'object'], 'setRTCRoomInfo', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object', 'object'],
+          'setRTCRoomInfo',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.setRTCRoomInfo(room, info, callback)
       }
-      RongIMClient.prototype.removeRTCRoomInfo = function (room, info, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object', 'object'], 'removeRTCRoomInfo', false, arguments)
+      RongIMClient.prototype.removeRTCRoomInfo = function (
+        room,
+        info,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object', 'object'],
+          'removeRTCRoomInfo',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.removeRTCRoomInfo(room, info, callback)
       }
       RongIMClient.prototype.joinRTCRoom = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'joinRTCRoom', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'joinRTCRoom',
+          false,
+          arguments
+        )
         if (RongIMClient.isJoinedRTCRoom) {
           return callback.onSuccess(RongIMClient.roomInfo)
         }
@@ -4471,78 +5667,250 @@
             RongIMClient.isJoinedRTCRoom = true
             callback.onSuccess(result)
           },
-          onError: callback.onError
+          onError: callback.onError,
         })
       }
       RongIMClient.prototype.quitRTCRoom = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'quitRTCRoom', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'quitRTCRoom',
+          false,
+          arguments
+        )
         RongIMClient.isJoinedRTCRoom = false
         RongIMClient._dataAccessProvider.quitRTCRoom(room, {
           onSuccess: function () {
             RongIMClient.roomInfo = {
               users: {},
-              token: ''
+              token: '',
             }
             callback.onSuccess(true)
           },
-          onError: callback.onError
+          onError: callback.onError,
         })
       }
       RongIMClient.prototype.RTCPing = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'RTCPing', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'RTCPing',
+          false,
+          arguments
+        )
         RongIMClient._dataAccessProvider.RTCPing(room, callback)
       }
-      RongIMClient.prototype.setRTCUserData = function (roomId, key, value, isInner, callback, message) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'string', 'string', 'boolean', 'object', 'global|object|null|undefined'], 'setRTCUserData', false, arguments)
-        RongIMClient._dataAccessProvider.setRTCUserData(roomId, key, value, isInner, callback, message)
+      RongIMClient.prototype.setRTCUserData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        callback,
+        message
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'string',
+            'string',
+            'string',
+            'boolean',
+            'object',
+            'global|object|null|undefined',
+          ],
+          'setRTCUserData',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setRTCUserData(
+          roomId,
+          key,
+          value,
+          isInner,
+          callback,
+          message
+        )
       }
-      RongIMClient.prototype.getRTCUserData = function (roomId, keys, isInner, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'array', 'boolean', 'object', 'global|object|null'], 'getRTCUserData', false, arguments)
-        RongIMClient._dataAccessProvider.getRTCUserData(roomId, keys, isInner, callback)
+      RongIMClient.prototype.getRTCUserData = function (
+        roomId,
+        keys,
+        isInner,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'array', 'boolean', 'object', 'global|object|null'],
+          'getRTCUserData',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getRTCUserData(
+          roomId,
+          keys,
+          isInner,
+          callback
+        )
       }
-      RongIMClient.prototype.removeRTCUserData = function (roomId, keys, isInner, callback, message) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'array', 'boolean', 'object', 'global|object|null|undefined'], 'removeRTCUserData', false, arguments)
-        RongIMClient._dataAccessProvider.removeRTCUserData(roomId, keys, isInner, callback, message)
+      RongIMClient.prototype.removeRTCUserData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'string',
+            'array',
+            'boolean',
+            'object',
+            'global|object|null|undefined',
+          ],
+          'removeRTCUserData',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.removeRTCUserData(
+          roomId,
+          keys,
+          isInner,
+          callback,
+          message
+        )
       }
-      RongIMClient.prototype.setRTCRoomData = function (roomId, key, value, isInner, callback, message) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'string', 'string', 'boolean', 'object', 'global|object|null|undefined'], 'setRTCRoomData', false, arguments)
-        RongIMClient._dataAccessProvider.setRTCRoomData(roomId, key, value, isInner, callback, message)
+      RongIMClient.prototype.setRTCRoomData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        callback,
+        message
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'string',
+            'string',
+            'string',
+            'boolean',
+            'object',
+            'global|object|null|undefined',
+          ],
+          'setRTCRoomData',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.setRTCRoomData(
+          roomId,
+          key,
+          value,
+          isInner,
+          callback,
+          message
+        )
       }
-      RongIMClient.prototype.getRTCRoomData = function (roomId, keys, isInner, callback) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'array', 'boolean', 'object'], 'getRTCRoomData', false, arguments)
-        RongIMClient._dataAccessProvider.getRTCRoomData(roomId, keys, isInner, callback)
+      RongIMClient.prototype.getRTCRoomData = function (
+        roomId,
+        keys,
+        isInner,
+        callback
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          ['string', 'array', 'boolean', 'object'],
+          'getRTCRoomData',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.getRTCRoomData(
+          roomId,
+          keys,
+          isInner,
+          callback
+        )
       }
-      RongIMClient.prototype.removeRTCRoomData = function (roomId, keys, isInner, callback, message) {
-        RongIMLib.CheckParam.getInstance().check(['string', 'array', 'boolean', 'object', 'global|object|null|undefined'], 'removeRTCRoomData', false, arguments)
-        RongIMClient._dataAccessProvider.removeRTCRoomData(roomId, keys, isInner, callback, message)
+      RongIMClient.prototype.removeRTCRoomData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        RongIMLib.CheckParam.getInstance().check(
+          [
+            'string',
+            'array',
+            'boolean',
+            'object',
+            'global|object|null|undefined',
+          ],
+          'removeRTCRoomData',
+          false,
+          arguments
+        )
+        RongIMClient._dataAccessProvider.removeRTCRoomData(
+          roomId,
+          keys,
+          isInner,
+          callback,
+          message
+        )
       }
-      RongIMClient.prototype.setRTCOutData = function (roomId, data, type, callback, message) {
-        RongIMClient._dataAccessProvider.setRTCOutData(roomId, data, type, callback, message)
+      RongIMClient.prototype.setRTCOutData = function (
+        roomId,
+        data,
+        type,
+        callback,
+        message
+      ) {
+        RongIMClient._dataAccessProvider.setRTCOutData(
+          roomId,
+          data,
+          type,
+          callback,
+          message
+        )
       }
       // 信令 SDK 新增
-      RongIMClient.prototype.getRTCOutData = function (roomId, userIds, callback) {
-        RongIMClient._dataAccessProvider.getRTCOutData(roomId, userIds, callback)
+      RongIMClient.prototype.getRTCOutData = function (
+        roomId,
+        userIds,
+        callback
+      ) {
+        RongIMClient._dataAccessProvider.getRTCOutData(
+          roomId,
+          userIds,
+          callback
+        )
       }
       RongIMClient.prototype.getNavi = function () {
         return RongIMClient._dataAccessProvider.getNavi()
       }
       RongIMClient.prototype.getRTCToken = function (room, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object'], 'getRTCToken', false, arguments)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object'],
+          'getRTCToken',
+          false,
+          arguments
+        )
         return RongIMClient._dataAccessProvider.getRTCToken(room, callback)
       }
       RongIMClient.prototype.setRTCState = function (room, content, callback) {
-        RongIMLib.CheckParam.getInstance().check(['object', 'object', 'object'], 'setRTCState', false, arguments)
-        return RongIMClient._dataAccessProvider.setRTCState(room, content, callback)
+        RongIMLib.CheckParam.getInstance().check(
+          ['object', 'object', 'object'],
+          'setRTCState',
+          false,
+          arguments
+        )
+        return RongIMClient._dataAccessProvider.setRTCState(
+          room,
+          content,
+          callback
+        )
       }
       RongIMClient.prototype.getAppInfo = function () {
         var appKey = RongIMClient._memoryStore.appKey
         return {
-          appKey: appKey
+          appKey: appKey,
         }
       }
       RongIMClient.prototype.getSDKInfo = function () {
         return {
-          version: RongIMClient.sdkver
+          version: RongIMClient.sdkver,
         }
       }
       RongIMClient.RTCListener = function () {}
@@ -4555,19 +5923,19 @@
       RongIMClient._memoryStore = {
         listenerList: [],
         isPullFinished: false,
-        syncMsgQueue: []
+        syncMsgQueue: [],
       }
       RongIMClient.isNotPullMsg = false
       RongIMClient.userStatusObserver = null
       RongIMClient.sdkver = '2.5.1'
       RongIMClient.otherDeviceLoginCount = 0
       RongIMClient.serverStore = {
-        index: 0
+        index: 0,
       }
       RongIMClient.isFirstConnect = true
       RongIMClient.roomInfo = {
         users: {},
-        token: ''
+        token: '',
       }
       RongIMClient.isJoinedRTCRoom = false
       RongIMClient.statusListeners = []
@@ -4577,43 +5945,90 @@
     RongIMLib.RongIMClient = RongIMClient
   })(RongIMLib || (RongIMLib = {}))
   // 用于连接通道
-  var RongIMLib;
-  (function (RongIMLib) {
-    (function (Qos) {
-      Qos[Qos.AT_MOST_ONCE = 0] = 'AT_MOST_ONCE'
-      Qos[Qos.AT_LEAST_ONCE = 1] = 'AT_LEAST_ONCE'
-      Qos[Qos.EXACTLY_ONCE = 2] = 'EXACTLY_ONCE'
-      Qos[Qos.DEFAULT = 3] = 'DEFAULT'
+  var RongIMLib
+  ;(function (RongIMLib) {
+    ;(function (Qos) {
+      Qos[(Qos.AT_MOST_ONCE = 0)] = 'AT_MOST_ONCE'
+      Qos[(Qos.AT_LEAST_ONCE = 1)] = 'AT_LEAST_ONCE'
+      Qos[(Qos.EXACTLY_ONCE = 2)] = 'EXACTLY_ONCE'
+      Qos[(Qos.DEFAULT = 3)] = 'DEFAULT'
     })(RongIMLib.Qos || (RongIMLib.Qos = {}))
-    var Qos = RongIMLib.Qos;
-    (function (Type) {
-      Type[Type.CONNECT = 1] = 'CONNECT'
-      Type[Type.CONNACK = 2] = 'CONNACK'
-      Type[Type.PUBLISH = 3] = 'PUBLISH'
-      Type[Type.PUBACK = 4] = 'PUBACK'
-      Type[Type.QUERY = 5] = 'QUERY'
-      Type[Type.QUERYACK = 6] = 'QUERYACK'
-      Type[Type.QUERYCON = 7] = 'QUERYCON'
-      Type[Type.SUBSCRIBE = 8] = 'SUBSCRIBE'
-      Type[Type.SUBACK = 9] = 'SUBACK'
-      Type[Type.UNSUBSCRIBE = 10] = 'UNSUBSCRIBE'
-      Type[Type.UNSUBACK = 11] = 'UNSUBACK'
-      Type[Type.PINGREQ = 12] = 'PINGREQ'
-      Type[Type.PINGRESP = 13] = 'PINGRESP'
-      Type[Type.DISCONNECT = 14] = 'DISCONNECT'
+    var Qos = RongIMLib.Qos
+    ;(function (Type) {
+      Type[(Type.CONNECT = 1)] = 'CONNECT'
+      Type[(Type.CONNACK = 2)] = 'CONNACK'
+      Type[(Type.PUBLISH = 3)] = 'PUBLISH'
+      Type[(Type.PUBACK = 4)] = 'PUBACK'
+      Type[(Type.QUERY = 5)] = 'QUERY'
+      Type[(Type.QUERYACK = 6)] = 'QUERYACK'
+      Type[(Type.QUERYCON = 7)] = 'QUERYCON'
+      Type[(Type.SUBSCRIBE = 8)] = 'SUBSCRIBE'
+      Type[(Type.SUBACK = 9)] = 'SUBACK'
+      Type[(Type.UNSUBSCRIBE = 10)] = 'UNSUBSCRIBE'
+      Type[(Type.UNSUBACK = 11)] = 'UNSUBACK'
+      Type[(Type.PINGREQ = 12)] = 'PINGREQ'
+      Type[(Type.PINGRESP = 13)] = 'PINGRESP'
+      Type[(Type.DISCONNECT = 14)] = 'DISCONNECT'
     })(RongIMLib.Type || (RongIMLib.Type = {}))
     var Type = RongIMLib.Type
     var _topic = [
-      'invtDiz', 'crDiz', 'qnUrl', 'userInf', 'dizInf', 'userInf', 'joinGrp', 'quitDiz', 'exitGrp', 'evctDiz',
-      ['', 'ppMsgP', 'pdMsgP', 'pgMsgP', 'chatMsg', 'pcMsgP', '', 'pmcMsgN', 'pmpMsgN', '', '', '', 'prMsgS', 'prMsgP'],
-      'pdOpen', 'rename', 'uGcmpr', 'qnTkn', 'destroyChrm', 'createChrm', 'exitChrm', 'queryChrm',
-      'joinChrm', 'pGrps', 'addBlack', 'rmBlack', 'getBlack', 'blackStat',
-      'addRelation', 'qryRelation', 'delRelation', 'pullMp', 'schMp', 'qnTkn',
-      'qnUrl', 'qryVoipK', 'delMsg', 'qryCHMsg', 'getUserStatus', 'setUserStatus',
-      'subUserStatus', 'cleanHisMsg'
+      'invtDiz',
+      'crDiz',
+      'qnUrl',
+      'userInf',
+      'dizInf',
+      'userInf',
+      'joinGrp',
+      'quitDiz',
+      'exitGrp',
+      'evctDiz',
+      [
+        '',
+        'ppMsgP',
+        'pdMsgP',
+        'pgMsgP',
+        'chatMsg',
+        'pcMsgP',
+        '',
+        'pmcMsgN',
+        'pmpMsgN',
+        '',
+        '',
+        '',
+        'prMsgS',
+        'prMsgP',
+      ],
+      'pdOpen',
+      'rename',
+      'uGcmpr',
+      'qnTkn',
+      'destroyChrm',
+      'createChrm',
+      'exitChrm',
+      'queryChrm',
+      'joinChrm',
+      'pGrps',
+      'addBlack',
+      'rmBlack',
+      'getBlack',
+      'blackStat',
+      'addRelation',
+      'qryRelation',
+      'delRelation',
+      'pullMp',
+      'schMp',
+      'qnTkn',
+      'qnUrl',
+      'qryVoipK',
+      'delMsg',
+      'qryCHMsg',
+      'getUserStatus',
+      'setUserStatus',
+      'subUserStatus',
+      'cleanHisMsg',
     ]
     var Channel = (function () {
-      function Channel (cb, self) {
+      function Channel(cb, self) {
         this.connectionStatus = -1
         var appId = self.appId
         var token = encodeURIComponent(self.token)
@@ -4627,27 +6042,28 @@
         servers = JSON.parse(servers) || []
         var depend = RongIMLib.RongIMClient._memoryStore.depend
         var startConnect = function (host) {
-          var tpl = '{host}/websocket?appId={appId}&token={token}&sdkVer={sdkVer}&apiVer={apiVer}'
+          var tpl =
+            '{host}/websocket?appId={appId}&token={token}&sdkVer={sdkVer}&apiVer={apiVer}'
           that.url = RongIMLib.RongUtil.tplEngine(tpl, {
             host: host,
             appId: appId,
             token: token,
             sdkVer: sdkVer,
-            apiVer: apiVer
+            apiVer: apiVer,
           })
           that.socket.connect(that.url, cb)
           // 临时兼容 Comet 逻辑，Comet 中用到
           var userId = storage.getItem('rong_current_user')
           RongIMLib.Navigation.Endpoint = {
             host: host,
-            userId: userId
+            userId: userId,
           }
         }
         var connectMap = {
           ws: function () {
             // 所有链接计算器，超过 15 秒后认为所有 CMP 地址均不可用
             var totalTimer = new RongIMLib.Timer({
-              timeout: 1 * 1000 * 15
+              timeout: 1 * 1000 * 15,
             })
             var timers = []
             var xhrs = []
@@ -4685,7 +6101,7 @@
                   success: onSuccess,
                   fail: function (code) {
                     console.log(code)
-                  }
+                  },
                 })
                 xhrs.push(xhr)
               }, time)
@@ -4704,42 +6120,61 @@
                 server = RongIMLib.RongUtil.tplEngine(snifferTpl, {
                   protocol: depend.protocol,
                   server: server,
-                  random: RongIMLib.RongUtil.getTimestamp()
+                  random: RongIMLib.RongUtil.getTimestamp(),
                 })
-                request({
-                  url: server,
-                  time: i * 1000
-                }, snifferCallback)
+                request(
+                  {
+                    url: server,
+                    time: i * 1000,
+                  },
+                  snifferCallback
+                )
               }
             }
             totalTimer.resume(function () {
               RongIMLib.Navigation.clear()
               clearHandler()
-              that.socket.fire('StatusChanged', RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE)
+              that.socket.fire(
+                'StatusChanged',
+                RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE
+              )
             })
           },
           comet: function () {
             var host = servers[0]
             startConnect(host)
-          }
+          },
         }
         var isPolling = depend.isPolling
         var type = isPolling ? 'comet' : 'ws'
         connectMap[type]()
         // 注册状态改变观察者
         var StatusEvent = Channel._ConnectionStatusListener
-        var hasEvent = (typeof StatusEvent === 'object')
+        var hasEvent = typeof StatusEvent === 'object'
         var me = this
         me.socket.on('StatusChanged', function (code) {
-          if (RongIMLib.Bridge && RongIMLib.Bridge._client && RongIMLib.Bridge._client.channel && me !== RongIMLib.Bridge._client.channel) {
+          if (
+            RongIMLib.Bridge &&
+            RongIMLib.Bridge._client &&
+            RongIMLib.Bridge._client.channel &&
+            me !== RongIMLib.Bridge._client.channel
+          ) {
             return
           }
           if (!hasEvent) {
-            throw new Error('setConnectStatusListener:Parameter format is incorrect')
+            throw new Error(
+              'setConnectStatusListener:Parameter format is incorrect'
+            )
           }
-          var isNetworkUnavailable = (code == RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE)
-          var isWebSocket = !RongIMLib.RongIMClient._memoryStore.depend.isPolling
-          if (RongIMLib.RongIMClient.isFirstConnect && isNetworkUnavailable && isWebSocket) {
+          var isNetworkUnavailable =
+            code == RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE
+          var isWebSocket = !RongIMLib.RongIMClient._memoryStore.depend
+            .isPolling
+          if (
+            RongIMLib.RongIMClient.isFirstConnect &&
+            isNetworkUnavailable &&
+            isWebSocket
+          ) {
             code = RongIMLib.ConnectionStatus.WEBSOCKET_UNAVAILABLE
           }
           if (isNetworkUnavailable) {
@@ -4761,25 +6196,30 @@
           setTimeout(function () {
             StatusEvent.onChanged(code)
           })
-          var isDisconnected = (code == RongIMLib.ConnectionStatus.DISCONNECTED)
+          var isDisconnected = code == RongIMLib.ConnectionStatus.DISCONNECTED
           if (isDisconnected) {
             self.clearHeartbeat()
           }
-          var isOtherDevice = (code == RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT)
+          var isOtherDevice =
+            code == RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT
           if (isOtherDevice) {
             // 累计其他设备登陆次数，超过 5 次后，自动销毁内部对象
             // 删除位置：ServerDataProivder.prototype.connect
             RongIMLib.RongIMClient.otherDeviceLoginCount++
           }
-          var isConnected = (code == RongIMLib.ConnectionStatus.CONNECTED)
+          var isConnected = code == RongIMLib.ConnectionStatus.CONNECTED
           if (isConnected) {
             RongIMLib.RongIMClient.isFirstConnect = false
           }
-          var isWebsocketUnAvailable = (code == RongIMLib.ConnectionStatus.WEBSOCKET_UNAVAILABLE)
+          var isWebsocketUnAvailable =
+            code == RongIMLib.ConnectionStatus.WEBSOCKET_UNAVAILABLE
           if (isWebsocketUnAvailable) {
             me.changeConnectType()
             RongIMLib.RongIMClient.isFirstConnect = false
-            RongIMLib.RongIMClient.connect(self.token, RongIMLib.RongIMClient._memoryStore.callback)
+            RongIMLib.RongIMClient.connect(
+              self.token,
+              RongIMLib.RongIMClient._memoryStore.callback
+            )
           }
         })
         // 注册message观察者
@@ -4790,7 +6230,8 @@
         })
       }
       Channel.prototype.changeConnectType = function () {
-        RongIMLib.RongIMClient._memoryStore.depend.isPolling = !RongIMLib.RongIMClient._memoryStore.depend.isPolling
+        RongIMLib.RongIMClient._memoryStore.depend.isPolling = !RongIMLib
+          .RongIMClient._memoryStore.depend.isPolling
         new RongIMLib.FeatureDectector()
       }
       Channel.prototype.writeAndFlush = function (val) {
@@ -4810,7 +6251,7 @@
     })()
     RongIMLib.Channel = Channel
     var Socket = (function () {
-      function Socket () {
+      function Socket() {
         this.socket = null
         this._events = {}
       }
@@ -4820,7 +6261,10 @@
       Socket.prototype.connect = function (url, cb) {
         if (this.socket) {
           if (url) {
-            RongIMLib.RongIMClient._storageProvider.setItem('rongSDK', this.checkTransport())
+            RongIMLib.RongIMClient._storageProvider.setItem(
+              'rongSDK',
+              this.checkTransport()
+            )
             this.on('connect', cb || new Function())
           }
           if (url) {
@@ -4863,15 +6307,18 @@
         return this
       }
       Socket.prototype.reconnect = function () {
-        if (this.currentURL && RongIMLib.RongIMClient._storageProvider.getItem('rongSDK')) {
+        if (
+          this.currentURL &&
+          RongIMLib.RongIMClient._storageProvider.getItem('rongSDK')
+        ) {
           return this.connect(this.currentURL, null)
         } else {
           throw new Error('reconnect:no have URL')
         }
       }
       /**
-             * [checkTransport 返回通道类型]
-             */
+       * [checkTransport 返回通道类型]
+       */
       Socket.prototype.checkTransport = function () {
         if (RongIMLib.RongIMClient._memoryStore.depend.isPolling) {
           RongIMLib.Transportations._TransportType = Socket.XHR_POLLING
@@ -4891,7 +6338,8 @@
           return this
         }
         if (x in this._events) {
-          RongIMLib.MessageUtil.indexOf(this._events, func) == -1 && this._events[x].push(func)
+          RongIMLib.MessageUtil.indexOf(this._events, func) == -1 &&
+            this._events[x].push(func)
         } else {
           this._events[x] = [func]
         }
@@ -4908,13 +6356,22 @@
         return this
       }
       Socket.prototype._encode = function (x) {
-        var str = '?messageid=' + x.getMessageId() + '&header=' + x.getHeaderFlag() + '&sessionid=' + RongIMLib.RongIMClient._storageProvider.getItem('sId' + RongIMLib.Navigation.Endpoint.userId)
+        var str =
+          '?messageid=' +
+          x.getMessageId() +
+          '&header=' +
+          x.getHeaderFlag() +
+          '&sessionid=' +
+          RongIMLib.RongIMClient._storageProvider.getItem(
+            'sId' + RongIMLib.Navigation.Endpoint.userId
+          )
         if (!/(PubAckMessage|QueryConMessage)/.test(x._name)) {
-          str += '&topic=' + x.getTopic() + '&targetid=' + (x.getTargetId() || '')
+          str +=
+            '&topic=' + x.getTopic() + '&targetid=' + (x.getTargetId() || '')
         }
         return {
           url: str,
-          data: 'getData' in x ? x.getData() : ''
+          data: 'getData' in x ? x.getData() : '',
         }
       }
       // 消息通道常量，所有和通道相关判断均用 XHR_POLLING WEBSOCKET两属性
@@ -4925,7 +6382,7 @@
     RongIMLib.Socket = Socket
     // 连接端消息累
     var Client = (function () {
-      function Client (token, appId) {
+      function Client(token, appId) {
         this.timeoutMillis = 6000
         this.timeout_ = 0
         this.sdkVer = ''
@@ -4964,10 +6421,14 @@
         // 实例通道类型
         var me = this
         this.channel = new Channel(function () {
-          RongIMLib.Transportations._TransportType == Socket.WEBSOCKET && me.keepLive()
+          RongIMLib.Transportations._TransportType == Socket.WEBSOCKET &&
+            me.keepLive()
         }, this)
         // 触发状态改变观察者
-        this.channel.socket.fire('StatusChanged', RongIMLib.ConnectionStatus.CONNECTING)
+        this.channel.socket.fire(
+          'StatusChanged',
+          RongIMLib.ConnectionStatus.CONNECTING
+        )
         // 没有返回地址就手动抛出错误
         // _callback.onError(ConnectionState.NOT_AUTHORIZED);
       }
@@ -5011,8 +6472,16 @@
         clearInterval(this.pullMsgHearbeat)
         this.pullMsgHearbeat = 0
       }
-      Client.prototype.publishMessage = function (_topic, _data, _targetId, _callback, _msg) {
-        var msgId = RongIMLib.MessageIdHandler.messageIdPlus(this.channel.reconnect)
+      Client.prototype.publishMessage = function (
+        _topic,
+        _data,
+        _targetId,
+        _callback,
+        _msg
+      ) {
+        var msgId = RongIMLib.MessageIdHandler.messageIdPlus(
+          this.channel.reconnect
+        )
         if (!msgId) {
           return
         }
@@ -5020,32 +6489,56 @@
         msg.setMessageId(msgId)
         if (_callback) {
           msg.setQos(Qos.AT_LEAST_ONCE)
-          this.handler.putCallback(new RongIMLib.PublishCallback(_callback.onSuccess, _callback.onError), msg.getMessageId(), _msg)
+          this.handler.putCallback(
+            new RongIMLib.PublishCallback(
+              _callback.onSuccess,
+              _callback.onError
+            ),
+            msg.getMessageId(),
+            _msg
+          )
         } else {
           msg.setQos(Qos.AT_MOST_ONCE)
         }
         this.channel.writeAndFlush(msg)
       }
-      Client.prototype.queryMessage = function (_topic, _data, _targetId, _qos, _callback, pbtype) {
+      Client.prototype.queryMessage = function (
+        _topic,
+        _data,
+        _targetId,
+        _qos,
+        _callback,
+        pbtype
+      ) {
         if (_topic == 'userInf') {
           if (Client.userInfoMapping[_targetId]) {
             _callback.onSuccess(Client.userInfoMapping[_targetId])
             return
           }
         }
-        var msgId = RongIMLib.MessageIdHandler.messageIdPlus(this.channel.reconnect)
+        var msgId = RongIMLib.MessageIdHandler.messageIdPlus(
+          this.channel.reconnect
+        )
         if (!msgId) {
           return
         }
         var msg = new RongIMLib.QueryMessage(_topic, _data, _targetId)
         msg.setMessageId(msgId)
         msg.setQos(_qos)
-        this.handler.putCallback(new RongIMLib.QueryCallback(_callback.onSuccess, _callback.onError), msg.getMessageId(), pbtype)
+        this.handler.putCallback(
+          new RongIMLib.QueryCallback(_callback.onSuccess, _callback.onError),
+          msg.getMessageId(),
+          pbtype
+        )
         this.channel.writeAndFlush(msg)
       }
       Client.prototype.invoke = function (isPullMsg, chrmId, offlineMsg) {
-        var time; var modules; var str; var me = this
-        var target; var temp = this.SyncTimeQueue.shift()
+        var time
+        var modules
+        var str
+        var me = this
+        var target
+        var temp = this.SyncTimeQueue.shift()
         if (temp == undefined) {
           return
         }
@@ -5063,12 +6556,17 @@
         } else {
           // 聊天室消息
           target = temp.chrmId || me.chatroomId
-          time = RongIMLib.RongIMClient._memoryStore.lastReadTime.get(target + Bridge._client.userId + 'CST') || 0
+          time =
+            RongIMLib.RongIMClient._memoryStore.lastReadTime.get(
+              target + Bridge._client.userId + 'CST'
+            ) || 0
           modules = new RongIMLib.RongIMClient.Protobuf.ChrmPullMsg()
           modules.setCount(0)
           str = 'chrmPull'
           if (!target) {
-            throw new Error('syncTime:Received messages of chatroom but was not init')
+            throw new Error(
+              'syncTime:Received messages of chatroom but was not init'
+            )
           }
         }
         // 判断服务器给的时间是否消息本地存储的时间，小于的话不执行拉取操作，进行一下步队列操作
@@ -5082,70 +6580,103 @@
         }
         modules.setSyncTime(time)
         // 发送queryMessage请求
-        this.queryMessage(str, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), target, Qos.AT_LEAST_ONCE, {
-          onSuccess: function (collection) {
-            var sync = RongIMLib.MessageUtil.int64ToTimestamp(collection.syncTime)
-            var symbol = target
-            // 把返回时间戳存入本地，普通消息key为userid，聊天室消息key为userid＋'CST'；value都为服务器返回的时间戳
-            var isChrmPull = str == 'chrmPull'
-            if (isChrmPull) {
-              symbol += Bridge._client.userId + 'CST'
-              RongIMLib.RongIMClient._memoryStore.lastReadTime.set(symbol, sync)
-            } else {
-              var storage = RongIMLib.RongIMClient._storageProvider
-              if (sync > storage.getItem(symbol)) {
-                storage.setItem(symbol, sync)
+        this.queryMessage(
+          str,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          target,
+          Qos.AT_LEAST_ONCE,
+          {
+            onSuccess: function (collection) {
+              var sync = RongIMLib.MessageUtil.int64ToTimestamp(
+                collection.syncTime
+              )
+              var symbol = target
+              // 把返回时间戳存入本地，普通消息key为userid，聊天室消息key为userid＋'CST'；value都为服务器返回的时间戳
+              var isChrmPull = str == 'chrmPull'
+              if (isChrmPull) {
+                symbol += Bridge._client.userId + 'CST'
+                RongIMLib.RongIMClient._memoryStore.lastReadTime.set(
+                  symbol,
+                  sync
+                )
+              } else {
+                var storage = RongIMLib.RongIMClient._storageProvider
+                if (sync > storage.getItem(symbol)) {
+                  storage.setItem(symbol, sync)
+                }
               }
-            }
-            // 把拉取到的消息逐条传给消息监听器
-            var list = collection.list
-            var isPullFinished = collection.finished
-            // chrmPull 没有 finished 字段，自动设置为拉取完成
-            if (isChrmPull) {
-              isPullFinished = true
-            }
-            // 兼容长轮训 finished 为空的造成丢消息情况
-            if (typeof isPullFinished === 'undefined') {
-              isPullFinished = true
-            }
-            RongIMLib.RongIMClient._memoryStore.isPullFinished = isPullFinished
-            var connectAckTime = RongIMLib.RongIMClient._memoryStore.connectAckTime
-            for (var i = 0, len = list.length, count = len; i < len; i++) {
-              count -= 1
-              var message = list[i]
-              var sentTime = RongIMLib.MessageUtil.int64ToTimestamp(message.dataTime)
-              var isSender = message.direction == RongIMLib.MessageDirection.SEND
-              var compareTime = isSender ? sentBoxTime : time
-              if (sentTime > compareTime) {
-                var isSyncMessage = false
-                var isOffLineMessage = sentTime < connectAckTime
-                Bridge._client.handler.onReceived(message, undefined, isOffLineMessage, count, isSyncMessage, isPullFinished)
+              // 把拉取到的消息逐条传给消息监听器
+              var list = collection.list
+              var isPullFinished = collection.finished
+              // chrmPull 没有 finished 字段，自动设置为拉取完成
+              if (isChrmPull) {
+                isPullFinished = true
               }
-            }
-            me.SyncTimeQueue.state = 'complete'
-            me.invoke(isPullMsg, target, offlineMsg)
+              // 兼容长轮训 finished 为空的造成丢消息情况
+              if (typeof isPullFinished === 'undefined') {
+                isPullFinished = true
+              }
+              RongIMLib.RongIMClient._memoryStore.isPullFinished = isPullFinished
+              var connectAckTime =
+                RongIMLib.RongIMClient._memoryStore.connectAckTime
+              for (var i = 0, len = list.length, count = len; i < len; i++) {
+                count -= 1
+                var message = list[i]
+                var sentTime = RongIMLib.MessageUtil.int64ToTimestamp(
+                  message.dataTime
+                )
+                var isSender =
+                  message.direction == RongIMLib.MessageDirection.SEND
+                var compareTime = isSender ? sentBoxTime : time
+                if (sentTime > compareTime) {
+                  var isSyncMessage = false
+                  var isOffLineMessage = sentTime < connectAckTime
+                  Bridge._client.handler.onReceived(
+                    message,
+                    undefined,
+                    isOffLineMessage,
+                    count,
+                    isSyncMessage,
+                    isPullFinished
+                  )
+                }
+              }
+              me.SyncTimeQueue.state = 'complete'
+              me.invoke(isPullMsg, target, offlineMsg)
+            },
+            onError: function (error) {
+              me.SyncTimeQueue.state = 'complete'
+              me.invoke(isPullMsg, target, offlineMsg)
+            },
           },
-          onError: function (error) {
-            me.SyncTimeQueue.state = 'complete'
-            me.invoke(isPullMsg, target, offlineMsg)
-          }
-        }, 'DownStreamMessages')
+          'DownStreamMessages'
+        )
       }
-      Client.prototype.syncTime = function (_type, pullTime, chrmId, offlineMsg) {
+      Client.prototype.syncTime = function (
+        _type,
+        pullTime,
+        chrmId,
+        offlineMsg
+      ) {
         this.SyncTimeQueue.push({
           type: _type,
           pulltime: pullTime,
-          chrmId: chrmId
+          chrmId: chrmId,
         })
         // 如果队列中只有一个成员并且状态已经完成就执行invoke方法
-        if (this.SyncTimeQueue.length == 1 && this.SyncTimeQueue.state == 'complete') {
+        if (
+          this.SyncTimeQueue.length == 1 &&
+          this.SyncTimeQueue.state == 'complete'
+        ) {
           this.invoke(!_type, chrmId, offlineMsg)
         }
       }
       Client.prototype.__init = function (f) {
         this.handler = new MessageHandler(this)
         // 设置连接回调
-        this.handler.setConnectCallback(RongIMLib.RongIMClient._memoryStore.callback)
+        this.handler.setConnectCallback(
+          RongIMLib.RongIMClient._memoryStore.callback
+        )
         this.channel = new Channel(f, this)
       }
       Client.userInfoMapping = {}
@@ -5154,7 +6685,7 @@
     RongIMLib.Client = Client
     // 连接类，实现imclient与connect_client的连接
     var Bridge = (function () {
-      function Bridge () {}
+      function Bridge() {}
       Bridge.getInstance = function () {
         return new Bridge()
       }
@@ -5163,7 +6694,11 @@
         if (!RongIMLib.RongIMClient.Protobuf) {
           return
         }
-        Bridge._client = new RongIMLib.Navigation().connect(appKey, token, callback)
+        Bridge._client = new RongIMLib.Navigation().connect(
+          appKey,
+          token,
+          callback
+        )
         return Bridge._client
       }
       Bridge.prototype.setListener = function (_changer) {
@@ -5182,29 +6717,67 @@
         Bridge._client.channel.disconnect(2)
       }
       // 执行queryMessage请求
-      Bridge.prototype.queryMsg = function (topic, content, targetId, callback, pbname) {
+      Bridge.prototype.queryMsg = function (
+        topic,
+        content,
+        targetId,
+        callback,
+        pbname
+      ) {
         if (typeof topic !== 'string') {
           topic = _topic[topic]
         }
-        Bridge._client.queryMessage(topic, content, targetId, Qos.AT_MOST_ONCE, callback, pbname)
+        Bridge._client.queryMessage(
+          topic,
+          content,
+          targetId,
+          Qos.AT_MOST_ONCE,
+          callback,
+          pbname
+        )
       }
       // 发送消息 执行publishMessage 请求
-      Bridge.prototype.pubMsg = function (topic, content, targetId, callback, msg, methodType) {
+      Bridge.prototype.pubMsg = function (
+        topic,
+        content,
+        targetId,
+        callback,
+        msg,
+        methodType
+      ) {
         if (typeof methodType === 'number') {
           if (methodType == RongIMLib.MethodType.CUSTOMER_SERVICE) {
-            Bridge._client.publishMessage('pcuMsgP', content, targetId, callback, msg)
+            Bridge._client.publishMessage(
+              'pcuMsgP',
+              content,
+              targetId,
+              callback,
+              msg
+            )
           } else if (methodType == RongIMLib.MethodType.RECALL) {
-            Bridge._client.publishMessage('recallMsg', content, targetId, callback, msg)
+            Bridge._client.publishMessage(
+              'recallMsg',
+              content,
+              targetId,
+              callback,
+              msg
+            )
           }
         } else {
-          Bridge._client.publishMessage(_topic[10][topic], content, targetId, callback, msg)
+          Bridge._client.publishMessage(
+            _topic[10][topic],
+            content,
+            targetId,
+            callback,
+            msg
+          )
         }
       }
       return Bridge
     })()
     RongIMLib.Bridge = Bridge
     var MessageHandler = (function () {
-      function MessageHandler (client) {
+      function MessageHandler(client) {
         this.map = {}
         this.connectCallback = null
         if (!Channel._ReceiveMessageListener) {
@@ -5215,21 +6788,37 @@
         this.syncMsgMap = new Object()
       }
       // 把对象推入回调对象队列中，并启动定时器
-      MessageHandler.prototype.putCallback = function (callbackObj, _publishMessageId, _msg) {
+      MessageHandler.prototype.putCallback = function (
+        callbackObj,
+        _publishMessageId,
+        _msg
+      ) {
         var item = {
           Callback: callbackObj,
-          Message: _msg
+          Message: _msg,
         }
         item.Callback.resumeTimer()
         this.map[_publishMessageId] = item
       }
       // 设置连接回调对象，启动定时器
-      MessageHandler.prototype.setConnectCallback = function (_connectCallback) {
+      MessageHandler.prototype.setConnectCallback = function (
+        _connectCallback
+      ) {
         if (_connectCallback) {
-          this.connectCallback = new RongIMLib.ConnectAck(_connectCallback.onSuccess, _connectCallback.onError, this._client)
+          this.connectCallback = new RongIMLib.ConnectAck(
+            _connectCallback.onSuccess,
+            _connectCallback.onError,
+            this._client
+          )
         }
       }
-      MessageHandler.prototype.onReceived = function (msg, pubAckItem, offlineMsg, leftCount, isSync) {
+      MessageHandler.prototype.onReceived = function (
+        msg,
+        pubAckItem,
+        offlineMsg,
+        leftCount,
+        isSync
+      ) {
         // 实体对象
         var entity
         // 解析完成的消息对象
@@ -5240,31 +6829,54 @@
         var isStraightMsg = false
         if (msg._name != 'PublishMessage') {
           entity = msg
-          RongIMLib.RongIMClient._storageProvider.setItem(this._client.userId, RongIMLib.MessageUtil.int64ToTimestamp(entity.dataTime))
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            this._client.userId,
+            RongIMLib.MessageUtil.int64ToTimestamp(entity.dataTime)
+          )
         } else {
           if (msg.getTopic() == 's_ntf') {
-            entity = RongIMLib.RongIMClient.Protobuf.NotifyMsg.decode(msg.getData())
-            this._client.syncTime(entity.type, RongIMLib.MessageUtil.int64ToTimestamp(entity.time), entity.chrmId)
+            entity = RongIMLib.RongIMClient.Protobuf.NotifyMsg.decode(
+              msg.getData()
+            )
+            this._client.syncTime(
+              entity.type,
+              RongIMLib.MessageUtil.int64ToTimestamp(entity.time),
+              entity.chrmId
+            )
             return
           } else if (msg.getTopic() == 's_msg') {
             isStraightMsg = true
-            entity = RongIMLib.RongIMClient.Protobuf.DownStreamMessage.decode(msg.getData())
-            var timestamp = RongIMLib.MessageUtil.int64ToTimestamp(entity.dataTime)
-            RongIMLib.RongIMClient._storageProvider.setItem(this._client.userId, timestamp)
-            RongIMLib.RongIMClient._memoryStore.lastReadTime.get(this._client.userId, timestamp)
+            entity = RongIMLib.RongIMClient.Protobuf.DownStreamMessage.decode(
+              msg.getData()
+            )
+            var timestamp = RongIMLib.MessageUtil.int64ToTimestamp(
+              entity.dataTime
+            )
+            RongIMLib.RongIMClient._storageProvider.setItem(
+              this._client.userId,
+              timestamp
+            )
+            RongIMLib.RongIMClient._memoryStore.lastReadTime.get(
+              this._client.userId,
+              timestamp
+            )
           } else if (msg.getTopic() == 's_stat') {
-            entity = RongIMLib.RongIMClient.Protobuf.GetUserStatusOutput.decode(msg.getData())
+            entity = RongIMLib.RongIMClient.Protobuf.GetUserStatusOutput.decode(
+              msg.getData()
+            )
             entity = RongIMLib.RongInnerTools.convertUserStatus(entity)
             RongIMLib.RongIMClient.userStatusObserver.notify({
               key: entity.userId,
-              entity: entity
+              entity: entity,
             })
             return
           } else {
             if (Bridge._client.sdkVer && Bridge._client.sdkVer == '1.0.0') {
               return
             }
-            entity = RongIMLib.RongIMClient.Protobuf.UpStreamMessage.decode(msg.getData())
+            entity = RongIMLib.RongIMClient.Protobuf.UpStreamMessage.decode(
+              msg.getData()
+            )
             var tmpTopic = msg.getTopic()
             var tmpType = tmpTopic.substr(0, 2)
             if (tmpType == 'pp') {
@@ -5293,7 +6905,11 @@
           return
         }
         // 解析实体对象为消息对象。
-        message = RongIMLib.MessageUtil.messageParser(entity, this._onReceived, offlineMsg)
+        message = RongIMLib.MessageUtil.messageParser(
+          entity,
+          this._onReceived,
+          offlineMsg
+        )
         var isRTCMessage = message.conversationType == 12
         if (isRTCMessage) {
           RongIMLib.RongIMClient.RTCListener(message)
@@ -5301,7 +6917,7 @@
           RongIMLib.RongIMClient.RTCSignalLisener(message)
           return
         }
-        var isRecall = (msg.getTopic && msg.getTopic() == 'recallMsg')
+        var isRecall = msg.getTopic && msg.getTopic() == 'recallMsg'
         if (isRecall) {
           var content = message.content
           message.conversationType = content.conversationType
@@ -5311,22 +6927,30 @@
         if (pubAckItem) {
           message.messageUId = pubAckItem.getMessageUId()
           message.sentTime = pubAckItem.getTimestamp()
-          RongIMLib.RongIMClient._storageProvider.setItem(this._client.userId, message.sentTime)
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            this._client.userId,
+            message.sentTime
+          )
         }
         if (message === null) {
           return
         }
-        var isChatroomMessage = message.conversationType == RongIMLib.ConversationType.CHATROOM
+        var isChatroomMessage =
+          message.conversationType == RongIMLib.ConversationType.CHATROOM
         if (!isChatroomMessage) {
-          var msgTag = RongIMLib.RongIMClient.MessageParams[message.messageType].msgTag.getMessageTag()
+          var msgTag = RongIMLib.RongIMClient.MessageParams[
+            message.messageType
+          ].msgTag.getMessageTag()
           if (msgTag >= 0) {
             RongIMLib.SyncTimeUtil.set(message)
           }
-          var isSend = (message.messageDirection == RongIMLib.MessageDirection.SEND)
+          var isSend =
+            message.messageDirection == RongIMLib.MessageDirection.SEND
           if (isSend) {
             var storageProvider = RongIMLib.RongIMClient._storageProvider
             var userId = RongIMLib.Bridge._client.userId
-            var lastSentTime = storageProvider.getItem('last_sentTime_' + userId) || 0
+            var lastSentTime =
+              storageProvider.getItem('last_sentTime_' + userId) || 0
             if (message.sentTime <= lastSentTime && !isSync) {
               return
             }
@@ -5335,26 +6959,55 @@
         // 设置会话时间戳并且判断是否传递 message  发送消息未处理会话时间戳
         // key：'converST_' + 当前用户 + conversationType + targetId
         // RongIMClient._storageProvider.setItem('converST_' + Bridge._client.userId + message.conversationType + message.targetId, message.sentTime);
-        var isPersited = (RongIMLib.RongIMClient.MessageParams[message.messageType].msgTag.getMessageTag() > 0)
+        var isPersited =
+          RongIMLib.RongIMClient.MessageParams[
+            message.messageType
+          ].msgTag.getMessageTag() > 0
         if (isPersited) {
-          con = RongIMLib.RongIMClient._dataAccessProvider.getConversation(message.conversationType, message.targetId, {
-            onSuccess: function () {},
-            onError: function () {}
-          })
+          con = RongIMLib.RongIMClient._dataAccessProvider.getConversation(
+            message.conversationType,
+            message.targetId,
+            {
+              onSuccess: function () {},
+              onError: function () {},
+            }
+          )
           if (!con) {
-            con = RongIMLib.RongIMClient.getInstance().createConversation(message.conversationType, message.targetId, '')
+            con = RongIMLib.RongIMClient.getInstance().createConversation(
+              message.conversationType,
+              message.targetId,
+              ''
+            )
           }
-          if (message.messageDirection == RongIMLib.MessageDirection.RECEIVE && (entity.status & 64) == 64) {
-            var mentioneds = RongIMLib.RongIMClient._storageProvider.getItem('mentioneds_' + Bridge._client.userId + '_' + message.conversationType + '_' + message.targetId)
+          if (
+            message.messageDirection == RongIMLib.MessageDirection.RECEIVE &&
+            (entity.status & 64) == 64
+          ) {
+            var mentioneds = RongIMLib.RongIMClient._storageProvider.getItem(
+              'mentioneds_' +
+                Bridge._client.userId +
+                '_' +
+                message.conversationType +
+                '_' +
+                message.targetId
+            )
             var key = message.conversationType + '_' + message.targetId
             var info = {}
             if (message.content && message.content.mentionedInfo) {
               info[key] = {
                 uid: message.messageUId,
                 time: message.sentTime,
-                mentionedInfo: message.content.mentionedInfo
+                mentionedInfo: message.content.mentionedInfo,
               }
-              RongIMLib.RongIMClient._storageProvider.setItem('mentioneds_' + Bridge._client.userId + '_' + message.conversationType + '_' + message.targetId, JSON.stringify(info))
+              RongIMLib.RongIMClient._storageProvider.setItem(
+                'mentioneds_' +
+                  Bridge._client.userId +
+                  '_' +
+                  message.conversationType +
+                  '_' +
+                  message.targetId,
+                JSON.stringify(info)
+              )
               mentioneds = JSON.stringify(info)
             }
             if (mentioneds) {
@@ -5362,78 +7015,157 @@
               con.mentionedMsg = info[key]
             }
           }
-          var isReceiver = message.messageDirection == RongIMLib.MessageDirection.RECEIVE
+          var isReceiver =
+            message.messageDirection == RongIMLib.MessageDirection.RECEIVE
           if (isReceiver && message.senderUserId != Bridge._client.userId) {
             con.unreadMessageCount = con.unreadMessageCount + 1
             if (RongIMLib.RongUtil.supportLocalStorage()) {
-              var originUnreadCount = RongIMLib.RongIMClient._storageProvider.getItem('cu' + Bridge._client.userId + con.conversationType + con.targetId) // 与本地存储会话合并
+              var originUnreadCount = RongIMLib.RongIMClient._storageProvider.getItem(
+                'cu' +
+                  Bridge._client.userId +
+                  con.conversationType +
+                  con.targetId
+              ) // 与本地存储会话合并
               var newUnreadCount = Number(originUnreadCount) + 1
-              RongIMLib.RongIMClient._storageProvider.setItem('cu' + Bridge._client.userId + con.conversationType + message.targetId, newUnreadCount)
+              RongIMLib.RongIMClient._storageProvider.setItem(
+                'cu' +
+                  Bridge._client.userId +
+                  con.conversationType +
+                  message.targetId,
+                newUnreadCount
+              )
               con.unreadMessageCount = newUnreadCount
             }
           }
           con.receivedTime = new Date().getTime()
           con.receivedStatus = message.receivedStatus
           con.senderUserId = message.sendUserId
-          con.notificationStatus = RongIMLib.ConversationNotificationStatus.DO_NOT_DISTURB
+          con.notificationStatus =
+            RongIMLib.ConversationNotificationStatus.DO_NOT_DISTURB
           con.latestMessageId = message.messageId
           con.latestMessage = message
           con.sentTime = message.sentTime
           RongIMLib.RongIMClient._dataAccessProvider.addConversation(con, {
             onSuccess: function (data) {},
-            onError: function () {}
+            onError: function () {},
           })
         }
-        if (message.conversationType == RongIMLib.ConversationType.CUSTOMER_SERVICE && (message.messageType == 'ChangeModeResponseMessage' || message.messageType == 'SuspendMessage' || message.messageType == 'HandShakeResponseMessage' ||
-                        message.messageType == 'TerminateMessage' || message.messageType == 'CustomerStatusUpdateMessage' || message.messageType == 'TextMessage' || message.messageType == 'InformationNotificationMessage')) {
+        if (
+          message.conversationType ==
+            RongIMLib.ConversationType.CUSTOMER_SERVICE &&
+          (message.messageType == 'ChangeModeResponseMessage' ||
+            message.messageType == 'SuspendMessage' ||
+            message.messageType == 'HandShakeResponseMessage' ||
+            message.messageType == 'TerminateMessage' ||
+            message.messageType == 'CustomerStatusUpdateMessage' ||
+            message.messageType == 'TextMessage' ||
+            message.messageType == 'InformationNotificationMessage')
+        ) {
           if (!RongIMLib.RongIMClient._memoryStore.custStore.isInit) {
             return
           }
         }
-        if (message.conversationType == RongIMLib.ConversationType.CUSTOMER_SERVICE && message.messageType != 'HandShakeResponseMessage') {
-          if (!RongIMLib.RongIMClient._memoryStore.custStore[message.targetId]) {
+        if (
+          message.conversationType ==
+            RongIMLib.ConversationType.CUSTOMER_SERVICE &&
+          message.messageType != 'HandShakeResponseMessage'
+        ) {
+          if (
+            !RongIMLib.RongIMClient._memoryStore.custStore[message.targetId]
+          ) {
             return
           }
           if (message.messageType == 'TerminateMessage') {
-            if (RongIMLib.RongIMClient._memoryStore.custStore[message.targetId].sid != message.content.sid) {
+            if (
+              RongIMLib.RongIMClient._memoryStore.custStore[message.targetId]
+                .sid != message.content.sid
+            ) {
               return
             }
           }
         }
-        if (message.messageType === RongIMLib.RongIMClient.MessageType.HandShakeResponseMessage) {
+        if (
+          message.messageType ===
+          RongIMLib.RongIMClient.MessageType.HandShakeResponseMessage
+        ) {
           var session = message.content.data
-          RongIMLib.RongIMClient._memoryStore.custStore[message.targetId] = session
-          if (session.serviceType == RongIMLib.CustomerType.ONLY_HUMAN || session.serviceType == RongIMLib.CustomerType.HUMAN_FIRST) {
+          RongIMLib.RongIMClient._memoryStore.custStore[
+            message.targetId
+          ] = session
+          if (
+            session.serviceType == RongIMLib.CustomerType.ONLY_HUMAN ||
+            session.serviceType == RongIMLib.CustomerType.HUMAN_FIRST
+          ) {
             if (session.notAutoCha == '1') {
-              RongIMLib.RongIMClient.getInstance().switchToHumanMode(message.targetId, {
-                onSuccess: function () {},
-                onError: function () {}
-              })
+              RongIMLib.RongIMClient.getInstance().switchToHumanMode(
+                message.targetId,
+                {
+                  onSuccess: function () {},
+                  onError: function () {},
+                }
+              )
             }
           }
         }
         var d = new Date()
         var m = d.getMonth() + 1
-        var date = d.getFullYear() + '/' + (m.toString().length == 1 ? '0' + m : m) + '/' + d.getDate()
+        var date =
+          d.getFullYear() +
+          '/' +
+          (m.toString().length == 1 ? '0' + m : m) +
+          '/' +
+          d.getDate()
         // new Date(date).getTime() - message.sentTime < 1 逻辑判断 超过 1 天未收的 ReadReceiptRequestMessage 离线消息自动忽略。
         var dealtime = new Date(date).getTime() - message.sentTime < 0
-        if (RongIMLib.RongUtil.supportLocalStorage() && message.messageType === RongIMLib.RongIMClient.MessageType.ReadReceiptRequestMessage && dealtime && message.messageDirection == RongIMLib.MessageDirection.SEND) {
-          var sentkey = Bridge._client.userId + message.content.messageUId + 'SENT'
-          RongIMLib.RongIMClient._storageProvider.setItem(sentkey, JSON.stringify({
-            count: 0,
-            dealtime: message.sentTime,
-            userIds: {}
-          }))
-        } else if (RongIMLib.RongUtil.supportLocalStorage() && message.messageType === RongIMLib.RongIMClient.MessageType.ReadReceiptRequestMessage && dealtime) {
-          var reckey = Bridge._client.userId + message.conversationType + message.targetId + 'RECEIVED'
-          var recData = JSON.parse(RongIMLib.RongIMClient._storageProvider.getItem(reckey))
+        if (
+          RongIMLib.RongUtil.supportLocalStorage() &&
+          message.messageType ===
+            RongIMLib.RongIMClient.MessageType.ReadReceiptRequestMessage &&
+          dealtime &&
+          message.messageDirection == RongIMLib.MessageDirection.SEND
+        ) {
+          var sentkey =
+            Bridge._client.userId + message.content.messageUId + 'SENT'
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            sentkey,
+            JSON.stringify({
+              count: 0,
+              dealtime: message.sentTime,
+              userIds: {},
+            })
+          )
+        } else if (
+          RongIMLib.RongUtil.supportLocalStorage() &&
+          message.messageType ===
+            RongIMLib.RongIMClient.MessageType.ReadReceiptRequestMessage &&
+          dealtime
+        ) {
+          var reckey =
+            Bridge._client.userId +
+            message.conversationType +
+            message.targetId +
+            'RECEIVED'
+          var recData = JSON.parse(
+            RongIMLib.RongIMClient._storageProvider.getItem(reckey)
+          )
           if (recData) {
             if (message.senderUserId in recData) {
-              if (recData[message.senderUserId].uIds && recData[message.senderUserId].uIds && recData[message.senderUserId].uIds.indexOf(message.content.messageUId) == -1) {
-                recData[message.senderUserId].uIds.push(message.content.messageUId)
+              if (
+                recData[message.senderUserId].uIds &&
+                recData[message.senderUserId].uIds &&
+                recData[message.senderUserId].uIds.indexOf(
+                  message.content.messageUId
+                ) == -1
+              ) {
+                recData[message.senderUserId].uIds.push(
+                  message.content.messageUId
+                )
                 recData[message.senderUserId].dealtime = message.sentTime
                 recData[message.senderUserId].isResponse = false
-                RongIMLib.RongIMClient._storageProvider.setItem(reckey, JSON.stringify(recData))
+                RongIMLib.RongIMClient._storageProvider.setItem(
+                  reckey,
+                  JSON.stringify(recData)
+                )
               } else {
                 return
               }
@@ -5441,22 +7173,33 @@
               var objSon = {
                 uIds: [message.content.messageUId],
                 dealtime: message.sentTime,
-                isResponse: false
+                isResponse: false,
               }
               recData[message.senderUserId] = objSon
-              RongIMLib.RongIMClient._storageProvider.setItem(reckey, JSON.stringify(recData))
+              RongIMLib.RongIMClient._storageProvider.setItem(
+                reckey,
+                JSON.stringify(recData)
+              )
             }
           } else {
             var obj = {}
             obj[message.senderUserId] = {
               uIds: [message.content.messageUId],
               dealtime: message.sentTime,
-              isResponse: false
+              isResponse: false,
             }
-            RongIMLib.RongIMClient._storageProvider.setItem(reckey, JSON.stringify(obj))
+            RongIMLib.RongIMClient._storageProvider.setItem(
+              reckey,
+              JSON.stringify(obj)
+            )
           }
         }
-        if (RongIMLib.RongUtil.supportLocalStorage() && message.messageType === RongIMLib.RongIMClient.MessageType.ReadReceiptResponseMessage && dealtime) {
+        if (
+          RongIMLib.RongUtil.supportLocalStorage() &&
+          message.messageType ===
+            RongIMLib.RongIMClient.MessageType.ReadReceiptResponseMessage &&
+          dealtime
+        ) {
           var receiptResponseMsg = message.content
           var uIds = receiptResponseMsg.receiptMessageDic[Bridge._client.userId]
           var sentkey = ''
@@ -5466,13 +7209,18 @@
             var cbuIds = []
             for (var i = 0, len = uIds.length; i < len; i++) {
               sentkey = Bridge._client.userId + uIds[i] + 'SENT'
-              sentObj = JSON.parse(RongIMLib.RongIMClient._storageProvider.getItem(sentkey))
+              sentObj = JSON.parse(
+                RongIMLib.RongIMClient._storageProvider.getItem(sentkey)
+              )
               if (sentObj && !(message.senderUserId in sentObj.userIds)) {
                 cbuIds.push(uIds[i])
                 sentObj.count += 1
                 sentObj.userIds[message.senderUserId] = message.sentTime
                 message.receiptResponse[uIds[i]] = sentObj.count
-                RongIMLib.RongIMClient._storageProvider.setItem(sentkey, JSON.stringify(sentObj))
+                RongIMLib.RongIMClient._storageProvider.setItem(
+                  sentkey,
+                  JSON.stringify(sentObj)
+                )
               }
             }
             receiptResponseMsg.receiptMessageDic[Bridge._client.userId] = cbuIds
@@ -5480,7 +7228,17 @@
           }
         }
         var that = this
-        if (RongIMLib.RongIMClient._voipProvider && ['AcceptMessage', 'RingingMessage', 'HungupMessage', 'InviteMessage', 'MediaModifyMessage', 'MemberModifyMessage'].indexOf(message.messageType) > -1) {
+        if (
+          RongIMLib.RongIMClient._voipProvider &&
+          [
+            'AcceptMessage',
+            'RingingMessage',
+            'HungupMessage',
+            'InviteMessage',
+            'MediaModifyMessage',
+            'MemberModifyMessage',
+          ].indexOf(message.messageType) > -1
+        ) {
           setTimeout(function () {
             RongIMLib.RongIMClient._voipProvider.onReceived(message)
           })
@@ -5498,14 +7256,23 @@
         }
         switch (msg._name) {
           case 'ConnAckMessage':
-            Bridge._client.handler.connectCallback.process(msg.getStatus(), msg.getUserId(), msg.getTimestamp())
+            Bridge._client.handler.connectCallback.process(
+              msg.getStatus(),
+              msg.getUserId(),
+              msg.getTimestamp()
+            )
             break
           case 'PublishMessage':
             if (!msg.getSyncMsg() && msg.getQos() != 0) {
-              Bridge._client.channel.writeAndFlush(new RongIMLib.PubAckMessage(msg.getMessageId()))
+              Bridge._client.channel.writeAndFlush(
+                new RongIMLib.PubAckMessage(msg.getMessageId())
+              )
             }
             // TODO && ->
-            if (msg.getSyncMsg() && !RongIMLib.RongIMClient._memoryStore.depend.isPolling) {
+            if (
+              msg.getSyncMsg() &&
+              !RongIMLib.RongIMClient._memoryStore.depend.isPolling
+            ) {
               Bridge._client.handler.syncMsgMap[msg.getMessageId()] = msg
             } else {
               // 如果是PublishMessage就把该对象给onReceived方法执行处理
@@ -5514,24 +7281,46 @@
             break
           case 'QueryAckMessage':
             if (msg.getQos() != 0) {
-              Bridge._client.channel.writeAndFlush(new RongIMLib.QueryConMessage(msg.getMessageId()))
+              Bridge._client.channel.writeAndFlush(
+                new RongIMLib.QueryConMessage(msg.getMessageId())
+              )
             }
             var temp = Bridge._client.handler.map[msg.getMessageId()]
             if (temp) {
               // 执行回调操作
-              temp.Callback.process(msg.getStatus(), msg.getData(), msg.getDate(), temp.Message)
+              temp.Callback.process(
+                msg.getStatus(),
+                msg.getData(),
+                msg.getDate(),
+                temp.Message
+              )
               delete Bridge._client.handler.map[msg.getMessageId()]
             }
             break
           case 'PubAckMessage':
             var item = Bridge._client.handler.map[msg.getMessageId()]
             if (item) {
-              item.Callback.process(msg.getStatus() || 0, msg.getMessageUId(), msg.getTimestamp(), item.Message, msg.getMessageId())
+              item.Callback.process(
+                msg.getStatus() || 0,
+                msg.getMessageUId(),
+                msg.getTimestamp(),
+                item.Message,
+                msg.getMessageId()
+              )
               delete Bridge._client.handler.map[msg.getMessageId()]
             } else {
               var userId = RongIMLib.Bridge._client.userId
-              RongIMLib.RongIMClient._storageProvider.setItem('last_sentTime_' + userId, msg.timestamp)
-              Bridge._client.handler.onReceived(Bridge._client.handler.syncMsgMap[msg.messageId], msg, null, null, true)
+              RongIMLib.RongIMClient._storageProvider.setItem(
+                'last_sentTime_' + userId,
+                msg.timestamp
+              )
+              Bridge._client.handler.onReceived(
+                Bridge._client.handler.syncMsgMap[msg.messageId],
+                msg,
+                null,
+                null,
+                true
+              )
               delete Bridge._client.handler.syncMsgMap[msg.getMessageId()]
             }
             break
@@ -5552,19 +7341,24 @@
     })()
     RongIMLib.MessageHandler = MessageHandler
   })(RongIMLib || (RongIMLib = {}))
-  var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) { if (b.hasOwnProperty(p)) d[p] = b[p] }
+  var __extends =
+    (this && this.__extends) ||
+    function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p]
+      }
 
-    function __ () {
-      this.constructor = d
+      function __() {
+        this.constructor = d
+      }
+      d.prototype =
+        b === null ? Object.create(b) : ((__.prototype = b.prototype), new __())
     }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __())
-  }
   /// <reference path="../dts/helper.d.ts"/>
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var MessageCallback = (function () {
-      function MessageCallback (error) {
+      function MessageCallback(error) {
         this.timeout = null
         this.onError = null
         if (error && typeof error === 'number') {
@@ -5599,7 +7393,7 @@
     })()
     RongIMLib.MessageCallback = MessageCallback
     var CallbackMapping = (function () {
-      function CallbackMapping () {
+      function CallbackMapping() {
         this.publicServiceList = []
       }
       CallbackMapping.getInstance = function () {
@@ -5616,22 +7410,29 @@
         this.profile.publicServiceId = item.mpid
         this.profile.name = item.name
         this.profile.portraitUri = item.portraitUrl
-        this.profile.conversationType = item.type == 'mc' ? RongIMLib.ConversationType.APP_PUBLIC_SERVICE : RongIMLib.ConversationType.PUBLIC_SERVICE
+        this.profile.conversationType =
+          item.type == 'mc'
+            ? RongIMLib.ConversationType.APP_PUBLIC_SERVICE
+            : RongIMLib.ConversationType.PUBLIC_SERVICE
         this.publicServiceList.push(this.profile)
       }
       CallbackMapping.prototype.mapping = function (entity, tag) {
         switch (tag) {
           case 'GetUserInfoOutput':
-            var userInfo = new RongIMLib.UserInfo(entity.userId, entity.userName, entity.userPortrait)
+            var userInfo = new RongIMLib.UserInfo(
+              entity.userId,
+              entity.userName,
+              entity.userPortrait
+            )
             return userInfo
           case 'GetQNupTokenOutput':
             return {
               deadline: RongIMLib.MessageUtil.int64ToTimestamp(entity.deadline),
-              token: entity.token
+              token: entity.token,
             }
           case 'GetQNdownloadUrlOutput':
             return {
-              downloadUrl: entity.downloadUrl
+              downloadUrl: entity.downloadUrl,
             }
           case 'CreateDiscussionOutput':
             return entity.id
@@ -5668,36 +7469,43 @@
     var PublishCallback = (function (_super) {
       __extends(PublishCallback, _super)
 
-      function PublishCallback (_cb, _timeout) {
+      function PublishCallback(_cb, _timeout) {
         _super.call(this, _timeout)
         this._cb = _cb
         this._timeout = _timeout
       }
-      PublishCallback.prototype.process = function (_status, messageUId, timestamp, _msg, messageId) {
+      PublishCallback.prototype.process = function (
+        _status,
+        messageUId,
+        timestamp,
+        _msg,
+        messageId
+      ) {
         this.readTimeOut()
         if (_status == 0) {
           if (_msg) {
             _msg.setSentStatus = _status
           }
-          var isPullFinished = RongIMLib.RongIMClient._memoryStore.isPullFinished
+          var isPullFinished =
+            RongIMLib.RongIMClient._memoryStore.isPullFinished
           if (isPullFinished) {
             var userId = RongIMLib.Bridge._client.userId
             var stroageProvider = RongIMLib.RongIMClient._storageProvider
             stroageProvider.setItem('last_sentTime_' + userId, timestamp)
             RongIMLib.SyncTimeUtil.set({
               messageDirection: RongIMLib.MessageDirection.SEND,
-              sentTime: timestamp
+              sentTime: timestamp,
             })
           }
           this._cb({
             messageUId: messageUId,
             timestamp: timestamp,
-            messageId: messageId
+            messageId: messageId,
           })
         } else {
           this._timeout(_status, {
             messageUId: messageUId,
-            sentTime: timestamp
+            sentTime: timestamp,
           })
         }
       }
@@ -5710,16 +7518,24 @@
     var QueryCallback = (function (_super) {
       __extends(QueryCallback, _super)
 
-      function QueryCallback (_cb, _timeout) {
+      function QueryCallback(_cb, _timeout) {
         _super.call(this, _timeout)
         this._cb = _cb
         this._timeout = _timeout
       }
-      QueryCallback.prototype.process = function (status, data, serverTime, pbtype) {
+      QueryCallback.prototype.process = function (
+        status,
+        data,
+        serverTime,
+        pbtype
+      ) {
         this.readTimeOut()
         if (pbtype && data && status == 0) {
           try {
-            data = CallbackMapping.getInstance().mapping(RongIMLib.RongIMClient.Protobuf[pbtype].decode(data), pbtype)
+            data = CallbackMapping.getInstance().mapping(
+              RongIMLib.RongIMClient.Protobuf[pbtype].decode(data),
+              pbtype
+            )
           } catch (e) {
             this._timeout(RongIMLib.ErrorCode.UNKNOWN)
             return
@@ -5742,7 +7558,7 @@
     var ConnectAck = (function (_super) {
       __extends(ConnectAck, _super)
 
-      function ConnectAck (_cb, _timeout, client) {
+      function ConnectAck(_cb, _timeout, client) {
         _super.call(this, _timeout)
         this._client = client
         this._cb = _cb
@@ -5753,7 +7569,10 @@
         if (status == 0) {
           this._client.userId = userId
           var self = this
-          if (!RongIMLib.RongIMClient._memoryStore.depend.isPolling && RongIMLib.RongIMClient._memoryStore.isFirstPingMsg) {
+          if (
+            !RongIMLib.RongIMClient._memoryStore.depend.isPolling &&
+            RongIMLib.RongIMClient._memoryStore.isFirstPingMsg
+          ) {
             RongIMLib.Bridge._client.checkSocket({
               onSuccess: function () {
                 if (!RongIMLib.RongIMClient.isNotPullMsg) {
@@ -5763,8 +7582,11 @@
               onError: function () {
                 RongIMLib.RongIMClient._memoryStore.isFirstPingMsg = false
                 RongIMLib.RongIMClient.getInstance().disconnect()
-                RongIMLib.RongIMClient.connect(RongIMLib.RongIMClient._memoryStore.token, RongIMLib.RongIMClient._memoryStore.callback)
-              }
+                RongIMLib.RongIMClient.connect(
+                  RongIMLib.RongIMClient._memoryStore.token,
+                  RongIMLib.RongIMClient._memoryStore.callback
+                )
+              },
             })
           } else {
             if (!RongIMLib.RongIMClient.isNotPullMsg) {
@@ -5785,7 +7607,8 @@
           if (!(new Date().getTime() - timestamp)) {
             RongIMLib.RongIMClient._memoryStore.deltaTime = 0
           } else {
-            RongIMLib.RongIMClient._memoryStore.deltaTime = new Date().getTime() - timestamp
+            RongIMLib.RongIMClient._memoryStore.deltaTime =
+              new Date().getTime() - timestamp
           }
         } else if (status == 6) {
           RongIMLib.RongIMClient.getInstance().disconnect()
@@ -5794,14 +7617,21 @@
           var _client = me._client
           var appId = _client.appId
           var token = _client.token
-          new RongIMLib.Navigation().requestNavi(token, appId, function () {
-            _client.clearHeartbeat()
-            var newClient = new RongIMLib.Client(token, appId)
-            RongIMLib.Bridge._client = newClient
-            newClient.__init(function () {
-              RongIMLib.Transportations._TransportType == 'websocket' && newClient.keepLive()
-            })
-          }, me._timeout, false)
+          new RongIMLib.Navigation().requestNavi(
+            token,
+            appId,
+            function () {
+              _client.clearHeartbeat()
+              var newClient = new RongIMLib.Client(token, appId)
+              RongIMLib.Bridge._client = newClient
+              newClient.__init(function () {
+                RongIMLib.Transportations._TransportType == 'websocket' &&
+                  newClient.keepLive()
+              })
+            },
+            me._timeout,
+            false
+          )
         } else {
           RongIMLib.Bridge._client.channel.socket.socket._status = status
           if (this._client.reconnectObj.onError) {
@@ -5819,10 +7649,10 @@
     })(MessageCallback)
     RongIMLib.ConnectAck = ConnectAck
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var Navigation = (function () {
-      function Navigation () {}
+      function Navigation() {}
       Navigation.clear = function () {
         var storage = RongIMLib.RongIMClient._storageProvider
         storage.removeItem('rc_uid')
@@ -5840,7 +7670,7 @@
         var tpl = '{server}{backupServer}'
         var servers = RongIMLib.RongUtil.tplEngine(tpl, {
           server: server,
-          backupServer: backupServer
+          backupServer: backupServer,
         })
         servers = servers.split(',')
         storage.setItem('servers', JSON.stringify(servers))
@@ -5870,25 +7700,40 @@
           RongIMLib.RongIMClient._storageProvider.setItem('appId', appId)
         }
         var client = new RongIMLib.Client(token, appId)
-        this.requestNavi(token, appId, function () {
-          client.connect(callback)
-        }, callback.onError, true)
+        this.requestNavi(
+          token,
+          appId,
+          function () {
+            client.connect(callback)
+          },
+          callback.onError,
+          true
+        )
         return client
       }
-      Navigation.prototype.requestNavi = function (token, appId, _onsuccess, _onerror, unignore) {
+      Navigation.prototype.requestNavi = function (
+        token,
+        appId,
+        _onsuccess,
+        _onerror,
+        unignore
+      ) {
         if (unignore) {
           // 根据token生成MD5截取8-16下标的数据与本地存储的导航信息进行比对
           // 如果信息和上次的通道类型都一样，不执行navi请求，用本地存储的导航信息连接服务器
           var uId = md5(token).slice(8, 16)
           var storage = RongIMLib.RongIMClient._storageProvider
           var transportType = storage.getItem('rongSDK')
-          var isSameType = (RongIMLib.Transportations._TransportType == transportType)
+          var isSameType =
+            RongIMLib.Transportations._TransportType == transportType
           var _old = storage.getItem('rc_uid')
-          var isSameUser = (_old == uId)
+          var isSameUser = _old == uId
           var servers = storage.getItem('servers')
-          var hasServers = (typeof servers === 'string')
+          var hasServers = typeof servers === 'string'
           if (isSameUser && isSameType && hasServers) {
-            RongIMLib.RongIMClient._memoryStore.voipStategy = storage.getItem('voipStrategy')
+            RongIMLib.RongIMClient._memoryStore.voipStategy = storage.getItem(
+              'voipStrategy'
+            )
             var openMp = storage.getItem('openMp' + uId)
             RongIMLib.RongIMClient._memoryStore.depend.openMp = openMp
             _onsuccess()
@@ -5905,9 +7750,11 @@
         var isNaviJSONP = depend.isNaviJSONP
         var isSupportRequestHeaders = RongIMLib.RongUtil.isSupportRequestHeaders()
         var isRequestJSONP = !isSupportRequestHeaders || isNaviJSONP
-        var requestFunc = isRequestJSONP ? context.requestJSONP : context.request
+        var requestFunc = isRequestJSONP
+          ? context.requestJSONP
+          : context.request
         var timer = new RongIMLib.Timer({
-          timeout: naviTimeout
+          timeout: naviTimeout,
         })
         var internalRetry = 1
         var isRange = function () {
@@ -5917,7 +7764,7 @@
           items: navigaters,
           onwheel: function () {
             internalRetry += 1
-          }
+          },
         })
         var consume = function () {
           if (isRange()) {
@@ -5947,26 +7794,43 @@
               return
             }
             timer.pause()
-            StatusEvent.onChanged(RongIMLib.ConnectionStatus.RESPONSE_NAVI_ERROR)
+            StatusEvent.onChanged(
+              RongIMLib.ConnectionStatus.RESPONSE_NAVI_ERROR
+            )
             consume()
           }
           StatusEvent.onChanged(RongIMLib.ConnectionStatus.REQUEST_NAVI)
-          var xhr = requestFunc.call(context, navi, appId, token, success, error)
+          var xhr = requestFunc.call(
+            context,
+            navi,
+            appId,
+            token,
+            success,
+            error
+          )
           timer.resume(function () {
-            StatusEvent.onChanged(RongIMLib.ConnectionStatus.RESPONSE_NAVI_TIMEOUT)
+            StatusEvent.onChanged(
+              RongIMLib.ConnectionStatus.RESPONSE_NAVI_TIMEOUT
+            )
             // xhr.abort();
             consume()
           })
         }
         consume()
       }
-      Navigation.prototype.getPath = function (navi, appId, token, callbackName) {
+      Navigation.prototype.getPath = function (
+        navi,
+        appId,
+        token,
+        callbackName
+      ) {
         var depend = RongIMLib.RongIMClient._memoryStore.depend
-        var path = (depend.isPolling ? 'cometnavi' : 'navi')
+        var path = depend.isPolling ? 'cometnavi' : 'navi'
         token = encodeURIComponent(token)
         var sdkver = RongIMLib.RongIMClient.sdkver
         var random = RongIMLib.RongUtil.getTimestamp()
-        var tpl = '{navi}/{path}.js?appId={appId}&token={token}&callBack={callback}&v={sdkver}&r={random}'
+        var tpl =
+          '{navi}/{path}.js?appId={appId}&token={token}&callBack={callback}&v={sdkver}&r={random}'
         var url = RongIMLib.RongUtil.tplEngine(tpl, {
           navi: navi,
           path: path,
@@ -5974,11 +7838,17 @@
           token: token,
           sdkver: sdkver,
           random: random,
-          callback: callbackName
+          callback: callbackName,
         })
         return url
       }
-      Navigation.prototype.request = function (navi, appId, token, success, error) {
+      Navigation.prototype.request = function (
+        navi,
+        appId,
+        token,
+        success,
+        error
+      ) {
         var url = this.getPath(navi, appId, token, 'getServerEndpoint')
         return RongIMLib.RongUtil.request({
           url: url,
@@ -5998,10 +7868,16 @@
             } else {
               error(status)
             }
-          }
+          },
         })
       }
-      Navigation.prototype.requestJSONP = function (navi, appId, token, success, error) {
+      Navigation.prototype.requestJSONP = function (
+        navi,
+        appId,
+        token,
+        success,
+        error
+      ) {
         var callbackName = 'getServerEndpoint'
         var getServerEndpoint = function (result) {
           var code = result.code
@@ -6011,20 +7887,23 @@
           success(result)
         }
         var url = this.getPath(navi, appId, token, callbackName)
-        require('axios').get(url).then((e) => {
-          if (typeof e.data === 'string') {
-            const match = e.data.match(/^getServerEndpoint\((.*)\);?$/)
-            if (match !== null && match.length === 2) {
-              let data = null
-              data = JSON.parse(match[1])
-              getServerEndpoint(data)
+        require('axios')
+          .get(url)
+          .then((e) => {
+            if (typeof e.data === 'string') {
+              const match = e.data.match(/^getServerEndpoint\((.*)\);?$/)
+              if (match !== null && match.length === 2) {
+                let data = null
+                data = JSON.parse(match[1])
+                getServerEndpoint(data)
+              }
+            } else {
+              throw new TypeError('wrong Response Type')
             }
-          } else {
-            throw new TypeError('wrong Response Type')
-          }
-        }).catch((e) => {
-          error(RongIMLib.ConnectionState.TOKEN_INCORRECT)
-        })
+          })
+          .catch((e) => {
+            error(RongIMLib.ConnectionState.TOKEN_INCORRECT)
+          })
       }
       Navigation.Endpoint = new Object()
       return Navigation
@@ -6032,19 +7911,24 @@
     RongIMLib.Navigation = Navigation
   })(RongIMLib || (RongIMLib = {}))
   // TODO: 统一变量、方法等命名规范
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     /**
-         * 消息基类
-         */
+     * 消息基类
+     */
     var BaseMessage = (function () {
-      function BaseMessage (arg) {
+      function BaseMessage(arg) {
         this._name = 'BaseMessage'
         this.lengthSize = 0
         if (arg instanceof RongIMLib.Header) {
           this._header = arg
         } else {
-          this._header = new RongIMLib.Header(arg, false, RongIMLib.Qos.AT_MOST_ONCE, false)
+          this._header = new RongIMLib.Header(
+            arg,
+            false,
+            RongIMLib.Qos.AT_MOST_ONCE,
+            false
+          )
         }
       }
       BaseMessage.prototype.read = function (In, length) {
@@ -6074,7 +7958,10 @@
         this._header.retain = retain
       }
       BaseMessage.prototype.setQos = function (qos) {
-        this._header.qos = Object.prototype.toString.call(qos) == '[object Object]' ? qos : RongIMLib.Qos[qos]
+        this._header.qos =
+          Object.prototype.toString.call(qos) == '[object Object]'
+            ? qos
+            : RongIMLib.Qos[qos]
       }
       BaseMessage.prototype.setDup = function (dup) {
         this._header.dup = dup
@@ -6094,7 +7981,9 @@
       BaseMessage.prototype.writeMessage = function (out) {}
       BaseMessage.prototype.readMessage = function (In, length) {}
       BaseMessage.prototype.init = function (args) {
-        var valName; var nana; var me = this
+        var valName
+        var nana
+        var me = this
         for (nana in args) {
           if (!args.hasOwnProperty(nana)) {
             continue
@@ -6105,7 +7994,11 @@
           })
           if (valName in me) {
             if (nana == 'status') {
-              me[valName](disconnectStatus[args[nana]] ? disconnectStatus[args[nana]] : args[nana])
+              me[valName](
+                disconnectStatus[args[nana]]
+                  ? disconnectStatus[args[nana]]
+                  : args[nana]
+              )
             } else {
               me[valName](args[nana])
             }
@@ -6116,13 +8009,18 @@
     })()
     RongIMLib.BaseMessage = BaseMessage
     /**
-         *连接消息类型
-         */
+     *连接消息类型
+     */
     var ConnectMessage = (function (_super) {
       __extends(ConnectMessage, _super)
 
-      function ConnectMessage (header) {
-        _super.call(this, arguments.length == 0 || arguments.length == 3 ? RongIMLib.Type.CONNECT : arguments[0])
+      function ConnectMessage(header) {
+        _super.call(
+          this,
+          arguments.length == 0 || arguments.length == 3
+            ? RongIMLib.Type.CONNECT
+            : arguments[0]
+        )
         this._name = 'ConnectMessage'
         this.CONNECT_HEADER_SIZE = 12
         this.protocolId = 'RCloud'
@@ -6133,7 +8031,10 @@
           case 1:
           case 3:
             if (!arguments[0] || arguments[0].length > 64) {
-              throw new Error('ConnectMessage:Client Id cannot be null and must be at most 64 characters long: ' + arguments[0])
+              throw new Error(
+                'ConnectMessage:Client Id cannot be null and must be at most 64 characters long: ' +
+                  arguments[0]
+              )
             }
             this.clientId = arguments[0]
             this.cleanSession = arguments[1]
@@ -6156,7 +8057,7 @@
         this.hasAppId = (cFlags & 128) > 0
         this.hasToken = (cFlags & 64) > 0
         this.retainWill = (cFlags & 32) > 0
-        this.willQos = cFlags >> 3 & 3
+        this.willQos = (cFlags >> 3) & 3
         this.hasWill = (cFlags & 4) > 0
         this.cleanSession = (cFlags & 32) > 0
         this.keepAlive = stream.read() * 256 + stream.read()
@@ -6210,13 +8111,22 @@
     })(BaseMessage)
     RongIMLib.ConnectMessage = ConnectMessage
     /**
-         *连接应答类型
-         */
+     *连接应答类型
+     */
     var ConnAckMessage = (function (_super) {
       __extends(ConnAckMessage, _super)
 
-      function ConnAckMessage (header) {
-        _super.call(this, arguments.length == 0 ? RongIMLib.Type.CONNACK : arguments.length == 1 ? arguments[0] instanceof RongIMLib.Header ? arguments[0] : RongIMLib.Type.CONNACK : null)
+      function ConnAckMessage(header) {
+        _super.call(
+          this,
+          arguments.length == 0
+            ? RongIMLib.Type.CONNACK
+            : arguments.length == 1
+            ? arguments[0] instanceof RongIMLib.Header
+              ? arguments[0]
+              : RongIMLib.Type.CONNACK
+            : null
+        )
         this._name = 'ConnAckMessage'
         this.MESSAGE_LENGTH = 2
         this.binaryHelper = new RongIMLib.BinaryHelper()
@@ -6227,14 +8137,16 @@
             if (!(arguments[0] instanceof RongIMLib.Header)) {
               if (arguments[0] in RongIMLib.ConnectionState) {
                 if (arguments[0] == null) {
-                  throw new Error("ConnAckMessage:The status of ConnAskMessage can't be null")
+                  throw new Error(
+                    "ConnAckMessage:The status of ConnAskMessage can't be null"
+                  )
                 }
                 me.setStatus(arguments[0])
               }
             }
             break
         }
-      };
+      }
       ConnAckMessage.prototype.messageLength = function () {
         var length = this.MESSAGE_LENGTH
         if (this.userId) {
@@ -6302,13 +8214,18 @@
     })(BaseMessage)
     RongIMLib.ConnAckMessage = ConnAckMessage
     /**
-         *断开消息类型
-         */
+     *断开消息类型
+     */
     var DisconnectMessage = (function (_super) {
       __extends(DisconnectMessage, _super)
 
-      function DisconnectMessage (header) {
-        _super.call(this, header instanceof RongIMLib.Header ? header : RongIMLib.Type.DISCONNECT)
+      function DisconnectMessage(header) {
+        _super.call(
+          this,
+          header instanceof RongIMLib.Header
+            ? header
+            : RongIMLib.Type.DISCONNECT
+        )
         this._name = 'DisconnectMessage'
         this.MESSAGE_LENGTH = 2
         this.binaryHelper = new RongIMLib.BinaryHelper()
@@ -6325,7 +8242,9 @@
         _in.read()
         var result = +_in.read()
         if (result >= 0 && result <= 5) {
-          this.setStatus(disconnectStatus[result] ? disconnectStatus[result] : result)
+          this.setStatus(
+            disconnectStatus[result] ? disconnectStatus[result] : result
+          )
         } else {
           throw new Error('Unsupported CONNACK code:' + result)
         }
@@ -6334,7 +8253,7 @@
         var out = this.binaryHelper.convertStream(Out)
         out.write(0)
         if (+status >= 1 && +status <= 3) {
-          out.write((+status) - 1)
+          out.write(+status - 1)
         } else {
           throw new Error('Unsupported CONNACK code:' + status)
         }
@@ -6349,38 +8268,48 @@
     })(BaseMessage)
     RongIMLib.DisconnectMessage = DisconnectMessage
     /**
-         *请求消息信令
-         */
+     *请求消息信令
+     */
     var PingReqMessage = (function (_super) {
       __extends(PingReqMessage, _super)
 
-      function PingReqMessage (header) {
-        _super.call(this, (header && header instanceof RongIMLib.Header) ? header : RongIMLib.Type.PINGREQ)
+      function PingReqMessage(header) {
+        _super.call(
+          this,
+          header && header instanceof RongIMLib.Header
+            ? header
+            : RongIMLib.Type.PINGREQ
+        )
         this._name = 'PingReqMessage'
       }
       return PingReqMessage
     })(BaseMessage)
     RongIMLib.PingReqMessage = PingReqMessage
     /**
-         *响应消息信令
-         */
+     *响应消息信令
+     */
     var PingRespMessage = (function (_super) {
       __extends(PingRespMessage, _super)
 
-      function PingRespMessage (header) {
-        _super.call(this, (header && header instanceof RongIMLib.Header) ? header : RongIMLib.Type.PINGRESP)
+      function PingRespMessage(header) {
+        _super.call(
+          this,
+          header && header instanceof RongIMLib.Header
+            ? header
+            : RongIMLib.Type.PINGRESP
+        )
         this._name = 'PingRespMessage'
       }
       return PingRespMessage
     })(BaseMessage)
     RongIMLib.PingRespMessage = PingRespMessage
     /**
-         *封装MesssageId
-         */
+     *封装MesssageId
+     */
     var RetryableMessage = (function (_super) {
       __extends(RetryableMessage, _super)
 
-      function RetryableMessage (argu) {
+      function RetryableMessage(argu) {
         _super.call(this, argu)
         this._name = 'RetryableMessage'
         this.binaryHelper = new RongIMLib.BinaryHelper()
@@ -6411,14 +8340,17 @@
     })(BaseMessage)
     RongIMLib.RetryableMessage = RetryableMessage
     /**
-         *发送消息应答（双向）
-         *qos为1必须给出应答（所有消息类型一样）
-         */
+     *发送消息应答（双向）
+     *qos为1必须给出应答（所有消息类型一样）
+     */
     var PubAckMessage = (function (_super) {
       __extends(PubAckMessage, _super)
 
-      function PubAckMessage (header) {
-        _super.call(this, (header instanceof RongIMLib.Header) ? header : RongIMLib.Type.PUBACK)
+      function PubAckMessage(header) {
+        _super.call(
+          this,
+          header instanceof RongIMLib.Header ? header : RongIMLib.Type.PUBACK
+        )
         this.msgLen = 2
         this.date = 0
         this.millisecond = 0
@@ -6469,20 +8401,28 @@
     })(RetryableMessage)
     RongIMLib.PubAckMessage = PubAckMessage
     /**
-         *发布消息
-         */
+     *发布消息
+     */
     var PublishMessage = (function (_super) {
       __extends(PublishMessage, _super)
 
-      function PublishMessage (header, two, three) {
-        _super.call(this, (arguments.length == 1 && header instanceof RongIMLib.Header) ? header : arguments.length == 3 ? RongIMLib.Type.PUBLISH : 0)
+      function PublishMessage(header, two, three) {
+        _super.call(
+          this,
+          arguments.length == 1 && header instanceof RongIMLib.Header
+            ? header
+            : arguments.length == 3
+            ? RongIMLib.Type.PUBLISH
+            : 0
+        )
         this._name = 'PublishMessage'
         this.binaryHelper = new RongIMLib.BinaryHelper()
         this.syncMsg = false
         if (arguments.length == 3) {
           this.topic = header
           this.targetId = three
-          this.data = typeof two === 'string' ? this.binaryHelper.toMQttString(two) : two
+          this.data =
+            typeof two === 'string' ? this.binaryHelper.toMQttString(two) : two
         }
       }
       PublishMessage.prototype.messageLength = function () {
@@ -6545,17 +8485,25 @@
     })(RetryableMessage)
     RongIMLib.PublishMessage = PublishMessage
     /**
-         *请求查询
-         */
+     *请求查询
+     */
     var QueryMessage = (function (_super) {
       __extends(QueryMessage, _super)
 
-      function QueryMessage (header, two, three) {
-        _super.call(this, header instanceof RongIMLib.Header ? header : arguments.length == 3 ? RongIMLib.Type.QUERY : null)
+      function QueryMessage(header, two, three) {
+        _super.call(
+          this,
+          header instanceof RongIMLib.Header
+            ? header
+            : arguments.length == 3
+            ? RongIMLib.Type.QUERY
+            : null
+        )
         this.binaryHelper = new RongIMLib.BinaryHelper()
         this._name = 'QueryMessage'
         if (arguments.length == 3) {
-          this.data = typeof two === 'string' ? this.binaryHelper.toMQttString(two) : two
+          this.data =
+            typeof two === 'string' ? this.binaryHelper.toMQttString(two) : two
           this.topic = header
           this.targetId = three
         }
@@ -6608,13 +8556,18 @@
     })(RetryableMessage)
     RongIMLib.QueryMessage = QueryMessage
     /**
-         *请求查询确认
-         */
+     *请求查询确认
+     */
     var QueryConMessage = (function (_super) {
       __extends(QueryConMessage, _super)
 
-      function QueryConMessage (messageId) {
-        _super.call(this, (messageId instanceof RongIMLib.Header) ? messageId : RongIMLib.Type.QUERYCON)
+      function QueryConMessage(messageId) {
+        _super.call(
+          this,
+          messageId instanceof RongIMLib.Header
+            ? messageId
+            : RongIMLib.Type.QUERYCON
+        )
         this._name = 'QueryConMessage'
         if (!(messageId instanceof RongIMLib.Header)) {
           _super.prototype.setMessageId.call(this, messageId)
@@ -6624,12 +8577,12 @@
     })(RetryableMessage)
     RongIMLib.QueryConMessage = QueryConMessage
     /**
-         *请求查询应答
-         */
+     *请求查询应答
+     */
     var QueryAckMessage = (function (_super) {
       __extends(QueryAckMessage, _super)
 
-      function QueryAckMessage (header) {
+      function QueryAckMessage(header) {
         _super.call(this, header)
         this._name = 'QueryAckMessage'
         this.binaryHelper = new RongIMLib.BinaryHelper()
@@ -6666,14 +8619,14 @@
     RongIMLib.QueryAckMessage = QueryAckMessage
   })(RongIMLib || (RongIMLib = {}))
   /// <reference path="../../dts/helper.d.ts"/>
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     /**
-         * 把消息对象写入流中
-         * 发送消息时用到
-         */
+     * 把消息对象写入流中
+     * 发送消息时用到
+     */
     var MessageOutputStream = (function () {
-      function MessageOutputStream (_out) {
+      function MessageOutputStream(_out) {
         var binaryHelper = new RongIMLib.BinaryHelper()
         this.out = binaryHelper.convertStream(_out)
       }
@@ -6686,11 +8639,11 @@
     })()
     RongIMLib.MessageOutputStream = MessageOutputStream
     /**
-         * 流转换为消息对象
-         * 服务器返回消息时用到
-         */
+     * 流转换为消息对象
+     * 服务器返回消息时用到
+     */
     var MessageInputStream = (function () {
-      function MessageInputStream (In, isPolling) {
+      function MessageInputStream(In, isPolling) {
         if (!isPolling) {
           var _in = new RongIMLib.BinaryHelper().convertStream(In)
           this.flags = _in.readByte()
@@ -6740,7 +8693,11 @@
             this.msg = new RongIMLib.DisconnectMessage(this.header)
             break
           default:
-            throw new Error('No support for deserializing ' + this.header.getType() + ' messages')
+            throw new Error(
+              'No support for deserializing ' +
+                this.header.getType() +
+                ' messages'
+            )
         }
         if (this.isPolling) {
           this.msg.init(this.In)
@@ -6753,7 +8710,7 @@
     })()
     RongIMLib.MessageInputStream = MessageInputStream
     var Header = (function () {
-      function Header (_type, _retain, _qos, _dup) {
+      function Header(_type, _retain, _qos, _dup) {
         this.retain = false
         this.qos = RongIMLib.Qos.AT_LEAST_ONCE
         this.dup = false
@@ -6793,23 +8750,33 @@
             me.qos = RongIMLib.Qos.DEFAULT
             break
         }
-        var _byte = (this.type << 4)
+        var _byte = this.type << 4
         _byte |= this.retain ? 1 : 0
         _byte |= this.qos << 1
         _byte |= this.dup ? 8 : 0
         return _byte
       }
       Header.prototype.toString = function () {
-        return 'Header [type=' + this.type + ',retain=' + this.retain + ',qos=' + this.qos + ',dup=' + this.dup + ']'
+        return (
+          'Header [type=' +
+          this.type +
+          ',retain=' +
+          this.retain +
+          ',qos=' +
+          this.qos +
+          ',dup=' +
+          this.dup +
+          ']'
+        )
       }
       return Header
     })()
     RongIMLib.Header = Header
     /**
-         * 二进制帮助对象
-         */
+     * 二进制帮助对象
+     */
     var BinaryHelper = (function () {
-      function BinaryHelper () {}
+      function BinaryHelper() {}
       BinaryHelper.prototype.writeUTF = function (str, isGetBytes) {
         var back = []
         var byteSize = 0
@@ -6820,13 +8787,13 @@
             back.push(code)
           } else if (code >= 128 && code <= 2047) {
             byteSize += 2
-            back.push((192 | (31 & (code >> 6))))
-            back.push((128 | (63 & code)))
+            back.push(192 | (31 & (code >> 6)))
+            back.push(128 | (63 & code))
           } else if (code >= 2048 && code <= 65535) {
             byteSize += 3
-            back.push((224 | (15 & (code >> 12))))
-            back.push((128 | (63 & (code >> 6))))
-            back.push((128 | (63 & code)))
+            back.push(224 | (15 & (code >> 12)))
+            back.push(128 | (63 & (code >> 6)))
+            back.push(128 | (63 & code))
           }
         }
         for (var i = 0, len = back.length; i < len; i++) {
@@ -6852,7 +8819,7 @@
         for (var i = 0, len = _arr.length; i < len; i++) {
           if (_arr[i] < 0) {
             _arr[i] += 256
-          };
+          }
           var one = _arr[i].toString(2)
           var v = one.match(/^1+?(?=0)/)
           if (v && one.length == 8) {
@@ -6871,9 +8838,9 @@
         return UTF
       }
       /**
-             * [convertStream 将参数x转化为RongIMStream对象]
-             * @param  {any}    x [参数]
-             */
+       * [convertStream 将参数x转化为RongIMStream对象]
+       * @param  {any}    x [参数]
+       */
       BinaryHelper.prototype.convertStream = function (x) {
         if (x instanceof RongIMStream) {
           return x
@@ -6888,7 +8855,7 @@
     })()
     RongIMLib.BinaryHelper = BinaryHelper
     var RongIMStream = (function () {
-      function RongIMStream (arr) {
+      function RongIMStream(arr) {
         // 当前流执行的起始位置
         this.position = 0
         // 当前流写入的多少字节
@@ -6945,7 +8912,9 @@
           return -1
         }
         var big = (this.readByte() << 8) | this.readByte()
-        return this.binaryHelper.readUTF(this.pool.subarray(this.position, this.position += big))
+        return this.binaryHelper.readUTF(
+          this.pool.subarray(this.position, (this.position += big))
+        )
       }
       RongIMStream.prototype.readByte = function () {
         if (this.check()) {
@@ -6966,8 +8935,10 @@
       }
       RongIMStream.prototype.write = function (_byte) {
         var b = _byte
-        if (Object.prototype.toString.call(b).toLowerCase() == '[object array]') {
-          [].push.apply(this.pool, b)
+        if (
+          Object.prototype.toString.call(b).toLowerCase() == '[object array]'
+        ) {
+          ;[].push.apply(this.pool, b)
         } else {
           if (+b == b) {
             if (b > 255) {
@@ -6983,13 +8954,13 @@
         if (+v != v) {
           throw new Error('writeChar:arguments type is error')
         }
-        this.write(v >> 8 & 255)
+        this.write((v >> 8) & 255)
         this.write(v & 255)
         this.writen += 2
       }
       RongIMStream.prototype.writeUTF = function (str) {
-        var val = this.binaryHelper.writeUTF(str);
-        [].push.apply(this.pool, val)
+        var val = this.binaryHelper.writeUTF(str)
+        ;[].push.apply(this.pool, val)
         this.writen += val.length
       }
       RongIMStream.prototype.toComplements = function () {
@@ -7011,14 +8982,14 @@
     })()
     RongIMLib.RongIMStream = RongIMStream
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var SocketTransportation = (function () {
       /**
-             * [constructor]
-             * @param  {string} url [连接地址：包含token、version]
-             */
-      function SocketTransportation (_socket) {
+       * [constructor]
+       * @param  {string} url [连接地址：包含token、version]
+       */
+      function SocketTransportation(_socket) {
         // 连接状态 true:已连接 false:未连接
         this.connected = false
         // 是否关闭： true:已关闭 false：未关闭
@@ -7030,19 +9001,19 @@
         return this
       }
       /**
-             * [createTransport 创建WebScoket对象]
-             */
+       * [createTransport 创建WebScoket对象]
+       */
       SocketTransportation.prototype.createTransport = function (url, method) {
         if (!url) {
           throw new Error("URL can't be empty")
-        };
+        }
         this.url = url
         var depend = RongIMLib.RongIMClient._memoryStore.depend
         var wsScheme = depend.wsScheme
         var tpl = '{wsScheme}{url}'
         url = RongIMLib.RongUtil.tplEngine(tpl, {
           wsScheme: wsScheme,
-          url: url
+          url: url,
         })
         this.socket = new WebSocket(url)
         this.socket.binaryType = 'arraybuffer'
@@ -7050,9 +9021,9 @@
         return this.socket
       }
       /**
-             * [send 传送消息流]
-             * @param  {ArrayBuffer} data [二进制消息流]
-             */
+       * [send 传送消息流]
+       * @param  {ArrayBuffer} data [二进制消息流]
+       */
       SocketTransportation.prototype.send = function (data) {
         if (!this.connected && !this.isClose) {
           // 当通道不可用时，加入消息队列
@@ -7060,7 +9031,10 @@
           return
         }
         if (this.isClose) {
-          this._socket.fire('StatusChanged', RongIMLib.ConnectionStatus.CONNECTION_CLOSED)
+          this._socket.fire(
+            'StatusChanged',
+            RongIMLib.ConnectionStatus.CONNECTION_CLOSED
+          )
           return
         }
         var stream = new RongIMLib.RongIMStream([])
@@ -7072,42 +9046,54 @@
         return this
       }
       /**
-             * [onData 通道返回数据时调用的方法，用来想上层传递服务器返回的二进制消息流]
-             * @param  {ArrayBuffer}    data [二进制消息流]
-             */
+       * [onData 通道返回数据时调用的方法，用来想上层传递服务器返回的二进制消息流]
+       * @param  {ArrayBuffer}    data [二进制消息流]
+       */
       SocketTransportation.prototype.onData = function (data) {
         if (RongIMLib.MessageUtil.isArray(data)) {
-          this._socket.onMessage(new RongIMLib.MessageInputStream(data).readMessage())
+          this._socket.onMessage(
+            new RongIMLib.MessageInputStream(data).readMessage()
+          )
         } else {
-          this._socket.onMessage(new RongIMLib.MessageInputStream(RongIMLib.MessageUtil.ArrayFormInput(data)).readMessage())
+          this._socket.onMessage(
+            new RongIMLib.MessageInputStream(
+              RongIMLib.MessageUtil.ArrayFormInput(data)
+            ).readMessage()
+          )
         }
         return ''
       }
       /**
-             * [onClose 通道关闭时触发的方法]
-             */
+       * [onClose 通道关闭时触发的方法]
+       */
       SocketTransportation.prototype.onClose = function (ev) {
         var me = this
         me.isClose = true
         me.socket = this.empty
         RongIMLib.Bridge._client.clearHeartbeat()
         if (ev.code == 1006 && !this._status) {
-          me._socket.fire('StatusChanged', RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE)
+          me._socket.fire(
+            'StatusChanged',
+            RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE
+          )
         } else {
           me._status = 0
         }
       }
       /**
-             * [onError 通道报错时触发的方法]
-             * @param {any} error [抛出异常]
-             */
+       * [onError 通道报错时触发的方法]
+       * @param {any} error [抛出异常]
+       */
       SocketTransportation.prototype.onError = function (error) {
-        this._socket.fire('StatusChanged', RongIMLib.ConnectionStatus.WEBSOCKET_ERROR)
+        this._socket.fire(
+          'StatusChanged',
+          RongIMLib.ConnectionStatus.WEBSOCKET_ERROR
+        )
         throw new Error(error)
       }
       /**
-             * [addEvent 为通道绑定事件]
-             */
+       * [addEvent 为通道绑定事件]
+       */
       SocketTransportation.prototype.addEvent = function () {
         var self = this
         self.socket.onopen = function () {
@@ -7133,8 +9119,8 @@
         }
       }
       /**
-             * [doQueue 消息队列，把队列中消息发出]
-             */
+       * [doQueue 消息队列，把队列中消息发出]
+       */
       SocketTransportation.prototype.doQueue = function () {
         var self = this
         for (var i = 0, len = self.queue.length; i < len; i++) {
@@ -7142,8 +9128,8 @@
         }
       }
       /**
-             * [disconnect 断开连接]
-             */
+       * [disconnect 断开连接]
+       */
       SocketTransportation.prototype.disconnect = function (status) {
         var me = this
         if (me.socket.readyState) {
@@ -7155,8 +9141,8 @@
         }
       }
       /**
-             * [reconnect 重新连接]
-             */
+       * [reconnect 重新连接]
+       */
       SocketTransportation.prototype.reconnect = function () {
         this.disconnect()
         this.createTransport(this.url)
@@ -7168,10 +9154,10 @@
     })()
     RongIMLib.SocketTransportation = SocketTransportation
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var PollingTransportation = (function () {
-      function PollingTransportation (socket) {
+      function PollingTransportation(socket) {
         this.empty = new Function()
         this.connected = false
         this.pid = +new Date() + Math.random() + ''
@@ -7182,13 +9168,21 @@
       PollingTransportation.prototype.createTransport = function (url, method) {
         if (!url) {
           throw new Error('Url is empty,Please check it!')
-        };
+        }
         this.url = url
-        var sid = RongIMLib.RongIMClient._storageProvider.getItem('sId' + RongIMLib.Navigation.Endpoint.userId)
+        var sid = RongIMLib.RongIMClient._storageProvider.getItem(
+          'sId' + RongIMLib.Navigation.Endpoint.userId
+        )
         var me = this
         if (sid) {
           setTimeout(function () {
-            me.onSuccess('{"status":0,"userId":"' + RongIMLib.Navigation.Endpoint.userId + '","headerCode":32,"messageId":0,"sessionid":"' + sid + '"}')
+            me.onSuccess(
+              '{"status":0,"userId":"' +
+                RongIMLib.Navigation.Endpoint.userId +
+                '","headerCode":32,"messageId":0,"sessionid":"' +
+                sid +
+                '"}'
+            )
             me.connected = true
           }, 500)
           return this
@@ -7196,23 +9190,36 @@
         this.getRequest(url, true)
         return this
       }
-      PollingTransportation.prototype.requestFactory = function (url, method, multipart) {
+      PollingTransportation.prototype.requestFactory = function (
+        url,
+        method,
+        multipart
+      ) {
         var reqest = this.XmlHttpRequest()
         if (multipart) {
           reqest.multipart = true
         }
         // reqest.timeout = 60000;
-        reqest.open(method || 'GET', RongIMLib.RongIMClient._memoryStore.depend.protocol + url)
+        reqest.open(
+          method || 'GET',
+          RongIMLib.RongIMClient._memoryStore.depend.protocol + url
+        )
         if (method == 'POST' && 'setRequestHeader' in reqest) {
-          reqest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8')
+          reqest.setRequestHeader(
+            'Content-type',
+            'application/x-www-form-urlencoded; charset=utf-8'
+          )
         }
         return reqest
       }
       PollingTransportation.prototype.getRequest = function (url, isconnect) {
         var me = this
-        me.xhr = this.requestFactory(url + '&pid=' + encodeURIComponent(me.pid), 'GET')
+        me.xhr = this.requestFactory(
+          url + '&pid=' + encodeURIComponent(me.pid),
+          'GET'
+        )
         var timer = new RongIMLib.Timer({
-          timeout: 45000
+          timeout: 45000,
         })
         if ('onload' in me.xhr) {
           me.xhr.onload = function () {
@@ -7249,13 +9256,20 @@
         me.xhr.send()
       }
       /**
-             * [send 发送消息，Method:POST]
-             * queue 为消息队列，待通道可用发送所有等待消息
-             * @param  {string} data [需要传入comet格式数据，此处只负责通讯通道，数据转换在外层处理]
-             */
+       * [send 发送消息，Method:POST]
+       * queue 为消息队列，待通道可用发送所有等待消息
+       * @param  {string} data [需要传入comet格式数据，此处只负责通讯通道，数据转换在外层处理]
+       */
       PollingTransportation.prototype.send = function (data) {
         var me = this
-        var _send = me.sendxhr = this.requestFactory(RongIMLib.Navigation.Endpoint.host + '/websocket' + data.url + '&pid=' + encodeURIComponent(me.pid), 'POST')
+        var _send = (me.sendxhr = this.requestFactory(
+          RongIMLib.Navigation.Endpoint.host +
+            '/websocket' +
+            data.url +
+            '&pid=' +
+            encodeURIComponent(me.pid),
+          'POST'
+        ))
         if ('onload' in _send) {
           _send.onload = function () {
             _send.onload = me.empty
@@ -7286,18 +9300,26 @@
           RongIMLib.Navigation.Endpoint.userId = val.userId
         }
         if (header) {
-          RongIMLib.RongIMClient._storageProvider.setItem('sId' + RongIMLib.Navigation.Endpoint.userId, header)
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            'sId' + RongIMLib.Navigation.Endpoint.userId,
+            header
+          )
         }
         if (!RongIMLib.MessageUtil.isArray(val)) {
           val = [val]
         }
         Array.forEach(val, function (m) {
-          self.socket.fire('message', new RongIMLib.MessageInputStream(m, true).readMessage())
+          self.socket.fire(
+            'message',
+            new RongIMLib.MessageInputStream(m, true).readMessage()
+          )
         })
         return ''
       }
       PollingTransportation.prototype.XmlHttpRequest = function () {
-        var hasCORS = typeof XMLHttpRequest !== 'undefined' && 'withCredentials' in new XMLHttpRequest()
+        var hasCORS =
+          typeof XMLHttpRequest !== 'undefined' &&
+          'withCredentials' in new XMLHttpRequest()
         var self = this
         if (typeof XMLHttpRequest !== 'undefined' && hasCORS) {
           return new XMLHttpRequest()
@@ -7328,29 +9350,52 @@
         }
       }
       PollingTransportation.prototype.disconnect = function () {
-        RongIMLib.RongIMClient._storageProvider.removeItem('sId' + RongIMLib.Navigation.Endpoint.userId)
-        RongIMLib.RongIMClient._storageProvider.removeItem(RongIMLib.Navigation.Endpoint.userId + 'msgId')
+        RongIMLib.RongIMClient._storageProvider.removeItem(
+          'sId' + RongIMLib.Navigation.Endpoint.userId
+        )
+        RongIMLib.RongIMClient._storageProvider.removeItem(
+          RongIMLib.Navigation.Endpoint.userId + 'msgId'
+        )
         this.onClose()
       }
       PollingTransportation.prototype.reconnect = function () {
         this.disconnect()
         this.createTransport(this.url)
       }
-      PollingTransportation.prototype.onSuccess = function (responseText, isconnect) {
+      PollingTransportation.prototype.onSuccess = function (
+        responseText,
+        isconnect
+      ) {
         var txt = responseText.match(/"sessionid":"\S+?(?=")/)
         this.onData(responseText, txt ? txt[0].slice(13) : 0)
         if (/"headerCode":-32,/.test(responseText)) {
-          RongIMLib.RongIMClient._storageProvider.removeItem('sId' + RongIMLib.Navigation.Endpoint.userId)
-          RongIMLib.RongIMClient._storageProvider.removeItem(RongIMLib.Navigation.Endpoint.userId + 'msgId')
+          RongIMLib.RongIMClient._storageProvider.removeItem(
+            'sId' + RongIMLib.Navigation.Endpoint.userId
+          )
+          RongIMLib.RongIMClient._storageProvider.removeItem(
+            RongIMLib.Navigation.Endpoint.userId + 'msgId'
+          )
           return
         }
-        this.getRequest(RongIMLib.Navigation.Endpoint.host + '/pullmsg.js?sessionid=' + RongIMLib.RongIMClient._storageProvider.getItem('sId' + RongIMLib.Navigation.Endpoint.userId) + '&timestrap=' + encodeURIComponent(new Date().getTime() + Math.random() + ''))
+        this.getRequest(
+          RongIMLib.Navigation.Endpoint.host +
+            '/pullmsg.js?sessionid=' +
+            RongIMLib.RongIMClient._storageProvider.getItem(
+              'sId' + RongIMLib.Navigation.Endpoint.userId
+            ) +
+            '&timestrap=' +
+            encodeURIComponent(new Date().getTime() + Math.random() + '')
+        )
         this.connected = true
         isconnect && this.socket.fire('connect')
       }
       PollingTransportation.prototype.onError = function () {
-        RongIMLib.RongIMClient._storageProvider.removeItem('sId' + RongIMLib.Navigation.Endpoint.userId)
-        RongIMLib.RongIMClient._storageProvider.removeItem(RongIMLib.Navigation.Endpoint.userId + 'msgId')
+        RongIMLib.RongIMClient._storageProvider.removeItem(
+          'sId' + RongIMLib.Navigation.Endpoint.userId
+        )
+        RongIMLib.RongIMClient._storageProvider.removeItem(
+          RongIMLib.Navigation.Endpoint.userId + 'msgId'
+        )
         this.onClose()
         this.connected = false
         var code = RongIMLib.ConnectionStatus.NETWORK_UNAVAILABLE
@@ -7404,7 +9449,7 @@
     'RC:RRRspMsg': 'ReadReceiptResponseMessage',
     'RCJrmf:RpMsg': 'JrmfRedPacketMessage',
     'RCJrmf:RpOpendMsg': 'JrmfRedPacketOpenedMessage',
-    'RC:CombineMsg': 'RCCombineMessage'
+    'RC:CombineMsg': 'RCCombineMessage',
   }
   // 自定义消息类型
   var registerMessageTypeMapping = {}
@@ -7416,34 +9461,34 @@
     6: 'qrySMsg',
     7: 'qryPMsg',
     8: 'qryPMsg',
-    5: 'qryCMsg'
+    5: 'qryCMsg',
   }
   var disconnectStatus = {
-    1: 6
+    1: 6,
   }
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     /**
-         * 通道标识类
-         */
+     * 通道标识类
+     */
     var Transportations = (function () {
-      function Transportations () {}
+      function Transportations() {}
       Transportations._TransportType = RongIMLib.Socket.WEBSOCKET
       return Transportations
     })()
     RongIMLib.Transportations = Transportations
     var SyncTimeUtil = (function () {
-      function SyncTimeUtil () {}
+      function SyncTimeUtil() {}
       SyncTimeUtil.$getKey = function (message) {
         var client = RongIMLib.Bridge._client
         var userId = client.userId
-        var direction = (message.messageDirection == 1 ? 'send' : 'receive')
+        var direction = message.messageDirection == 1 ? 'send' : 'receive'
         var appkey = RongIMLib.RongIMClient._memoryStore.appKey
         var tpl = '{appkey}_{userId}_{direction}box'
         return RongIMLib.RongUtil.tplEngine(tpl, {
           appkey: appkey,
           userId: userId,
-          direction: direction
+          direction: direction,
         })
       }
       SyncTimeUtil.set = function (message) {
@@ -7454,25 +9499,25 @@
       }
       SyncTimeUtil.get = function () {
         var sent = SyncTimeUtil.$getKey({
-          messageDirection: RongIMLib.MessageDirection.SEND
+          messageDirection: RongIMLib.MessageDirection.SEND,
         })
         var received = SyncTimeUtil.$getKey({
-          messageDirection: RongIMLib.MessageDirection.RECEIVE
+          messageDirection: RongIMLib.MessageDirection.RECEIVE,
         })
         var storage = RongIMLib.RongIMClient._storageProvider
         return {
           sent: Number(storage.getItem(sent) || 0),
-          received: Number(storage.getItem(received) || 0)
+          received: Number(storage.getItem(received) || 0),
         }
       }
       return SyncTimeUtil
     })()
     RongIMLib.SyncTimeUtil = SyncTimeUtil
     var MessageUtil = (function () {
-      function MessageUtil () {}
+      function MessageUtil() {}
       /**
-             *4680000 为localstorage最小容量5200000字节的90%，超过90%将删除之前过早的存储
-             */
+       *4680000 为localstorage最小容量5200000字节的90%，超过90%将删除之前过早的存储
+       */
       MessageUtil.checkStorageSize = function () {
         return JSON.stringify(localStorage).length < 4680000
       }
@@ -7493,21 +9538,29 @@
         return empty
       }
       MessageUtil.ArrayForm = function (typearray) {
-        if (Object.prototype.toString.call(typearray) == '[object ArrayBuffer]') {
+        if (
+          Object.prototype.toString.call(typearray) == '[object ArrayBuffer]'
+        ) {
           var arr = new Int8Array(typearray)
           return [].slice.call(arr)
         }
         return typearray
       }
       MessageUtil.ArrayFormInput = function (typearray) {
-        if (Object.prototype.toString.call(typearray) == '[object ArrayBuffer]') {
+        if (
+          Object.prototype.toString.call(typearray) == '[object ArrayBuffer]'
+        ) {
           var arr = new Uint8Array(typearray)
           return arr
         }
         return typearray
       }
       MessageUtil.indexOf = function (arr, item, from) {
-        for (var l = arr.length, i = (from < 0) ? Math.max(0, +from) : from || 0; i < l; i++) {
+        for (
+          var l = arr.length, i = from < 0 ? Math.max(0, +from) : from || 0;
+          i < l;
+          i++
+        ) {
           if (arr[i] == item) {
             return i
           }
@@ -7521,7 +9574,7 @@
       MessageUtil.forEach = function (arr, func) {
         if ([].forEach) {
           return function (arr, func) {
-            [].forEach.call(arr, func)
+            ;[].forEach.call(arr, func)
           }
         } else {
           return function (arr, func) {
@@ -7548,7 +9601,11 @@
           low += 0xffffffff + 1
         }
         low = low.toString(16)
-        var timestamp = parseInt(obj.high.toString(16) + '00000000'.replace(new RegExp('0{' + low.length + '}$'), low), 16)
+        var timestamp = parseInt(
+          obj.high.toString(16) +
+            '00000000'.replace(new RegExp('0{' + low.length + '}$'), low),
+          16
+        )
         if (isDate) {
           return new Date(timestamp)
         }
@@ -7558,14 +9615,30 @@
       MessageUtil.messageParser = function (entity, onReceived, offlineMsg) {
         var message = new RongIMLib.Message()
         var content = entity.content
-        var de; var objectName = entity.classname
-        var val; var isUseDef = false
+        var de
+        var objectName = entity.classname
+        var val
+        var isUseDef = false
         try {
           if (RongIMLib.RongIMClient._memoryStore.depend.isPolling) {
-            val = new RongIMLib.BinaryHelper().readUTF(content.offset ? MessageUtil.ArrayForm(content.buffer).slice(content.offset, content.limit) : content)
+            val = new RongIMLib.BinaryHelper().readUTF(
+              content.offset
+                ? MessageUtil.ArrayForm(content.buffer).slice(
+                    content.offset,
+                    content.limit
+                  )
+                : content
+            )
             de = JSON.parse(val)
           } else {
-            val = new RongIMLib.BinaryHelper().readUTF(content.offset ? MessageUtil.ArrayFormInput(content.buffer).subarray(content.offset, content.limit) : content)
+            val = new RongIMLib.BinaryHelper().readUTF(
+              content.offset
+                ? MessageUtil.ArrayFormInput(content.buffer).subarray(
+                    content.offset,
+                    content.limit
+                  )
+                : content
+            )
             de = JSON.parse(val)
           }
         } catch (ex) {
@@ -7578,15 +9651,19 @@
           message.messageType = typeMapping[objectName]
         } else if (objectName in registerMessageTypeMapping) {
           if (isUseDef) {
-            message.content = (new RongIMLib.RongIMClient.RegisterMessage[registerMessageTypeMapping[objectName]](de)).decode(de)
+            message.content = new RongIMLib.RongIMClient.RegisterMessage[
+              registerMessageTypeMapping[objectName]
+            ](de).decode(de)
           } else {
-            message.content = new RongIMLib.RongIMClient.RegisterMessage[registerMessageTypeMapping[objectName]](de)
+            message.content = new RongIMLib.RongIMClient.RegisterMessage[
+              registerMessageTypeMapping[objectName]
+            ](de)
           }
           message.messageType = registerMessageTypeMapping[objectName]
         } else {
           message.content = new RongIMLib.UnknownMessage({
             content: de,
-            objectName: objectName
+            objectName: objectName,
           })
           message.messageType = 'UnknownMessage'
         }
@@ -7602,11 +9679,14 @@
         if (entity.fromUserId == RongIMLib.Bridge._client.userId) {
           message.targetId = entity.groupId
         } else {
-          message.targetId = (/^[234]$/.test(entity.type || entity.getType()) ? entity.groupId : message.senderUserId)
+          message.targetId = /^[234]$/.test(entity.type || entity.getType())
+            ? entity.groupId
+            : message.senderUserId
         }
         var selfUserId = RongIMLib.Bridge._client.userId
         // 解决多端在线收自己发的消息时, messageDirection 为 2(接收), 导致未读数增加
-        var isSelfSend = entity.direction == 1 || message.senderUserId === selfUserId
+        var isSelfSend =
+          entity.direction == 1 || message.senderUserId === selfUserId
         if (isSelfSend) {
           message.messageDirection = RongIMLib.MessageDirection.SEND
           message.senderUserId = RongIMLib.Bridge._client.userId
@@ -7614,13 +9694,15 @@
           message.messageDirection = RongIMLib.MessageDirection.RECEIVE
         }
         // 自己给自己发的消息, messageDirection 为 2(接收)
-        var isSelfToSelf = message.senderUserId === selfUserId && message.targetId === selfUserId
+        var isSelfToSelf =
+          message.senderUserId === selfUserId && message.targetId === selfUserId
         if (isSelfToSelf) {
           message.messageDirection = RongIMLib.MessageDirection.RECEIVE
         }
         message.messageUId = entity.msgId
         message.receivedTime = new Date().getTime()
-        message.messageId = (message.conversationType + '_' + ~~(Math.random() * 0xffffff))
+        message.messageId =
+          message.conversationType + '_' + ~~(Math.random() * 0xffffff)
         message.objectName = objectName
         message.receivedStatus = RongIMLib.ReceivedStatus.READ
         if ((entity.status & 2) == 2) {
@@ -7628,27 +9710,33 @@
         }
         message.offLineMessage = !!offlineMsg
         if (!offlineMsg) {
-          if (RongIMLib.RongIMClient._memoryStore.connectAckTime > message.sentTime) {
+          if (
+            RongIMLib.RongIMClient._memoryStore.connectAckTime >
+            message.sentTime
+          ) {
             message.offLineMessage = true
           }
         }
         return message
       }
       MessageUtil.detectCMP = function (options) {
-        var xhr = require('axios').default.request({
-          method: options.method || 'GET',
-          url: options.url,
-          headers: options.headers,
-          body: JSON.stringify(options.body || {})
-        }).then((e) => {
-          if (e.status == 200) {
-            options.success()
-          } else {
+        var xhr = require('axios')
+          .default.request({
+            method: options.method || 'GET',
+            url: options.url,
+            headers: options.headers,
+            body: JSON.stringify(options.body || {}),
+          })
+          .then((e) => {
+            if (e.status == 200) {
+              options.success()
+            } else {
+              options.fail(e.status)
+            }
+          })
+          .catch((e) => {
             options.fail(e.status)
-          }
-        }).catch((e) => {
-          options.fail(e.status)
-        })
+          })
         // var xhr = new XMLHttpRequest();
         // xhr.onreadystatechange = function () {
         //     if (xhr.readyState == 4) {
@@ -7679,18 +9767,27 @@
         converNum: 1,
         msgNum: 1,
         isMsgStart: true,
-        isConvStart: true
+        isConvStart: true,
       }
       return MessageUtil
     })()
     RongIMLib.MessageUtil = MessageUtil
     /**
-         * 工具类
-         */
+     * 工具类
+     */
     var MessageIdHandler = (function () {
-      function MessageIdHandler () {}
+      function MessageIdHandler() {}
       MessageIdHandler.init = function () {
-        this.messageId = +(RongIMLib.RongIMClient._storageProvider.getItem(RongIMLib.Navigation.Endpoint.userId + 'msgId') || RongIMLib.RongIMClient._storageProvider.setItem(RongIMLib.Navigation.Endpoint.userId + 'msgId', 0) || 0)
+        this.messageId = +(
+          RongIMLib.RongIMClient._storageProvider.getItem(
+            RongIMLib.Navigation.Endpoint.userId + 'msgId'
+          ) ||
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            RongIMLib.Navigation.Endpoint.userId + 'msgId',
+            0
+          ) ||
+          0
+        )
       }
       MessageIdHandler.messageIdPlus = function (method) {
         RongIMLib.RongIMClient._memoryStore.depend.isPolling && this.init()
@@ -7699,12 +9796,20 @@
           return false
         }
         this.messageId++
-        RongIMLib.RongIMClient._memoryStore.depend.isPolling && RongIMLib.RongIMClient._storageProvider.setItem(RongIMLib.Navigation.Endpoint.userId + 'msgId', this.messageId)
+        RongIMLib.RongIMClient._memoryStore.depend.isPolling &&
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            RongIMLib.Navigation.Endpoint.userId + 'msgId',
+            this.messageId
+          )
         return this.messageId
       }
       MessageIdHandler.clearMessageId = function () {
         this.messageId = 0
-        RongIMLib.RongIMClient._memoryStore.depend.isPolling && RongIMLib.RongIMClient._storageProvider.setItem(RongIMLib.Navigation.Endpoint.userId + 'msgId', this.messageId)
+        RongIMLib.RongIMClient._memoryStore.depend.isPolling &&
+          RongIMLib.RongIMClient._storageProvider.setItem(
+            RongIMLib.Navigation.Endpoint.userId + 'msgId',
+            this.messageId
+          )
       }
       MessageIdHandler.getMessageId = function () {
         RongIMLib.RongIMClient._memoryStore.depend.isPolling && this.init()
@@ -7715,10 +9820,10 @@
     })()
     RongIMLib.MessageIdHandler = MessageIdHandler
     var RongInnerTools = (function () {
-      function RongInnerTools () {}
+      function RongInnerTools() {}
       RongInnerTools.convertUserStatus = function (entity) {
         entity = RongIMLib.RongUtil.rename(entity, {
-          subUserId: 'userId'
+          subUserId: 'userId',
         })
         var status = JSON.parse(entity.status)
         var us = status.us
@@ -7728,7 +9833,7 @@
         entity.status = RongIMLib.RongUtil.rename(us, {
           o: 'online',
           p: 'platform',
-          s: 'status'
+          s: 'status',
         })
         return entity
       }
@@ -7736,14 +9841,18 @@
     })()
     RongIMLib.RongInnerTools = RongInnerTools
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var MessageContent = (function () {
-      function MessageContent (data) {
-        throw new Error('This method is abstract, you must implement this method in inherited class.')
+      function MessageContent(data) {
+        throw new Error(
+          'This method is abstract, you must implement this method in inherited class.'
+        )
       }
       MessageContent.obtain = function () {
-        throw new Error('This method is abstract, you must implement this method in inherited class.')
+        throw new Error(
+          'This method is abstract, you must implement this method in inherited class.'
+        )
       }
       return MessageContent
     })()
@@ -7751,7 +9860,7 @@
     var NotificationMessage = (function (_super) {
       __extends(NotificationMessage, _super)
 
-      function NotificationMessage () {
+      function NotificationMessage() {
         _super.apply(this, arguments)
       }
       return NotificationMessage
@@ -7760,14 +9869,14 @@
     var StatusMessage = (function (_super) {
       __extends(StatusMessage, _super)
 
-      function StatusMessage () {
+      function StatusMessage() {
         _super.apply(this, arguments)
       }
       return StatusMessage
     })(MessageContent)
     RongIMLib.StatusMessage = StatusMessage
     var ModelUtil = (function () {
-      function ModelUtil () {}
+      function ModelUtil() {}
       ModelUtil.modelClone = function (object) {
         var obj = {}
         for (var item in object) {
@@ -7797,10 +9906,10 @@
     })()
     RongIMLib.ModelUtil = ModelUtil
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var CustomerStatusMessage = (function () {
-      function CustomerStatusMessage (message) {
+      function CustomerStatusMessage(message) {
         this.messageName = 'CustomerStatusMessage'
         this.status = message.status
       }
@@ -7814,10 +9923,10 @@
     })()
     RongIMLib.CustomerStatusMessage = CustomerStatusMessage
     /**
-         * 客服转换响应消息的类型名
-         */
+     * 客服转换响应消息的类型名
+     */
     var ChangeModeResponseMessage = (function () {
-      function ChangeModeResponseMessage (message) {
+      function ChangeModeResponseMessage(message) {
         this.messageName = 'ChangeModeResponseMessage'
         this.code = message.code
         this.data = message.data
@@ -7833,11 +9942,11 @@
     })()
     RongIMLib.ChangeModeResponseMessage = ChangeModeResponseMessage
     /**
-         * 客服转换消息的类型名
-         * 此消息不计入未读消息数
-         */
+     * 客服转换消息的类型名
+     * 此消息不计入未读消息数
+     */
     var ChangeModeMessage = (function () {
-      function ChangeModeMessage (message) {
+      function ChangeModeMessage(message) {
         this.messageName = 'ChangeModeMessage'
         this.uid = message.uid
         this.sid = message.sid
@@ -7853,7 +9962,7 @@
     })()
     RongIMLib.ChangeModeMessage = ChangeModeMessage
     var CustomerStatusUpdateMessage = (function () {
-      function CustomerStatusUpdateMessage (message) {
+      function CustomerStatusUpdateMessage(message) {
         this.messageName = 'CustomerStatusUpdateMessage'
         this.serviceStatus = message.serviceStatus
         this.sid = message.sid
@@ -7868,7 +9977,7 @@
     })()
     RongIMLib.CustomerStatusUpdateMessage = CustomerStatusUpdateMessage
     var HandShakeMessage = (function () {
-      function HandShakeMessage (message) {
+      function HandShakeMessage(message) {
         this.messageName = 'HandShakeMessage'
         if (message) {
           this.requestInfo = message.requestInfo
@@ -7885,7 +9994,7 @@
     })()
     RongIMLib.HandShakeMessage = HandShakeMessage
     var CustomerContact = (function () {
-      function CustomerContact (message) {
+      function CustomerContact(message) {
         this.messageName = 'CustomerContact'
         this.page = message.page
         this.nickName = message.nickName
@@ -7900,7 +10009,7 @@
     })()
     RongIMLib.CustomerContact = CustomerContact
     var EvaluateMessage = (function () {
-      function EvaluateMessage (message) {
+      function EvaluateMessage(message) {
         this.messageName = 'EvaluateMessage'
         this.uid = message.uid
         this.sid = message.sid
@@ -7920,10 +10029,10 @@
     })()
     RongIMLib.EvaluateMessage = EvaluateMessage
     /**
-         * 客服握手响应消息的类型名
-         */
+     * 客服握手响应消息的类型名
+     */
     var HandShakeResponseMessage = (function () {
-      function HandShakeResponseMessage (message) {
+      function HandShakeResponseMessage(message) {
         this.messageName = 'HandShakeResponseMessage'
         this.msg = message.msg
         this.status = message.status
@@ -7939,7 +10048,7 @@
     })()
     RongIMLib.HandShakeResponseMessage = HandShakeResponseMessage
     var SuspendMessage = (function () {
-      function SuspendMessage (message) {
+      function SuspendMessage(message) {
         this.messageName = 'SuspendMessage'
         this.uid = message.uid
         this.sid = message.sid
@@ -7955,7 +10064,7 @@
     })()
     RongIMLib.SuspendMessage = SuspendMessage
     var TerminateMessage = (function () {
-      function TerminateMessage (message) {
+      function TerminateMessage(message) {
         this.messageName = 'TerminateMessage'
         this.code = message.code
         this.msg = message.msg
@@ -7971,10 +10080,10 @@
     })()
     RongIMLib.TerminateMessage = TerminateMessage
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var IsTypingStatusMessage = (function () {
-      function IsTypingStatusMessage (data) {
+      function IsTypingStatusMessage(data) {
         this.messageName = 'IsTypingStatusMessage'
         var msg = data
       }
@@ -7988,13 +10097,15 @@
     })()
     RongIMLib.IsTypingStatusMessage = IsTypingStatusMessage
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var InformationNotificationMessage = (function () {
-      function InformationNotificationMessage (message) {
+      function InformationNotificationMessage(message) {
         this.messageName = 'InformationNotificationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> InformationNotificationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> InformationNotificationMessage.'
+          )
         }
         this.message = message.message
         this.extra = message.extra
@@ -8005,7 +10116,7 @@
       InformationNotificationMessage.obtain = function (message) {
         return new InformationNotificationMessage({
           message: message,
-          extra: ''
+          extra: '',
         })
       }
       InformationNotificationMessage.prototype.encode = function () {
@@ -8015,13 +10126,17 @@
     })()
     RongIMLib.InformationNotificationMessage = InformationNotificationMessage
     var CommandMessage = (function () {
-      function CommandMessage (message) {
+      function CommandMessage(message) {
         this.messageName = 'CommandMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> CommandMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> CommandMessage.'
+          )
         }
         try {
-          if (Object.prototype.toString.call(message.data) == '[object String]') {
+          if (
+            Object.prototype.toString.call(message.data) == '[object String]'
+          ) {
             this.data = JSON.parse(message.data)
           } else {
             this.data = message.data
@@ -8035,7 +10150,7 @@
       CommandMessage.obtain = function (data) {
         return new CommandMessage({
           data: data,
-          extra: ''
+          extra: '',
         })
       }
       CommandMessage.prototype.encode = function () {
@@ -8045,10 +10160,12 @@
     })()
     RongIMLib.CommandMessage = CommandMessage
     var ContactNotificationMessage = (function () {
-      function ContactNotificationMessage (message) {
+      function ContactNotificationMessage(message) {
         this.messageName = 'ContactNotificationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> ContactNotificationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> ContactNotificationMessage.'
+          )
         }
         this.operation = message.operation
         this.targetUserId = message.targetUserId
@@ -8059,32 +10176,44 @@
           this.user = message.user
         }
       }
-      ContactNotificationMessage.obtain = function (operation, sourceUserId, targetUserId, message) {
+      ContactNotificationMessage.obtain = function (
+        operation,
+        sourceUserId,
+        targetUserId,
+        message
+      ) {
         return new InformationNotificationMessage({
           operation: operation,
           sourceUserId: sourceUserId,
           targetUserId: targetUserId,
-          message: message
+          message: message,
         })
       }
       ContactNotificationMessage.prototype.encode = function () {
         return JSON.stringify(RongIMLib.ModelUtil.modelClone(this))
       }
-      ContactNotificationMessage.CONTACT_OPERATION_ACCEPT_RESPONSE = 'ContactOperationAcceptResponse'
-      ContactNotificationMessage.CONTACT_OPERATION_REJECT_RESPONSE = 'ContactOperationRejectResponse'
-      ContactNotificationMessage.CONTACT_OPERATION_REQUEST = 'ContactOperationRequest'
+      ContactNotificationMessage.CONTACT_OPERATION_ACCEPT_RESPONSE =
+        'ContactOperationAcceptResponse'
+      ContactNotificationMessage.CONTACT_OPERATION_REJECT_RESPONSE =
+        'ContactOperationRejectResponse'
+      ContactNotificationMessage.CONTACT_OPERATION_REQUEST =
+        'ContactOperationRequest'
       return ContactNotificationMessage
     })()
     RongIMLib.ContactNotificationMessage = ContactNotificationMessage
     var ProfileNotificationMessage = (function () {
-      function ProfileNotificationMessage (message) {
+      function ProfileNotificationMessage(message) {
         this.messageName = 'ProfileNotificationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> ProfileNotificationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> ProfileNotificationMessage.'
+          )
         }
         this.operation = message.operation
         try {
-          if (Object.prototype.toString.call(message.data) == '[object String]') {
+          if (
+            Object.prototype.toString.call(message.data) == '[object String]'
+          ) {
             this.data = JSON.parse(message.data)
           } else {
             this.data = message.data
@@ -8100,7 +10229,7 @@
       ProfileNotificationMessage.obtain = function (operation, data) {
         return new ProfileNotificationMessage({
           operation: operation,
-          data: data
+          data: data,
         })
       }
       ProfileNotificationMessage.prototype.encode = function () {
@@ -8110,13 +10239,17 @@
     })()
     RongIMLib.ProfileNotificationMessage = ProfileNotificationMessage
     var CommandNotificationMessage = (function () {
-      function CommandNotificationMessage (message) {
+      function CommandNotificationMessage(message) {
         this.messageName = 'CommandNotificationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> ProfileNotificationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> ProfileNotificationMessage.'
+          )
         }
         try {
-          if (Object.prototype.toString.call(message.data) == '[object String]') {
+          if (
+            Object.prototype.toString.call(message.data) == '[object String]'
+          ) {
             this.data = JSON.parse(message.data)
           } else {
             this.data = message.data
@@ -8134,7 +10267,7 @@
         return new CommandNotificationMessage({
           name: name,
           data: data,
-          extra: ''
+          extra: '',
         })
       }
       CommandNotificationMessage.prototype.encode = function () {
@@ -8144,10 +10277,12 @@
     })()
     RongIMLib.CommandNotificationMessage = CommandNotificationMessage
     var DiscussionNotificationMessage = (function () {
-      function DiscussionNotificationMessage (message) {
+      function DiscussionNotificationMessage(message) {
         this.messageName = 'DiscussionNotificationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> DiscussionNotificationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> DiscussionNotificationMessage.'
+          )
         }
         this.extra = message.extra
         this.extension = message.extension
@@ -8166,10 +10301,12 @@
     })()
     RongIMLib.DiscussionNotificationMessage = DiscussionNotificationMessage
     var GroupNotificationMessage = (function () {
-      function GroupNotificationMessage (msg) {
+      function GroupNotificationMessage(msg) {
         this.messageName = 'GroupNotificationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> GroupNotificationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> GroupNotificationMessage.'
+          )
         }
         msg.operatorUserId && (this.operatorUserId = msg.operatorUserId)
         msg.operation && (this.operation = msg.operation)
@@ -8184,13 +10321,15 @@
     })()
     RongIMLib.GroupNotificationMessage = GroupNotificationMessage
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var TextMessage = (function () {
-      function TextMessage (message) {
+      function TextMessage(message) {
         this.messageName = 'TextMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> TextMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> TextMessage.'
+          )
         }
         this.content = message.content
         this.extra = message.extra
@@ -8204,7 +10343,7 @@
       TextMessage.obtain = function (text) {
         return new TextMessage({
           extra: '',
-          content: text
+          content: text,
         })
       }
       TextMessage.prototype.encode = function () {
@@ -8214,10 +10353,12 @@
     })()
     RongIMLib.TextMessage = TextMessage
     var TypingStatusMessage = (function () {
-      function TypingStatusMessage (message) {
+      function TypingStatusMessage(message) {
         this.messageName = 'TypingStatusMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> TypingStatusMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> TypingStatusMessage.'
+          )
         }
         this.typingContentType = message.typingContentType
         this.data = message.data
@@ -8225,7 +10366,7 @@
       TypingStatusMessage.obtain = function (typingContentType, data) {
         return new TypingStatusMessage({
           typingContentType: typingContentType,
-          data: data
+          data: data,
         })
       }
       TypingStatusMessage.prototype.encode = function () {
@@ -8235,20 +10376,26 @@
     })()
     RongIMLib.TypingStatusMessage = TypingStatusMessage
     var ReadReceiptMessage = (function () {
-      function ReadReceiptMessage (message) {
+      function ReadReceiptMessage(message) {
         this.messageName = 'ReadReceiptMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> ReadReceiptMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> ReadReceiptMessage.'
+          )
         }
         this.lastMessageSendTime = message.lastMessageSendTime
         this.messageUId = message.messageUId
         this.type = message.type
       }
-      ReadReceiptMessage.obtain = function (messageUId, lastMessageSendTime, type) {
+      ReadReceiptMessage.obtain = function (
+        messageUId,
+        lastMessageSendTime,
+        type
+      ) {
         return new ReadReceiptMessage({
           messageUId: messageUId,
           lastMessageSendTime: lastMessageSendTime,
-          type: type
+          type: type,
         })
       }
       ReadReceiptMessage.prototype.encode = function () {
@@ -8258,10 +10405,12 @@
     })()
     RongIMLib.ReadReceiptMessage = ReadReceiptMessage
     var VoiceMessage = (function () {
-      function VoiceMessage (message) {
+      function VoiceMessage(message) {
         this.messageName = 'VoiceMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> VoiceMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> VoiceMessage.'
+          )
         }
         this.content = message.content
         this.duration = message.duration
@@ -8277,7 +10426,7 @@
         return new VoiceMessage({
           content: base64Content,
           duration: duration,
-          extra: ''
+          extra: '',
         })
       }
       VoiceMessage.prototype.encode = function () {
@@ -8287,7 +10436,7 @@
     })()
     RongIMLib.VoiceMessage = VoiceMessage
     var RecallCommandMessage = (function () {
-      function RecallCommandMessage (message) {
+      function RecallCommandMessage(message) {
         this.messageName = 'RecallCommandMessage'
         this.messageUId = message.messageUId
         this.conversationType = message.conversationType
@@ -8303,10 +10452,12 @@
     })()
     RongIMLib.RecallCommandMessage = RecallCommandMessage
     var ImageMessage = (function () {
-      function ImageMessage (message) {
+      function ImageMessage(message) {
         this.messageName = 'ImageMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> ImageMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> ImageMessage.'
+          )
         }
         this.content = message.content
         this.imageUri = message.imageUri
@@ -8320,7 +10471,7 @@
         return new ImageMessage({
           content: content,
           imageUri: imageUri,
-          extra: ''
+          extra: '',
         })
       }
       ImageMessage.prototype.encode = function () {
@@ -8330,10 +10481,12 @@
     })()
     RongIMLib.ImageMessage = ImageMessage
     var LocationMessage = (function () {
-      function LocationMessage (message) {
+      function LocationMessage(message) {
         this.messageName = 'LocationMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> LocationMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> LocationMessage.'
+          )
         }
         this.latitude = message.latitude
         this.longitude = message.longitude
@@ -8353,7 +10506,7 @@
           longitude: longitude,
           poi: poi,
           content: content,
-          extra: ''
+          extra: '',
         })
       }
       LocationMessage.prototype.encode = function () {
@@ -8363,10 +10516,12 @@
     })()
     RongIMLib.LocationMessage = LocationMessage
     var RichContentMessage = (function () {
-      function RichContentMessage (message) {
+      function RichContentMessage(message) {
         this.messageName = 'RichContentMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> RichContentMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> RichContentMessage.'
+          )
         }
         this.title = message.title
         this.content = message.content
@@ -8383,7 +10538,7 @@
           content: content,
           imageUri: imageUri,
           url: url,
-          extra: ''
+          extra: '',
         })
       }
       RichContentMessage.prototype.encode = function () {
@@ -8393,7 +10548,7 @@
     })()
     RongIMLib.RichContentMessage = RichContentMessage
     var JrmfRedPacketMessage = (function () {
-      function JrmfRedPacketMessage (message) {
+      function JrmfRedPacketMessage(message) {
         this.messageName = 'JrmfRedPacketMessage'
         message && (this.message = message)
       }
@@ -8404,7 +10559,7 @@
     })()
     RongIMLib.JrmfRedPacketMessage = JrmfRedPacketMessage
     var JrmfRedPacketOpenedMessage = (function () {
-      function JrmfRedPacketOpenedMessage (message) {
+      function JrmfRedPacketOpenedMessage(message) {
         this.messageName = 'JrmfRedPacketOpenedMessage'
         message && (this.message = message)
       }
@@ -8415,10 +10570,12 @@
     })()
     RongIMLib.JrmfRedPacketOpenedMessage = JrmfRedPacketOpenedMessage
     var UnknownMessage = (function () {
-      function UnknownMessage (message) {
+      function UnknownMessage(message) {
         this.messageName = 'UnknownMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> UnknownMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> UnknownMessage.'
+          )
         }
         this.message = message
       }
@@ -8429,10 +10586,12 @@
     })()
     RongIMLib.UnknownMessage = UnknownMessage
     var PublicServiceCommandMessage = (function () {
-      function PublicServiceCommandMessage (message) {
+      function PublicServiceCommandMessage(message) {
         this.messageName = 'PublicServiceCommandMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> PublicServiceCommandMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> PublicServiceCommandMessage.'
+          )
         }
         this.content = message.content
         this.extra = message.extra
@@ -8449,7 +10608,7 @@
           content: '',
           command: '',
           menuItem: item,
-          extra: ''
+          extra: '',
         })
       }
       PublicServiceCommandMessage.prototype.encode = function () {
@@ -8459,7 +10618,7 @@
     })()
     RongIMLib.PublicServiceCommandMessage = PublicServiceCommandMessage
     var PublicServiceMultiRichContentMessage = (function () {
-      function PublicServiceMultiRichContentMessage (messages) {
+      function PublicServiceMultiRichContentMessage(messages) {
         this.messageName = 'PublicServiceMultiRichContentMessage'
         this.richContentMessages = messages
       }
@@ -8470,9 +10629,10 @@
     })()
     RongIMLib.PublicServiceMultiRichContentMessage = PublicServiceMultiRichContentMessage
     var SyncReadStatusMessage = (function () {
-      function SyncReadStatusMessage (message) {
+      function SyncReadStatusMessage(message) {
         this.messageName = 'SyncReadStatusMessage'
-        message.lastMessageSendTime && (this.lastMessageSendTime = message.lastMessageSendTime)
+        message.lastMessageSendTime &&
+          (this.lastMessageSendTime = message.lastMessageSendTime)
       }
       SyncReadStatusMessage.prototype.encode = function () {
         return JSON.stringify(RongIMLib.ModelUtil.modelClone(this))
@@ -8481,7 +10641,7 @@
     })()
     RongIMLib.SyncReadStatusMessage = SyncReadStatusMessage
     var ReadReceiptRequestMessage = (function () {
-      function ReadReceiptRequestMessage (message) {
+      function ReadReceiptRequestMessage(message) {
         this.messageName = 'ReadReceiptRequestMessage'
         message.messageUId && (this.messageUId = message.messageUId)
       }
@@ -8492,9 +10652,10 @@
     })()
     RongIMLib.ReadReceiptRequestMessage = ReadReceiptRequestMessage
     var ReadReceiptResponseMessage = (function () {
-      function ReadReceiptResponseMessage (message) {
+      function ReadReceiptResponseMessage(message) {
         this.messageName = 'ReadReceiptResponseMessage'
-        message.receiptMessageDic && (this.receiptMessageDic = message.receiptMessageDic)
+        message.receiptMessageDic &&
+          (this.receiptMessageDic = message.receiptMessageDic)
       }
       ReadReceiptResponseMessage.prototype.encode = function () {
         return JSON.stringify(RongIMLib.ModelUtil.modelClone(this))
@@ -8503,7 +10664,7 @@
     })()
     RongIMLib.ReadReceiptResponseMessage = ReadReceiptResponseMessage
     var PublicServiceRichContentMessage = (function () {
-      function PublicServiceRichContentMessage (message) {
+      function PublicServiceRichContentMessage(message) {
         this.messageName = 'PublicServiceRichContentMessage'
         this.richContentMessage = message
       }
@@ -8514,7 +10675,7 @@
     })()
     RongIMLib.PublicServiceRichContentMessage = PublicServiceRichContentMessage
     var FileMessage = (function () {
-      function FileMessage (message) {
+      function FileMessage(message) {
         this.messageName = 'FileMessage'
         message.name && (this.name = message.name)
         message.size && (this.size = message.size)
@@ -8528,7 +10689,7 @@
           name: msg.name,
           size: msg.size,
           type: msg.type,
-          fileUrl: msg.fileUrl
+          fileUrl: msg.fileUrl,
         })
       }
       FileMessage.prototype.encode = function () {
@@ -8538,7 +10699,7 @@
     })()
     RongIMLib.FileMessage = FileMessage
     var HQVoiceMessage = (function () {
-      function HQVoiceMessage (message) {
+      function HQVoiceMessage(message) {
         this.messageName = 'HQVoiceMessage'
         this.type = message.type || 'aac'
         message.localPath && (this.localPath = message.localPath)
@@ -8554,7 +10715,7 @@
     })()
     RongIMLib.HQVoiceMessage = HQVoiceMessage
     var AcceptMessage = (function () {
-      function AcceptMessage (message) {
+      function AcceptMessage(message) {
         this.messageName = 'AcceptMessage'
         this.mediaId = message.mediaId
         this.callId = message.callId
@@ -8569,7 +10730,7 @@
     })()
     RongIMLib.AcceptMessage = AcceptMessage
     var RingingMessage = (function () {
-      function RingingMessage (message) {
+      function RingingMessage(message) {
         this.messageName = 'RingingMessage'
         this.callId = message.callId
       }
@@ -8580,7 +10741,7 @@
     })()
     RongIMLib.RingingMessage = RingingMessage
     var SummaryMessage = (function () {
-      function SummaryMessage (message) {
+      function SummaryMessage(message) {
         this.messageName = 'SummaryMessage'
         this.caller = message.caller
         this.inviter = message.inviter
@@ -8598,7 +10759,7 @@
     })()
     RongIMLib.SummaryMessage = SummaryMessage
     var HungupMessage = (function () {
-      function HungupMessage (message) {
+      function HungupMessage(message) {
         this.messageName = 'HungupMessage'
         this.callId = message.callId
         this.reason = message.reason
@@ -8612,7 +10773,7 @@
     })()
     RongIMLib.HungupMessage = HungupMessage
     var InviteMessage = (function () {
-      function InviteMessage (message) {
+      function InviteMessage(message) {
         this.messageName = 'InviteMessage'
         this.mediaId = message.mediaId
         this.callId = message.callId
@@ -8632,7 +10793,7 @@
     })()
     RongIMLib.InviteMessage = InviteMessage
     var MediaModifyMessage = (function () {
-      function MediaModifyMessage (message) {
+      function MediaModifyMessage(message) {
         this.messageName = 'MediaModifyMessage'
         this.callId = message.callId
         this.mediaType = message.mediaType
@@ -8646,7 +10807,7 @@
     })()
     RongIMLib.MediaModifyMessage = MediaModifyMessage
     var MemberModifyMessage = (function () {
-      function MemberModifyMessage (message) {
+      function MemberModifyMessage(message) {
         this.messageName = 'MemberModifyMessage'
         this.modifyMemType = message.modifyMemType
         this.callId = message.callId
@@ -8669,10 +10830,12 @@
     })()
     RongIMLib.MemberModifyMessage = MemberModifyMessage
     var RCCombineMessage = (function () {
-      function RCCombineMessage (message) {
+      function RCCombineMessage(message) {
         this.messageName = 'RCCombineMessage'
         if (arguments.length == 0) {
-          throw new Error('Can not instantiate with empty parameters, use obtain method instead -> RCCombineMessage.')
+          throw new Error(
+            'Can not instantiate with empty parameters, use obtain method instead -> RCCombineMessage.'
+          )
         }
         this.nameList = message.nameList
         this.remoteUrl = message.remoteUrl
@@ -8686,7 +10849,7 @@
           extra: '',
           content: remoteUrl,
           nameList: nameList,
-          summaryList: summaryList
+          summaryList: summaryList,
         })
       }
       RCCombineMessage.prototype.encode = function () {
@@ -8696,10 +10859,10 @@
     })()
     RongIMLib.RCCombineMessage = RCCombineMessage
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var ChannelInfo = (function () {
-      function ChannelInfo (Id, Key) {
+      function ChannelInfo(Id, Key) {
         this.Id = Id
         this.Key = Key
       }
@@ -8707,7 +10870,7 @@
     })()
     RongIMLib.ChannelInfo = ChannelInfo
     var UserStatus = (function () {
-      function UserStatus (platform, online, status) {
+      function UserStatus(platform, online, status) {
         this.platform = platform
         this.online = online
         this.status = status
@@ -8716,12 +10879,12 @@
     })()
     RongIMLib.UserStatus = UserStatus
     var MentionedInfo = (function () {
-      function MentionedInfo (type, userIdList, mentionedContent) {}
+      function MentionedInfo(type, userIdList, mentionedContent) {}
       return MentionedInfo
     })()
     RongIMLib.MentionedInfo = MentionedInfo
     var DeleteMessage = (function () {
-      function DeleteMessage (msgId, msgDataTime, direct) {
+      function DeleteMessage(msgId, msgDataTime, direct) {
         this.msgId = msgId
         this.msgDataTime = msgDataTime
         this.direct = direct
@@ -8730,17 +10893,47 @@
     })()
     RongIMLib.DeleteMessage = DeleteMessage
     var CustomServiceConfig = (function () {
-      function CustomServiceConfig (isBlack, companyName, companyUrl) {}
+      function CustomServiceConfig(isBlack, companyName, companyUrl) {}
       return CustomServiceConfig
     })()
     RongIMLib.CustomServiceConfig = CustomServiceConfig
     var CustomServiceSession = (function () {
-      function CustomServiceSession (uid, cid, pid, isQuited, type, adminHelloWord, adminOfflineWord) {}
+      function CustomServiceSession(
+        uid,
+        cid,
+        pid,
+        isQuited,
+        type,
+        adminHelloWord,
+        adminOfflineWord
+      ) {}
       return CustomServiceSession
     })()
     RongIMLib.CustomServiceSession = CustomServiceSession
     var Conversation = (function () {
-      function Conversation (conversationTitle, conversationType, draft, isTop, latestMessage, latestMessageId, notificationStatus, objectName, receivedStatus, receivedTime, senderUserId, senderUserName, sentStatus, sentTime, targetId, unreadMessageCount, senderPortraitUri, isHidden, mentionedMsg, hasUnreadMention, _readTime) {
+      function Conversation(
+        conversationTitle,
+        conversationType,
+        draft,
+        isTop,
+        latestMessage,
+        latestMessageId,
+        notificationStatus,
+        objectName,
+        receivedStatus,
+        receivedTime,
+        senderUserId,
+        senderUserName,
+        sentStatus,
+        sentTime,
+        targetId,
+        unreadMessageCount,
+        senderPortraitUri,
+        isHidden,
+        mentionedMsg,
+        hasUnreadMention,
+        _readTime
+      ) {
         this.conversationTitle = conversationTitle
         this.conversationType = conversationType
         this.draft = draft
@@ -8765,14 +10958,14 @@
       }
       Conversation.prototype.setTop = function () {
         RongIMLib.RongIMClient._dataAccessProvider.addConversation(this, {
-          onSuccess: function (data) {}
+          onSuccess: function (data) {},
         })
       }
       return Conversation
     })()
     RongIMLib.Conversation = Conversation
     var Discussion = (function () {
-      function Discussion (creatorId, id, memberIdList, name, isOpen) {
+      function Discussion(creatorId, id, memberIdList, name, isOpen) {
         this.creatorId = creatorId
         this.id = id
         this.memberIdList = memberIdList
@@ -8783,7 +10976,7 @@
     })()
     RongIMLib.Discussion = Discussion
     var Group = (function () {
-      function Group (id, name, portraitUri) {
+      function Group(id, name, portraitUri) {
         this.id = id
         this.name = name
         this.portraitUri = portraitUri
@@ -8792,7 +10985,25 @@
     })()
     RongIMLib.Group = Group
     var Message = (function () {
-      function Message (content, conversationType, extra, objectName, messageDirection, messageId, receivedStatus, receivedTime, senderUserId, sentStatus, sentTime, targetId, messageType, messageUId, isLocalMessage, offLineMessage, receiptResponse) {
+      function Message(
+        content,
+        conversationType,
+        extra,
+        objectName,
+        messageDirection,
+        messageId,
+        receivedStatus,
+        receivedTime,
+        senderUserId,
+        sentStatus,
+        sentTime,
+        targetId,
+        messageType,
+        messageUId,
+        isLocalMessage,
+        offLineMessage,
+        receiptResponse
+      ) {
         this.content = content
         this.conversationType = conversationType
         this.extra = extra
@@ -8815,7 +11026,7 @@
     })()
     RongIMLib.Message = Message
     var MessageTag = (function () {
-      function MessageTag (isCounted, isPersited) {
+      function MessageTag(isCounted, isPersited) {
         this.isCounted = isCounted
         this.isPersited = isPersited
       }
@@ -8834,20 +11045,20 @@
         var statusMap = {
           3: {
             isCounted: true,
-            isPersited: true
+            isPersited: true,
           },
           2: {
             isCounted: true,
-            isPersited: false
+            isPersited: false,
           },
           1: {
             isCounted: true,
-            isPersited: true
+            isPersited: true,
           },
           0: {
             isCounted: true,
-            isPersited: true
-          }
+            isPersited: true,
+          },
         }
         return statusMap[status] || statusMap[3]
       }
@@ -8855,7 +11066,7 @@
     })()
     RongIMLib.MessageTag = MessageTag
     var PublicServiceMenuItem = (function () {
-      function PublicServiceMenuItem (id, name, type, sunMenuItems, url) {
+      function PublicServiceMenuItem(id, name, type, sunMenuItems, url) {
         this.id = id
         this.name = name
         this.type = type
@@ -8867,7 +11078,16 @@
     RongIMLib.PublicServiceMenuItem = PublicServiceMenuItem
     // TODO: TBD
     var PublicServiceProfile = (function () {
-      function PublicServiceProfile (conversationType, introduction, menu, name, portraitUri, publicServiceId, hasFollowed, isGlobal) {
+      function PublicServiceProfile(
+        conversationType,
+        introduction,
+        menu,
+        name,
+        portraitUri,
+        publicServiceId,
+        hasFollowed,
+        isGlobal
+      ) {
         this.conversationType = conversationType
         this.introduction = introduction
         this.menu = menu
@@ -8881,7 +11101,7 @@
     })()
     RongIMLib.PublicServiceProfile = PublicServiceProfile
     var UserInfo = (function () {
-      function UserInfo (id, name, portraitUri) {
+      function UserInfo(id, name, portraitUri) {
         this.id = id
         this.name = name
         this.portraitUri = portraitUri
@@ -8890,7 +11110,7 @@
     })()
     RongIMLib.UserInfo = UserInfo
     var User = (function () {
-      function User (id, token) {
+      function User(id, token) {
         this.id = id
         this.token = token
       }
@@ -8898,7 +11118,7 @@
     })()
     RongIMLib.User = User
     var Room = (function () {
-      function Room (id, user, mode, broadcastType, type) {
+      function Room(id, user, mode, broadcastType, type) {
         this.id = id
         this.user = user
         this.mode = mode
@@ -8909,16 +11129,21 @@
     })()
     RongIMLib.Room = Room
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var ServerDataProvider = (function () {
-      function ServerDataProvider () {
+      function ServerDataProvider() {
         this.userStatusListener = null
       }
       ServerDataProvider.prototype.init = function (appKey, options) {
         new RongIMLib.FeatureDectector(options.appCallback)
       }
-      ServerDataProvider.prototype.connect = function (token, callback, userId, option) {
+      ServerDataProvider.prototype.connect = function (
+        token,
+        callback,
+        userId,
+        option
+      ) {
         RongIMLib.RongIMClient.bridge = RongIMLib.Bridge.getInstance()
         RongIMLib.RongIMClient._memoryStore.token = token
         RongIMLib.RongIMClient._memoryStore.callback = callback
@@ -8927,13 +11152,17 @@
         var isConnecting = false
         var isConnected = false
         if (RongIMLib.Bridge._client && RongIMLib.Bridge._client.channel) {
-          isConnecting = (RongIMLib.Bridge._client.channel.connectionStatus == RongIMLib.ConnectionStatus.CONNECTING)
-          isConnected = (RongIMLib.Bridge._client.channel.connectionStatus == RongIMLib.ConnectionStatus.CONNECTED)
+          isConnecting =
+            RongIMLib.Bridge._client.channel.connectionStatus ==
+            RongIMLib.ConnectionStatus.CONNECTING
+          isConnected =
+            RongIMLib.Bridge._client.channel.connectionStatus ==
+            RongIMLib.ConnectionStatus.CONNECTED
         }
         if (isConnected || isConnecting) {
           return
         }
-        var isGreater = (RongIMLib.RongIMClient.otherDeviceLoginCount > 5)
+        var isGreater = RongIMLib.RongIMClient.otherDeviceLoginCount > 5
         if (isGreater) {
           callback.onError(RongIMLib.ConnectionStatus.ULTRALIMIT)
           return
@@ -8943,28 +11172,39 @@
           RongIMLib.RongIMClient._storageProvider.removeItem('servers')
         }
         // 循环设置监听事件，追加之后清空存放事件数据
-        for (var i = 0, len = RongIMLib.RongIMClient._memoryStore.listenerList.length; i < len; i++) {
-          RongIMLib.RongIMClient.bridge.setListener(RongIMLib.RongIMClient._memoryStore.listenerList[i])
+        for (
+          var i = 0,
+            len = RongIMLib.RongIMClient._memoryStore.listenerList.length;
+          i < len;
+          i++
+        ) {
+          RongIMLib.RongIMClient.bridge.setListener(
+            RongIMLib.RongIMClient._memoryStore.listenerList[i]
+          )
         }
         RongIMLib.RongIMClient._memoryStore.listenerList.length = 0
-        RongIMLib.RongIMClient.bridge.connect(RongIMLib.RongIMClient._memoryStore.appKey, token, {
-          onSuccess: function (data) {
-            setTimeout(function () {
-              callback.onSuccess(data)
-            })
-          },
-          onError: function (e) {
-            if (e == RongIMLib.ConnectionState.TOKEN_INCORRECT || !e) {
+        RongIMLib.RongIMClient.bridge.connect(
+          RongIMLib.RongIMClient._memoryStore.appKey,
+          token,
+          {
+            onSuccess: function (data) {
               setTimeout(function () {
-                callback.onTokenIncorrect()
+                callback.onSuccess(data)
               })
-            } else {
-              setTimeout(function () {
-                callback.onError(e)
-              })
-            }
+            },
+            onError: function (e) {
+              if (e == RongIMLib.ConnectionState.TOKEN_INCORRECT || !e) {
+                setTimeout(function () {
+                  callback.onTokenIncorrect()
+                })
+              } else {
+                setTimeout(function () {
+                  callback.onError(e)
+                })
+              }
+            },
           }
-        })
+        )
       }
       /*
                 config.auto: 默认 false, true 启用自动重连，启用则为必选参数
@@ -8977,7 +11217,14 @@
         if (!token) {
           throw new Error('reconnect: token is empty.')
         }
-        if (RongIMLib.Bridge._client && RongIMLib.Bridge._client.channel && RongIMLib.Bridge._client.channel.connectionStatus != RongIMLib.ConnectionStatus.CONNECTED && RongIMLib.Bridge._client.channel.connectionStatus != RongIMLib.ConnectionStatus.CONNECTING) {
+        if (
+          RongIMLib.Bridge._client &&
+          RongIMLib.Bridge._client.channel &&
+          RongIMLib.Bridge._client.channel.connectionStatus !=
+            RongIMLib.ConnectionStatus.CONNECTED &&
+          RongIMLib.Bridge._client.channel.connectionStatus !=
+            RongIMLib.ConnectionStatus.CONNECTING
+        ) {
           config = config || {}
           var key = config.auto ? 'auto' : 'custom'
           var handler = {
@@ -8996,7 +11243,7 @@
                     error: function () {
                       console.log('check network error')
                       repeat()
-                    }
+                    },
                   })
                 }
                 var repeat = function () {
@@ -9014,7 +11261,7 @@
               var url = config.url || 'cdn.ronghub.com/RongIMLib-2.2.6.min.js'
               var pathConfig = {
                 protocol: protocol,
-                path: url
+                path: url,
               }
               url = RongIMLib.RongUtil.formatProtoclPath(pathConfig)
               var rate = config.rate || [100, 1000, 3000, 6000, 10000, 18000]
@@ -9036,13 +11283,13 @@
                     return
                   }
                   RongIMLib.RongIMClient.connect(token, callback)
-                }
+                },
               }
               repeatConnect(opts)
             },
             custom: function () {
               RongIMLib.RongIMClient.connect(token, callback)
-            }
+            },
           }
           handler[key]()
         }
@@ -9054,11 +11301,21 @@
       ServerDataProvider.prototype.disconnect = function () {
         RongIMLib.RongIMClient.bridge.disconnect()
       }
-      ServerDataProvider.prototype.sendReceiptResponse = function (conversationType, targetId, sendCallback) {
-        var rspkey = RongIMLib.Bridge._client.userId + conversationType + targetId + 'RECEIVED'
+      ServerDataProvider.prototype.sendReceiptResponse = function (
+        conversationType,
+        targetId,
+        sendCallback
+      ) {
+        var rspkey =
+          RongIMLib.Bridge._client.userId +
+          conversationType +
+          targetId +
+          'RECEIVED'
         var me = this
         if (RongIMLib.RongUtil.supportLocalStorage()) {
-          var valObj = JSON.parse(RongIMLib.RongIMClient._storageProvider.getItem(rspkey))
+          var valObj = JSON.parse(
+            RongIMLib.RongIMClient._storageProvider.getItem(rspkey)
+          )
           if (valObj) {
             var vals = []
             for (var key in valObj) {
@@ -9076,18 +11333,21 @@
               }
               var obj = vals.splice(0, 1)[0]
               var rspMsg = new RongIMLib.ReadReceiptResponseMessage({
-                receiptMessageDic: obj
+                receiptMessageDic: obj,
               })
               me.sendMessage(conversationType, targetId, rspMsg, {
                 onSuccess: function (msg) {
                   var senderUserId = RongIMLib.MessageUtil.getFirstKey(obj)
                   valObj[senderUserId].isResponse = true
-                  RongIMLib.RongIMClient._storageProvider.setItem(rspkey, JSON.stringify(valObj))
+                  RongIMLib.RongIMClient._storageProvider.setItem(
+                    rspkey,
+                    JSON.stringify(valObj)
+                  )
                   sendCallback.onSuccess(msg)
                 },
                 onError: function (error, msg) {
                   sendCallback.onError(error, msg)
-                }
+                },
               })
             }, 200)
           } else {
@@ -9097,40 +11357,82 @@
           sendCallback.onSuccess()
         }
       }
-      ServerDataProvider.prototype.sendTypingStatusMessage = function (conversationType, targetId, messageName, sendCallback) {
+      ServerDataProvider.prototype.sendTypingStatusMessage = function (
+        conversationType,
+        targetId,
+        messageName,
+        sendCallback
+      ) {
         var me = this
         if (messageName in RongIMLib.RongIMClient.MessageParams) {
-          me.sendMessage(conversationType, targetId, RongIMLib.TypingStatusMessage.obtain(RongIMLib.RongIMClient.MessageParams[messageName].objectName, ''), {
-            onSuccess: function () {
-              setTimeout(function () {
-                sendCallback.onSuccess()
-              })
-            },
-            onError: function (errorCode) {
-              setTimeout(function () {
-                sendCallback.onError(errorCode, null)
-              })
-            },
-            onBefore: function () {}
-          })
+          me.sendMessage(
+            conversationType,
+            targetId,
+            RongIMLib.TypingStatusMessage.obtain(
+              RongIMLib.RongIMClient.MessageParams[messageName].objectName,
+              ''
+            ),
+            {
+              onSuccess: function () {
+                setTimeout(function () {
+                  sendCallback.onSuccess()
+                })
+              },
+              onError: function (errorCode) {
+                setTimeout(function () {
+                  sendCallback.onError(errorCode, null)
+                })
+              },
+              onBefore: function () {},
+            }
+          )
         }
       }
-      ServerDataProvider.prototype.sendRecallMessage = function (content, sendMessageCallback) {
+      ServerDataProvider.prototype.sendRecallMessage = function (
+        content,
+        sendMessageCallback
+      ) {
         var msg = new RongIMLib.RecallCommandMessage({
           conversationType: content.conversationType,
           targetId: content.targetId,
           sentTime: content.sentTime,
           messageUId: content.messageUId,
           extra: content.extra,
-          user: content.user
+          user: content.user,
         })
-        this.sendMessage(content.conversationType, content.senderUserId, msg, sendMessageCallback, false, null, null, 2)
+        this.sendMessage(
+          content.conversationType,
+          content.senderUserId,
+          msg,
+          sendMessageCallback,
+          false,
+          null,
+          null,
+          2
+        )
       }
-      ServerDataProvider.prototype.sendTextMessage = function (conversationType, targetId, content, sendMessageCallback) {
+      ServerDataProvider.prototype.sendTextMessage = function (
+        conversationType,
+        targetId,
+        content,
+        sendMessageCallback
+      ) {
         var msgContent = RongIMLib.TextMessage.obtain(content)
-        this.sendMessage(conversationType, targetId, msgContent, sendMessageCallback)
+        this.sendMessage(
+          conversationType,
+          targetId,
+          msgContent,
+          sendMessageCallback
+        )
       }
-      ServerDataProvider.prototype.getRemoteHistoryMessages = function (conversationType, targetId, timestamp, count, callback, config) {
+      ServerDataProvider.prototype.getRemoteHistoryMessages = function (
+        conversationType,
+        targetId,
+        timestamp,
+        count,
+        callback,
+        config
+      ) {
         if (count <= 1) {
           throw new Error('the count must be greater than 1.')
         }
@@ -9154,7 +11456,7 @@
                 */
         var limit = historyMessageLimit.get(key) || {}
         var hasMore = limit.hasMore
-        var isFecth = (hasMore || limit.time != timestamp)
+        var isFecth = hasMore || limit.time != timestamp
         // 正序获取消息时不做限制，防止有新消息导致无法获取
         if (!isFecth && order == 0) {
           return callback.onSuccess([], hasMore)
@@ -9165,49 +11467,69 @@
         modules.setTime(timestamp)
         modules.setCount(count)
         modules.setOrder(order)
-        RongIMLib.RongIMClient.bridge.queryMsg(HistoryMsgType[conversationType], RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), targetId, {
-          onSuccess: function (data) {
-            var fetchTime = RongIMLib.MessageUtil.int64ToTimestamp(data.syncTime)
-            RongIMLib.RongIMClient._memoryStore.lastReadTime.set(key, fetchTime)
-            historyMessageLimit.set(key, {
-              hasMore: !!data.hasMsg,
-              time: fetchTime
-            })
-            var list = data.list.reverse()
-            var tempMsg = null
-            var tempDir
-            var read = RongIMLib.SentStatus.READ
-            if (RongIMLib.RongUtil.supportLocalStorage()) {
-              for (var i = 0, len = list.length; i < len; i++) {
-                tempMsg = RongIMLib.MessageUtil.messageParser(list[i])
-                tempDir = JSON.parse(RongIMLib.RongIMClient._storageProvider.getItem(RongIMLib.Bridge._client.userId + tempMsg.messageUId + 'SENT'))
-                if (tempDir) {
-                  tempMsg.receiptResponse || (tempMsg.receiptResponse = {})
-                  tempMsg.receiptResponse[tempMsg.messageUId] = tempDir.count
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          HistoryMsgType[conversationType],
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          targetId,
+          {
+            onSuccess: function (data) {
+              var fetchTime = RongIMLib.MessageUtil.int64ToTimestamp(
+                data.syncTime
+              )
+              RongIMLib.RongIMClient._memoryStore.lastReadTime.set(
+                key,
+                fetchTime
+              )
+              historyMessageLimit.set(key, {
+                hasMore: !!data.hasMsg,
+                time: fetchTime,
+              })
+              var list = data.list.reverse()
+              var tempMsg = null
+              var tempDir
+              var read = RongIMLib.SentStatus.READ
+              if (RongIMLib.RongUtil.supportLocalStorage()) {
+                for (var i = 0, len = list.length; i < len; i++) {
+                  tempMsg = RongIMLib.MessageUtil.messageParser(list[i])
+                  tempDir = JSON.parse(
+                    RongIMLib.RongIMClient._storageProvider.getItem(
+                      RongIMLib.Bridge._client.userId +
+                        tempMsg.messageUId +
+                        'SENT'
+                    )
+                  )
+                  if (tempDir) {
+                    tempMsg.receiptResponse || (tempMsg.receiptResponse = {})
+                    tempMsg.receiptResponse[tempMsg.messageUId] = tempDir.count
+                  }
+                  tempMsg.sentStatus = read
+                  tempMsg.targetId = targetId
+                  list[i] = tempMsg
                 }
-                tempMsg.sentStatus = read
-                tempMsg.targetId = targetId
-                list[i] = tempMsg
+              } else {
+                for (var i = 0, len = list.length; i < len; i++) {
+                  var tempMsg = RongIMLib.MessageUtil.messageParser(list[i])
+                  tempMsg.sentStatus = read
+                  list[i] = tempMsg
+                }
               }
-            } else {
-              for (var i = 0, len = list.length; i < len; i++) {
-                var tempMsg = RongIMLib.MessageUtil.messageParser(list[i])
-                tempMsg.sentStatus = read
-                list[i] = tempMsg
-              }
-            }
-            setTimeout(function () {
-              callback.onSuccess(list, !!data.hasMsg)
-            })
+              setTimeout(function () {
+                callback.onSuccess(list, !!data.hasMsg)
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
-          }
-        }, 'HistoryMessagesOuput')
+          'HistoryMessagesOuput'
+        )
       }
-      ServerDataProvider.prototype.hasRemoteUnreadMessages = function (token, callback) {
+      ServerDataProvider.prototype.hasRemoteUnreadMessages = function (
+        token,
+        callback
+      ) {
         var xss = null
         window.RCCallback = function (x) {
           setTimeout(function () {
@@ -9216,7 +11538,14 @@
           xss.parentNode.removeChild(xss)
         }
         xss = document.createElement('script')
-        xss.src = RongIMLib.RongIMClient._memoryStore.depend.api + '/message/exist.js?appKey=' + encodeURIComponent(RongIMLib.RongIMClient._memoryStore.appKey) + '&token=' + encodeURIComponent(token) + '&callBack=RCCallback&_=' + RongIMLib.RongUtil.getTimestamp()
+        xss.src =
+          RongIMLib.RongIMClient._memoryStore.depend.api +
+          '/message/exist.js?appKey=' +
+          encodeURIComponent(RongIMLib.RongIMClient._memoryStore.appKey) +
+          '&token=' +
+          encodeURIComponent(token) +
+          '&callBack=RCCallback&_=' +
+          RongIMLib.RongUtil.getTimestamp()
         document.body.appendChild(xss)
         xss.onerror = function () {
           setTimeout(function () {
@@ -9225,7 +11554,11 @@
           xss.parentNode.removeChild(xss)
         }
       }
-      ServerDataProvider.prototype.getRemoteConversationList = function (callback, conversationTypes, count) {
+      ServerDataProvider.prototype.getRemoteConversationList = function (
+        callback,
+        conversationTypes,
+        count
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RelationsInput()
         var self = this
         modules.setType(1)
@@ -9234,343 +11567,542 @@
         } else {
           modules.setCount(count)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg(26, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (list) {
-            if (list.info) {
-              list.info = list.info.reverse()
-              for (var i = 0, len = list.info.length; i < len; i++) {
-                RongIMLib.RongIMClient.getInstance().pottingConversation(list.info[i])
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          26,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (list) {
+              if (list.info) {
+                list.info = list.info.reverse()
+                for (var i = 0, len = list.info.length; i < len; i++) {
+                  RongIMLib.RongIMClient.getInstance().pottingConversation(
+                    list.info[i]
+                  )
+                }
               }
-            }
-            var conversations = RongIMLib.RongIMClient._memoryStore.conversationList
-            setTimeout(function () {
-              if (conversationTypes) {
-                return callback.onSuccess(self.filterConversations(conversationTypes, conversations))
-              }
-              callback.onSuccess(conversations)
-            })
+              var conversations =
+                RongIMLib.RongIMClient._memoryStore.conversationList
+              setTimeout(function () {
+                if (conversationTypes) {
+                  return callback.onSuccess(
+                    self.filterConversations(conversationTypes, conversations)
+                  )
+                }
+                callback.onSuccess(conversations)
+              })
+            },
+            onError: function (error) {
+              callback.onError(error)
+            },
           },
-          onError: function (error) {
-            callback.onError(error)
-          }
-        }, 'RelationsOutput')
+          'RelationsOutput'
+        )
       }
-      ServerDataProvider.prototype.addMemberToDiscussion = function (discussionId, userIdList, callback) {
+      ServerDataProvider.prototype.addMemberToDiscussion = function (
+        discussionId,
+        userIdList,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.ChannelInvitationInput()
         modules.setUsers(userIdList)
-        RongIMLib.RongIMClient.bridge.queryMsg(0, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), discussionId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          0,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          discussionId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.createDiscussion = function (name, userIdList, callback) {
+      ServerDataProvider.prototype.createDiscussion = function (
+        name,
+        userIdList,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.CreateDiscussionInput()
         var self = this
         modules.setName(name)
-        RongIMLib.RongIMClient.bridge.queryMsg(1, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (discussId) {
-            if (userIdList.length > 0) {
-              self.addMemberToDiscussion(discussId, userIdList, {
-                onSuccess: function () {},
-                onError: function (error) {
-                  setTimeout(function () {
-                    callback.onError(error)
-                  })
-                }
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          1,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (discussId) {
+              if (userIdList.length > 0) {
+                self.addMemberToDiscussion(discussId, userIdList, {
+                  onSuccess: function () {},
+                  onError: function (error) {
+                    setTimeout(function () {
+                      callback.onError(error)
+                    })
+                  },
+                })
+              }
+              setTimeout(function () {
+                callback.onSuccess(discussId)
               })
-            }
-            setTimeout(function () {
-              callback.onSuccess(discussId)
-            })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
-          }
-        }, 'CreateDiscussionOutput')
+          'CreateDiscussionOutput'
+        )
       }
-      ServerDataProvider.prototype.getDiscussion = function (discussionId, callback) {
+      ServerDataProvider.prototype.getDiscussion = function (
+        discussionId,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.ChannelInfoInput()
         modules.setNothing(1)
-        RongIMLib.RongIMClient.bridge.queryMsg(4, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), discussionId, {
-          onSuccess: function (data) {
-            setTimeout(function () {
-              callback.onSuccess(data)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          4,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          discussionId,
+          {
+            onSuccess: function (data) {
+              setTimeout(function () {
+                callback.onSuccess(data)
+              })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                callback.onError(errorCode)
+              })
+            },
           },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              callback.onError(errorCode)
-            })
-          }
-        }, 'ChannelInfoOutput')
+          'ChannelInfoOutput'
+        )
       }
-      ServerDataProvider.prototype.quitDiscussion = function (discussionId, callback) {
+      ServerDataProvider.prototype.quitDiscussion = function (
+        discussionId,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.LeaveChannelInput()
         modules.setNothing(1)
-        RongIMLib.RongIMClient.bridge.queryMsg(7, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), discussionId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              callback.onError(errorCode)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          7,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          discussionId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.removeMemberFromDiscussion = function (discussionId, userId, callback) {
+      ServerDataProvider.prototype.removeMemberFromDiscussion = function (
+        discussionId,
+        userId,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.ChannelEvictionInput()
         modules.setUser(userId)
-        RongIMLib.RongIMClient.bridge.queryMsg(9, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), discussionId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              callback.onError(errorCode)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          9,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          discussionId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                callback.onError(errorCode)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.setDiscussionInviteStatus = function (discussionId, status, callback) {
+      ServerDataProvider.prototype.setDiscussionInviteStatus = function (
+        discussionId,
+        status,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.ModifyPermissionInput()
         modules.setOpenStatus(status.valueOf())
-        RongIMLib.RongIMClient.bridge.queryMsg(11, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), discussionId, {
-          onSuccess: function (x) {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          11,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          discussionId,
+          {
+            onSuccess: function (x) {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.setDiscussionName = function (discussionId, name, callback) {
+      ServerDataProvider.prototype.setDiscussionName = function (
+        discussionId,
+        name,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RenameChannelInput()
         modules.setName(name)
-        RongIMLib.RongIMClient.bridge.queryMsg(12, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), discussionId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (errcode) {
-            callback.onError(errcode)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          12,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          discussionId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (errcode) {
+              callback.onError(errcode)
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.joinChatRoom = function (chatroomId, messageCount, callback) {
+      ServerDataProvider.prototype.joinChatRoom = function (
+        chatroomId,
+        messageCount,
+        callback
+      ) {
         var e = new RongIMLib.RongIMClient.Protobuf.ChrmInput()
         e.setNothing(1)
         RongIMLib.Bridge._client.chatroomId = chatroomId
-        RongIMLib.RongIMClient.bridge.queryMsg(19, RongIMLib.MessageUtil.ArrayForm(e.toArrayBuffer()), chatroomId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-            var modules = new RongIMLib.RongIMClient.Protobuf.ChrmPullMsg()
-            messageCount == 0 && (messageCount = -1)
-            modules.setCount(messageCount)
-            modules.setSyncTime(0)
-            RongIMLib.Bridge._client.queryMessage('chrmPull', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), chatroomId, 1, {
-              onSuccess: function (collection) {
-                var list = collection.list
-                var sync = RongIMLib.MessageUtil.int64ToTimestamp(collection.syncTime)
-                var latestMessage = list[list.length - 1]
-                if (latestMessage) {
-                  latestMessage = RongIMLib.MessageUtil.messageParser(latestMessage)
-                  sync = latestMessage.sentTime
-                }
-                RongIMLib.RongIMClient._memoryStore.lastReadTime.set(chatroomId + RongIMLib.Bridge._client.userId + 'CST', sync)
-                var _client = RongIMLib.Bridge._client
-                for (var i = 0, mlen = list.length; i < mlen; i++) {
-                  var uId = 'R' + list[i].msgId
-                  if (!(uId in _client.cacheMessageIds)) {
-                    _client.cacheMessageIds[uId] = true
-                    var cacheUIds = RongIMLib.RongUtil.keys(_client.cacheMessageIds)
-                    if (cacheUIds.length > 10) {
-                      uId = cacheUIds[0]
-                      delete _client.cacheMessageIds[uId]
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          19,
+          RongIMLib.MessageUtil.ArrayForm(e.toArrayBuffer()),
+          chatroomId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+              var modules = new RongIMLib.RongIMClient.Protobuf.ChrmPullMsg()
+              messageCount == 0 && (messageCount = -1)
+              modules.setCount(messageCount)
+              modules.setSyncTime(0)
+              RongIMLib.Bridge._client.queryMessage(
+                'chrmPull',
+                RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+                chatroomId,
+                1,
+                {
+                  onSuccess: function (collection) {
+                    var list = collection.list
+                    var sync = RongIMLib.MessageUtil.int64ToTimestamp(
+                      collection.syncTime
+                    )
+                    var latestMessage = list[list.length - 1]
+                    if (latestMessage) {
+                      latestMessage = RongIMLib.MessageUtil.messageParser(
+                        latestMessage
+                      )
+                      sync = latestMessage.sentTime
                     }
-                    if (RongIMLib.RongIMClient._memoryStore.filterMessages.length > 0) {
-                      for (var j = 0, flen = RongIMLib.RongIMClient._memoryStore.filterMessages.length; j < flen; j++) {
-                        if (RongIMLib.RongIMClient.MessageParams[RongIMLib.RongIMClient._memoryStore.filterMessages[j]].objectName != list[i].classname) {
+                    RongIMLib.RongIMClient._memoryStore.lastReadTime.set(
+                      chatroomId + RongIMLib.Bridge._client.userId + 'CST',
+                      sync
+                    )
+                    var _client = RongIMLib.Bridge._client
+                    for (var i = 0, mlen = list.length; i < mlen; i++) {
+                      var uId = 'R' + list[i].msgId
+                      if (!(uId in _client.cacheMessageIds)) {
+                        _client.cacheMessageIds[uId] = true
+                        var cacheUIds = RongIMLib.RongUtil.keys(
+                          _client.cacheMessageIds
+                        )
+                        if (cacheUIds.length > 10) {
+                          uId = cacheUIds[0]
+                          delete _client.cacheMessageIds[uId]
+                        }
+                        if (
+                          RongIMLib.RongIMClient._memoryStore.filterMessages
+                            .length > 0
+                        ) {
+                          for (
+                            var j = 0,
+                              flen =
+                                RongIMLib.RongIMClient._memoryStore
+                                  .filterMessages.length;
+                            j < flen;
+                            j++
+                          ) {
+                            if (
+                              RongIMLib.RongIMClient.MessageParams[
+                                RongIMLib.RongIMClient._memoryStore
+                                  .filterMessages[j]
+                              ].objectName != list[i].classname
+                            ) {
+                              _client.handler.onReceived(list[i])
+                            }
+                          }
+                        } else {
                           _client.handler.onReceived(list[i])
                         }
                       }
-                    } else {
-                      _client.handler.onReceived(list[i])
                     }
-                  }
-                }
-              },
-              onError: function (x) {
-                setTimeout(function () {
-                  callback.onError(RongIMLib.ErrorCode.CHATROOM_HISMESSAGE_ERROR)
-                })
-              }
-            }, 'DownStreamMessages')
+                  },
+                  onError: function (x) {
+                    setTimeout(function () {
+                      callback.onError(
+                        RongIMLib.ErrorCode.CHATROOM_HISMESSAGE_ERROR
+                      )
+                    })
+                  },
+                },
+                'DownStreamMessages'
+              )
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
-          }
-        }, 'ChrmOutput')
+          'ChrmOutput'
+        )
       }
-      ServerDataProvider.prototype.getChatRoomInfo = function (chatRoomId, count, order, callback) {
+      ServerDataProvider.prototype.getChatRoomInfo = function (
+        chatRoomId,
+        count,
+        order,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.QueryChatroomInfoInput()
         modules.setCount(count)
         modules.setOrder(order)
-        RongIMLib.RongIMClient.bridge.queryMsg('queryChrmI', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), chatRoomId, {
-          onSuccess: function (ret) {
-            var userInfos = ret.userInfos
-            userInfos.forEach(function (item) {
-              item.time = RongIMLib.MessageUtil.int64ToTimestamp(item.time)
-            })
-            setTimeout(function () {
-              callback.onSuccess(ret)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'queryChrmI',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          chatRoomId,
+          {
+            onSuccess: function (ret) {
+              var userInfos = ret.userInfos
+              userInfos.forEach(function (item) {
+                item.time = RongIMLib.MessageUtil.int64ToTimestamp(item.time)
+              })
+              setTimeout(function () {
+                callback.onSuccess(ret)
+              })
+            },
+            onError: function (errcode) {
+              setTimeout(function () {
+                callback.onError(errcode)
+              })
+            },
           },
-          onError: function (errcode) {
-            setTimeout(function () {
-              callback.onError(errcode)
-            })
-          }
-        }, 'QueryChatroomInfoOutput')
+          'QueryChatroomInfoOutput'
+        )
       }
-      ServerDataProvider.prototype.quitChatRoom = function (chatroomId, callback) {
+      ServerDataProvider.prototype.quitChatRoom = function (
+        chatroomId,
+        callback
+      ) {
         var e = new RongIMLib.RongIMClient.Protobuf.ChrmInput()
         e.setNothing(1)
-        RongIMLib.RongIMClient.bridge.queryMsg(17, RongIMLib.MessageUtil.ArrayForm(e.toArrayBuffer()), chatroomId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          17,
+          RongIMLib.MessageUtil.ArrayForm(e.toArrayBuffer()),
+          chatroomId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (errcode) {
+              setTimeout(function () {
+                callback.onError(errcode)
+              })
+            },
           },
-          onError: function (errcode) {
-            setTimeout(function () {
-              callback.onError(errcode)
-            })
-          }
-        }, 'ChrmOutput')
+          'ChrmOutput'
+        )
       }
-      ServerDataProvider.prototype.setChatroomHisMessageTimestamp = function (chatRoomId, timestamp) {
-        RongIMLib.RongIMClient._memoryStore.lastReadTime.set('chrhis_' + chatRoomId, timestamp)
+      ServerDataProvider.prototype.setChatroomHisMessageTimestamp = function (
+        chatRoomId,
+        timestamp
+      ) {
+        RongIMLib.RongIMClient._memoryStore.lastReadTime.set(
+          'chrhis_' + chatRoomId,
+          timestamp
+        )
       }
-      ServerDataProvider.prototype.getChatRoomHistoryMessages = function (chatRoomId, count, order, callback) {
+      ServerDataProvider.prototype.getChatRoomHistoryMessages = function (
+        chatRoomId,
+        count,
+        order,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.HistoryMsgInput()
         modules.setTargetId(chatRoomId)
-        var timestamp = RongIMLib.RongIMClient._memoryStore.lastReadTime.get('chrhis_' + chatRoomId) || 0
+        var timestamp =
+          RongIMLib.RongIMClient._memoryStore.lastReadTime.get(
+            'chrhis_' + chatRoomId
+          ) || 0
         modules.setTime(timestamp)
         modules.setCount(count)
         modules.setOrder(order)
-        RongIMLib.RongIMClient.bridge.queryMsg(34, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (data) {
-            RongIMLib.RongIMClient._memoryStore.lastReadTime.set('chrhis_' + chatRoomId, RongIMLib.MessageUtil.int64ToTimestamp(data.syncTime))
-            var list = data.list.reverse()
-            for (var i = 0, len = list.length; i < len; i++) {
-              list[i] = RongIMLib.MessageUtil.messageParser(list[i])
-            }
-            setTimeout(function () {
-              callback.onSuccess(list, !!data.hasMsg)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          34,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (data) {
+              RongIMLib.RongIMClient._memoryStore.lastReadTime.set(
+                'chrhis_' + chatRoomId,
+                RongIMLib.MessageUtil.int64ToTimestamp(data.syncTime)
+              )
+              var list = data.list.reverse()
+              for (var i = 0, len = list.length; i < len; i++) {
+                list[i] = RongIMLib.MessageUtil.messageParser(list[i])
+              }
+              setTimeout(function () {
+                callback.onSuccess(list, !!data.hasMsg)
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
-          }
-        }, 'HistoryMsgOuput')
+          'HistoryMsgOuput'
+        )
       }
-      ServerDataProvider.prototype.setMessageStatus = function (conversationType, targetId, timestamp, status, callback) {
+      ServerDataProvider.prototype.setMessageStatus = function (
+        conversationType,
+        targetId,
+        timestamp,
+        status,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.addToBlacklist = function (userId, callback) {
+      ServerDataProvider.prototype.addToBlacklist = function (
+        userId,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.Add2BlackListInput()
         modules.setUserId(userId)
-        RongIMLib.RongIMClient.bridge.queryMsg(21, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          21,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
       ServerDataProvider.prototype.getBlacklist = function (callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.QueryBlackListInput()
         modules.setNothing(1)
-        RongIMLib.RongIMClient.bridge.queryMsg(23, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (list) {
-            setTimeout(function () {
-              callback.onSuccess(list)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          23,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (list) {
+              setTimeout(function () {
+                callback.onSuccess(list)
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
-          }
-        }, 'QueryBlackListOutput')
+          'QueryBlackListOutput'
+        )
       }
-      ServerDataProvider.prototype.getBlacklistStatus = function (userId, callback) {
+      ServerDataProvider.prototype.getBlacklistStatus = function (
+        userId,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.BlackListStatusInput()
         modules.setUserId(userId)
-        RongIMLib.RongIMClient.bridge.queryMsg(24, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function (status) {
-            setTimeout(function () {
-              callback.onSuccess(RongIMLib.BlacklistStatus[status])
-            })
-          },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          24,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function (status) {
+              setTimeout(function () {
+                callback.onSuccess(RongIMLib.BlacklistStatus[status])
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.removeFromBlacklist = function (userId, callback) {
+      ServerDataProvider.prototype.removeFromBlacklist = function (
+        userId,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RemoveFromBlackListInput()
         modules.setUserId(userId)
-        RongIMLib.RongIMClient.bridge.queryMsg(22, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function () {
-            setTimeout(function () {
-              callback.onSuccess()
-            })
-          },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          22,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function () {
+              setTimeout(function () {
+                callback.onSuccess()
+              })
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.getFileToken = function (fileType, callback) {
-        if (!(/(1|2|3|4)/.test(fileType.toString()))) {
+      ServerDataProvider.prototype.getFileToken = function (
+        fileType,
+        callback
+      ) {
+        if (!/(1|2|3|4)/.test(fileType.toString())) {
           setTimeout(function () {
             callback.onError(RongIMLib.ErrorCode.QNTKN_FILETYPE_ERROR)
           })
@@ -9578,21 +12110,32 @@
         }
         var modules = new RongIMLib.RongIMClient.Protobuf.GetQNupTokenInput()
         modules.setType(fileType)
-        RongIMLib.RongIMClient.bridge.queryMsg(30, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (data) {
-            setTimeout(function () {
-              callback.onSuccess(data)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          30,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (data) {
+              setTimeout(function () {
+                callback.onSuccess(data)
+              })
+            },
+            onError: function (errcode) {
+              setTimeout(function () {
+                callback.onError(errcode)
+              })
+            },
           },
-          onError: function (errcode) {
-            setTimeout(function () {
-              callback.onError(errcode)
-            })
-          }
-        }, 'GetQNupTokenOutput')
+          'GetQNupTokenOutput'
+        )
       }
-      ServerDataProvider.prototype.getFileUrl = function (fileType, fileName, oriName, callback) {
-        if (!(/(1|2|3|4)/.test(fileType.toString()))) {
+      ServerDataProvider.prototype.getFileUrl = function (
+        fileType,
+        fileName,
+        oriName,
+        callback
+      ) {
+        if (!/(1|2|3|4)/.test(fileType.toString())) {
           setTimeout(function () {
             callback.onError(RongIMLib.ErrorCode.QNTKN_FILETYPE_ERROR)
           })
@@ -9604,24 +12147,40 @@
         if (oriName) {
           modules.setFileName(oriName)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg(31, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (data) {
-            setTimeout(function () {
-              callback.onSuccess(data)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          31,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (data) {
+              setTimeout(function () {
+                callback.onSuccess(data)
+              })
+            },
+            onError: function (errcode) {
+              setTimeout(function () {
+                callback.onError(errcode)
+              })
+            },
           },
-          onError: function (errcode) {
-            setTimeout(function () {
-              callback.onError(errcode)
-            })
-          }
-        }, 'GetQNdownloadUrlOutput')
+          'GetQNdownloadUrlOutput'
+        )
       }
       /*
                 methodType 1 : 多客服(客服后台使用);   2 : 消息撤回
                 params.userIds : 定向消息接收者
             */
-      ServerDataProvider.prototype.sendMessage = function (conversationType, targetId, messageContent, sendCallback, mentiondMsg, pushText, appData, methodType, params) {
+      ServerDataProvider.prototype.sendMessage = function (
+        conversationType,
+        targetId,
+        messageContent,
+        sendCallback,
+        mentiondMsg,
+        pushText,
+        appData,
+        methodType,
+        params
+      ) {
         if (!RongIMLib.Bridge._client.channel) {
           setTimeout(function () {
             sendCallback.onError(RongIMLib.ErrorCode.RC_NET_UNAVAILABLE, null)
@@ -9634,16 +12193,26 @@
           })
           throw new Error('connect is timeout! postion:sendMessage')
         }
-        var isGroup = (conversationType == RongIMLib.ConversationType.DISCUSSION || conversationType == RongIMLib.ConversationType.GROUP)
+        var isGroup =
+          conversationType == RongIMLib.ConversationType.DISCUSSION ||
+          conversationType == RongIMLib.ConversationType.GROUP
         var modules = new RongIMLib.RongIMClient.Protobuf.UpStreamMessage()
         if (mentiondMsg && isGroup) {
           modules.setSessionId(7)
         } else {
-          modules.setSessionId(RongIMLib.RongIMClient.MessageParams[messageContent.messageName].msgTag.getMessageTag())
+          modules.setSessionId(
+            RongIMLib.RongIMClient.MessageParams[
+              messageContent.messageName
+            ].msgTag.getMessageTag()
+          )
         }
         pushText && modules.setPushText(pushText)
         appData && modules.setAppData(appData)
-        if (isGroup && messageContent.messageName == RongIMLib.RongIMClient.MessageType.ReadReceiptResponseMessage) {
+        if (
+          isGroup &&
+          messageContent.messageName ==
+            RongIMLib.RongIMClient.MessageType.ReadReceiptResponseMessage
+        ) {
           var rspMsg = messageContent
           if (rspMsg.receiptMessageDic) {
             var ids = []
@@ -9653,7 +12222,11 @@
             modules.setUserId(ids)
           }
         }
-        if (isGroup && messageContent.messageName == RongIMLib.RongIMClient.MessageType.SyncReadStatusMessage) {
+        if (
+          isGroup &&
+          messageContent.messageName ==
+            RongIMLib.RongIMClient.MessageType.SyncReadStatusMessage
+        ) {
           modules.setUserId(RongIMLib.Bridge._client.userId)
         }
         params = params || {}
@@ -9669,7 +12242,10 @@
           flag |= 0x02
         }
         modules.setConfigFlag(flag)
-        modules.setClassname(RongIMLib.RongIMClient.MessageParams[messageContent.messageName].objectName)
+        modules.setClassname(
+          RongIMLib.RongIMClient.MessageParams[messageContent.messageName]
+            .objectName
+        )
         modules.setContent(messageContent.encode())
         var content = modules.toArrayBuffer()
         if (Object.prototype.toString.call(content) == '[object ArrayBuffer]') {
@@ -9678,101 +12254,164 @@
         var me = this
         var msg = new RongIMLib.Message()
         var c = this.getConversation(conversationType, targetId)
-        if (RongIMLib.RongIMClient.MessageParams[messageContent.messageName].msgTag.getMessageTag() == 3) {
+        if (
+          RongIMLib.RongIMClient.MessageParams[
+            messageContent.messageName
+          ].msgTag.getMessageTag() == 3
+        ) {
           if (!c) {
-            c = RongIMLib.RongIMClient.getInstance().createConversation(conversationType, targetId, '')
+            c = RongIMLib.RongIMClient.getInstance().createConversation(
+              conversationType,
+              targetId,
+              ''
+            )
           }
           c.sentTime = new Date().getTime()
           c.sentStatus = RongIMLib.SentStatus.SENDING
           c.senderUserName = ''
           c.senderUserId = RongIMLib.Bridge._client.userId
-          c.notificationStatus = RongIMLib.ConversationNotificationStatus.DO_NOT_DISTURB
+          c.notificationStatus =
+            RongIMLib.ConversationNotificationStatus.DO_NOT_DISTURB
           c.latestMessage = msg
           c.unreadMessageCount = 0
           RongIMLib.RongIMClient._dataAccessProvider.addConversation(c, {
-            onSuccess: function (data) {}
+            onSuccess: function (data) {},
           })
         }
         RongIMLib.RongIMClient._memoryStore.converStore = c
         msg.content = messageContent
         msg.conversationType = conversationType
         msg.senderUserId = RongIMLib.Bridge._client.userId
-        msg.objectName = RongIMLib.RongIMClient.MessageParams[messageContent.messageName].objectName
+        msg.objectName =
+          RongIMLib.RongIMClient.MessageParams[
+            messageContent.messageName
+          ].objectName
         msg.targetId = targetId
         msg.sentTime = new Date().getTime()
         msg.messageDirection = RongIMLib.MessageDirection.SEND
         msg.sentStatus = RongIMLib.SentStatus.SENT
         msg.messageType = messageContent.messageName
-        RongIMLib.RongIMClient.bridge.pubMsg(conversationType.valueOf(), content, targetId, {
-          onSuccess: function (data) {
-            if (data && data.timestamp) {
-              RongIMLib.RongIMClient._memoryStore.lastReadTime.set('converST_' + RongIMLib.Bridge._client.userId + conversationType + targetId, data.timestamp)
-            }
-            if ((conversationType == RongIMLib.ConversationType.DISCUSSION || conversationType == RongIMLib.ConversationType.GROUP) && messageContent.messageName == RongIMLib.RongIMClient.MessageType.ReadReceiptRequestMessage) {
-              var reqMsg = msg.content
-              var sentkey = RongIMLib.Bridge._client.userId + reqMsg.messageUId + 'SENT'
-              RongIMLib.RongIMClient._storageProvider.setItem(sentkey, JSON.stringify({
-                count: 0,
-                dealtime: data.timestamp,
-                userIds: {}
-              }))
-            }
-            if (RongIMLib.RongIMClient.MessageParams[msg.messageType].msgTag.getMessageTag() == 3) {
-              var cacheConversation = RongIMLib.RongIMClient._memoryStore.converStore
-              cacheConversation.sentStatus = msg.sentStatus
-              cacheConversation.latestMessage = msg
-              me.updateConversation(cacheConversation)
-              RongIMLib.RongIMClient._dataAccessProvider.addMessage(conversationType, targetId, msg, {
-                onSuccess: function (ret) {
-                  msg = ret
-                  msg.messageUId = data.messageUId
-                  msg.sentTime = data.timestamp
-                  msg.sentStatus = RongIMLib.SentStatus.SENT
-                  msg.messageId = data.messageId
-                  RongIMLib.RongIMClient._dataAccessProvider.updateMessage(msg)
-                },
-                onError: function () {}
+        RongIMLib.RongIMClient.bridge.pubMsg(
+          conversationType.valueOf(),
+          content,
+          targetId,
+          {
+            onSuccess: function (data) {
+              if (data && data.timestamp) {
+                RongIMLib.RongIMClient._memoryStore.lastReadTime.set(
+                  'converST_' +
+                    RongIMLib.Bridge._client.userId +
+                    conversationType +
+                    targetId,
+                  data.timestamp
+                )
+              }
+              if (
+                (conversationType == RongIMLib.ConversationType.DISCUSSION ||
+                  conversationType == RongIMLib.ConversationType.GROUP) &&
+                messageContent.messageName ==
+                  RongIMLib.RongIMClient.MessageType.ReadReceiptRequestMessage
+              ) {
+                var reqMsg = msg.content
+                var sentkey =
+                  RongIMLib.Bridge._client.userId + reqMsg.messageUId + 'SENT'
+                RongIMLib.RongIMClient._storageProvider.setItem(
+                  sentkey,
+                  JSON.stringify({
+                    count: 0,
+                    dealtime: data.timestamp,
+                    userIds: {},
+                  })
+                )
+              }
+              if (
+                RongIMLib.RongIMClient.MessageParams[
+                  msg.messageType
+                ].msgTag.getMessageTag() == 3
+              ) {
+                var cacheConversation =
+                  RongIMLib.RongIMClient._memoryStore.converStore
+                cacheConversation.sentStatus = msg.sentStatus
+                cacheConversation.latestMessage = msg
+                me.updateConversation(cacheConversation)
+                RongIMLib.RongIMClient._dataAccessProvider.addMessage(
+                  conversationType,
+                  targetId,
+                  msg,
+                  {
+                    onSuccess: function (ret) {
+                      msg = ret
+                      msg.messageUId = data.messageUId
+                      msg.sentTime = data.timestamp
+                      msg.sentStatus = RongIMLib.SentStatus.SENT
+                      msg.messageId = data.messageId
+                      RongIMLib.RongIMClient._dataAccessProvider.updateMessage(
+                        msg
+                      )
+                    },
+                    onError: function () {},
+                  }
+                )
+              }
+              setTimeout(function () {
+                cacheConversation && me.updateConversation(cacheConversation)
+                msg.sentTime = data.timestamp
+                msg.messageUId = data.messageUId
+                sendCallback.onSuccess(msg)
               })
-            }
-            setTimeout(function () {
-              cacheConversation && me.updateConversation(cacheConversation)
-              msg.sentTime = data.timestamp
-              msg.messageUId = data.messageUId
-              sendCallback.onSuccess(msg)
-            })
+            },
+            onError: function (errorCode, _msg) {
+              msg.sentStatus = RongIMLib.SentStatus.FAILED
+              if (_msg) {
+                msg.messageUId = _msg.messageUId
+                msg.sentTime = _msg.sentTime
+              }
+              if (
+                RongIMLib.RongIMClient.MessageParams[
+                  msg.messageType
+                ].msgTag.getMessageTag() == 3
+              ) {
+                RongIMLib.RongIMClient._memoryStore.converStore.latestMessage = msg
+              }
+              RongIMLib.RongIMClient._dataAccessProvider.addMessage(
+                conversationType,
+                targetId,
+                msg,
+                {
+                  onSuccess: function (ret) {
+                    msg.messageId = ret.messageId
+                    RongIMLib.RongIMClient._dataAccessProvider.updateMessage(
+                      msg
+                    )
+                  },
+                  onError: function () {},
+                }
+              )
+              setTimeout(function () {
+                sendCallback.onError(errorCode, msg)
+              })
+            },
           },
-          onError: function (errorCode, _msg) {
-            msg.sentStatus = RongIMLib.SentStatus.FAILED
-            if (_msg) {
-              msg.messageUId = _msg.messageUId
-              msg.sentTime = _msg.sentTime
-            }
-            if (RongIMLib.RongIMClient.MessageParams[msg.messageType].msgTag.getMessageTag() == 3) {
-              RongIMLib.RongIMClient._memoryStore.converStore.latestMessage = msg
-            }
-            RongIMLib.RongIMClient._dataAccessProvider.addMessage(conversationType, targetId, msg, {
-              onSuccess: function (ret) {
-                msg.messageId = ret.messageId
-                RongIMLib.RongIMClient._dataAccessProvider.updateMessage(msg)
-              },
-              onError: function () {}
-            })
-            setTimeout(function () {
-              sendCallback.onError(errorCode, msg)
-            })
-          }
-        }, null, methodType)
-        sendCallback.onBefore && sendCallback.onBefore(RongIMLib.MessageIdHandler.messageId)
+          null,
+          methodType
+        )
+        sendCallback.onBefore &&
+          sendCallback.onBefore(RongIMLib.MessageIdHandler.messageId)
         msg.messageId = RongIMLib.MessageIdHandler.messageId + ''
       }
-      ServerDataProvider.prototype.setConnectionStatusListener = function (listener) {
+      ServerDataProvider.prototype.setConnectionStatusListener = function (
+        listener
+      ) {
         var watcher = {
           onChanged: function (status) {
             listener.onChanged(status)
-            RongIMLib.RongUtil.forEach(RongIMLib.RongIMClient.statusListeners, function (watch) {
-              watch(status)
-            })
-          }
+            RongIMLib.RongUtil.forEach(
+              RongIMLib.RongIMClient.statusListeners,
+              function (watch) {
+                watch(status)
+              }
+            )
+          },
         }
         if (RongIMLib.RongIMClient.bridge) {
           RongIMLib.RongIMClient.bridge.setListener(watcher)
@@ -9780,32 +12419,59 @@
           RongIMLib.RongIMClient._memoryStore.listenerList.push(watcher)
         }
       }
-      ServerDataProvider.prototype.setOnReceiveMessageListener = function (listener) {
+      ServerDataProvider.prototype.setOnReceiveMessageListener = function (
+        listener
+      ) {
         if (RongIMLib.RongIMClient.bridge) {
           RongIMLib.RongIMClient.bridge.setListener(listener)
         } else {
           RongIMLib.RongIMClient._memoryStore.listenerList.push(listener)
         }
       }
-      ServerDataProvider.prototype.registerMessageType = function (messageType, objectName, messageTag, messageContent, searchProps) {
+      ServerDataProvider.prototype.registerMessageType = function (
+        messageType,
+        objectName,
+        messageTag,
+        messageContent,
+        searchProps
+      ) {
         if (!messageType) {
-          throw new Error("messageType can't be empty,postion -> registerMessageType")
+          throw new Error(
+            "messageType can't be empty,postion -> registerMessageType"
+          )
         }
         if (!objectName) {
-          throw new Error("objectName can't be empty,postion -> registerMessageType")
+          throw new Error(
+            "objectName can't be empty,postion -> registerMessageType"
+          )
         }
-        if (Object.prototype.toString.call(messageContent) == '[object Array]') {
-          var regMsg = RongIMLib.ModelUtil.modleCreate(messageContent, messageType)
+        if (
+          Object.prototype.toString.call(messageContent) == '[object Array]'
+        ) {
+          var regMsg = RongIMLib.ModelUtil.modleCreate(
+            messageContent,
+            messageType
+          )
           RongIMLib.RongIMClient.RegisterMessage[messageType] = regMsg
-        } else if (Object.prototype.toString.call(messageContent) == '[object Function]' || Object.prototype.toString.call(messageContent) == '[object Object]') {
+        } else if (
+          Object.prototype.toString.call(messageContent) ==
+            '[object Function]' ||
+          Object.prototype.toString.call(messageContent) == '[object Object]'
+        ) {
           if (!messageContent.encode) {
-            throw new Error('encode method has not realized or messageName is undefined-> registerMessageType')
+            throw new Error(
+              'encode method has not realized or messageName is undefined-> registerMessageType'
+            )
           }
           if (!messageContent.decode) {
-            throw new Error('decode method has not realized -> registerMessageType')
+            throw new Error(
+              'decode method has not realized -> registerMessageType'
+            )
           }
         } else {
-          throw new Error('The index of 3 parameter was wrong type  must be object or function or array-> registerMessageType')
+          throw new Error(
+            'The index of 3 parameter was wrong type  must be object or function or array-> registerMessageType'
+          )
         }
         registerMessageTypeMapping[objectName] = messageType
       }
@@ -9830,7 +12496,7 @@
             type: name,
             name: message.name,
             flag: flag,
-            protos: protos
+            protos: protos,
           })
         }
         var register = function (message) {
@@ -9845,78 +12511,152 @@
           register(message)
         }
       }
-      ServerDataProvider.prototype.addConversation = function (conversation, callback) {
+      ServerDataProvider.prototype.addConversation = function (
+        conversation,
+        callback
+      ) {
         var isAdd = true
-        for (var i = 0, len = RongIMLib.RongIMClient._memoryStore.conversationList.length; i < len; i++) {
-          if (RongIMLib.RongIMClient._memoryStore.conversationList[i].conversationType === conversation.conversationType && RongIMLib.RongIMClient._memoryStore.conversationList[i].targetId === conversation.targetId) {
+        for (
+          var i = 0,
+            len = RongIMLib.RongIMClient._memoryStore.conversationList.length;
+          i < len;
+          i++
+        ) {
+          if (
+            RongIMLib.RongIMClient._memoryStore.conversationList[i]
+              .conversationType === conversation.conversationType &&
+            RongIMLib.RongIMClient._memoryStore.conversationList[i].targetId ===
+              conversation.targetId
+          ) {
             // RongIMClient._memoryStore.conversationList[i] = conversation;
-            RongIMLib.RongIMClient._memoryStore.conversationList.unshift(RongIMLib.RongIMClient._memoryStore.conversationList.splice(i, 1)[0])
+            RongIMLib.RongIMClient._memoryStore.conversationList.unshift(
+              RongIMLib.RongIMClient._memoryStore.conversationList.splice(
+                i,
+                1
+              )[0]
+            )
             isAdd = false
             break
           }
         }
         if (isAdd) {
-          RongIMLib.RongIMClient._memoryStore.conversationList.unshift(conversation)
+          RongIMLib.RongIMClient._memoryStore.conversationList.unshift(
+            conversation
+          )
         }
         callback && callback.onSuccess(true)
       }
-      ServerDataProvider.prototype.updateConversation = function (conversation) {
+      ServerDataProvider.prototype.updateConversation = function (
+        conversation
+      ) {
         var conver
-        for (var i = 0, len = RongIMLib.RongIMClient._memoryStore.conversationList.length; i < len; i++) {
+        for (
+          var i = 0,
+            len = RongIMLib.RongIMClient._memoryStore.conversationList.length;
+          i < len;
+          i++
+        ) {
           var item = RongIMLib.RongIMClient._memoryStore.conversationList[i]
-          if (conversation.conversationType === item.conversationType && conversation.targetId === item.targetId) {
-            conversation.conversationTitle && (item.conversationTitle = conversation.conversationTitle)
-            conversation.senderUserName && (item.senderUserName = conversation.senderUserName)
-            conversation.senderPortraitUri && (item.senderPortraitUri = conversation.senderPortraitUri)
-            conversation.latestMessage && (item.latestMessage = conversation.latestMessage)
-            conversation.sentStatus && (item.sentStatus = conversation.sentStatus)
+          if (
+            conversation.conversationType === item.conversationType &&
+            conversation.targetId === item.targetId
+          ) {
+            conversation.conversationTitle &&
+              (item.conversationTitle = conversation.conversationTitle)
+            conversation.senderUserName &&
+              (item.senderUserName = conversation.senderUserName)
+            conversation.senderPortraitUri &&
+              (item.senderPortraitUri = conversation.senderPortraitUri)
+            conversation.latestMessage &&
+              (item.latestMessage = conversation.latestMessage)
+            conversation.sentStatus &&
+              (item.sentStatus = conversation.sentStatus)
             break
           }
         }
         return conver
       }
-      ServerDataProvider.prototype.removeConversation = function (conversationType, targetId, callback) {
+      ServerDataProvider.prototype.removeConversation = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         var mod = new RongIMLib.RongIMClient.Protobuf.RelationsInput()
         mod.setType(conversationType)
-        RongIMLib.RongIMClient.bridge.queryMsg(27, RongIMLib.MessageUtil.ArrayForm(mod.toArrayBuffer()), targetId, {
-          onSuccess: function () {
-            var conversations = RongIMLib.RongIMClient._memoryStore.conversationList
-            var len = conversations.length
-            for (var i = 0; i < len; i++) {
-              if (conversations[i].conversationType == conversationType && targetId == conversations[i].targetId) {
-                conversations.splice(i, 1)
-                break
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          27,
+          RongIMLib.MessageUtil.ArrayForm(mod.toArrayBuffer()),
+          targetId,
+          {
+            onSuccess: function () {
+              var conversations =
+                RongIMLib.RongIMClient._memoryStore.conversationList
+              var len = conversations.length
+              for (var i = 0; i < len; i++) {
+                if (
+                  conversations[i].conversationType == conversationType &&
+                  targetId == conversations[i].targetId
+                ) {
+                  conversations.splice(i, 1)
+                  break
+                }
               }
-            }
-            callback.onSuccess(true)
-          },
-          onError: function (error) {
-            setTimeout(function () {
-              callback.onError(error)
-            })
+              callback.onSuccess(true)
+            },
+            onError: function (error) {
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
       ServerDataProvider.prototype.getMessage = function (messageId, callback) {
         callback.onSuccess(new RongIMLib.Message())
       }
-      ServerDataProvider.prototype.addMessage = function (conversationType, targetId, message, callback) {
+      ServerDataProvider.prototype.addMessage = function (
+        conversationType,
+        targetId,
+        message,
+        callback
+      ) {
         if (callback) {
           callback.onSuccess(message)
         }
       }
-      ServerDataProvider.prototype.removeMessage = function (conversationType, targetId, messageIds, callback) {
-        RongIMLib.RongIMClient.getInstance().deleteRemoteMessages(conversationType, targetId, messageIds, callback)
+      ServerDataProvider.prototype.removeMessage = function (
+        conversationType,
+        targetId,
+        messageIds,
+        callback
+      ) {
+        RongIMLib.RongIMClient.getInstance().deleteRemoteMessages(
+          conversationType,
+          targetId,
+          messageIds,
+          callback
+        )
       }
-      ServerDataProvider.prototype.removeLocalMessage = function (conversationType, targetId, timestamps, callback) {
+      ServerDataProvider.prototype.removeLocalMessage = function (
+        conversationType,
+        targetId,
+        timestamps,
+        callback
+      ) {
         callback.onSuccess(true)
       }
-      ServerDataProvider.prototype.updateMessage = function (message, callback) {
+      ServerDataProvider.prototype.updateMessage = function (
+        message,
+        callback
+      ) {
         if (callback) {
           callback.onSuccess(message)
         }
       }
-      ServerDataProvider.prototype.clearRemoteHistoryMessages = function (params, callback) {
+      ServerDataProvider.prototype.clearRemoteHistoryMessages = function (
+        params,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.CleanHisMsgInput()
         var conversationType = params.conversationType
         var _topic = {
@@ -9924,7 +12664,7 @@
           2: 'cleanDMsg',
           3: 'cleanGMsg',
           5: 'cleanCMsg',
-          6: 'cleanSMsg'
+          6: 'cleanSMsg',
         }
         var topic = _topic[conversationType]
         if (!topic) {
@@ -9939,57 +12679,100 @@
         modules.setDataTime(timestamp)
         var targetId = params.targetId
         modules.setTargetId(targetId)
-        RongIMLib.RongIMClient.bridge.queryMsg(topic, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), targetId, {
-          onSuccess: function (result) {
-            callback.onSuccess(!result)
-          },
-          onError: function (error) {
-            // error 1 历史消息云存储没有开通、传入时间大于服务器时间 清除失败，1 与其他错误码冲突，所以自定义错误码返回
-            if (error == 1) {
-              error = RongIMLib.ErrorCode.CLEAR_HIS_ERROR
-            }
-            setTimeout(function () {
-              callback.onError(error)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          topic,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          targetId,
+          {
+            onSuccess: function (result) {
+              callback.onSuccess(!result)
+            },
+            onError: function (error) {
+              // error 1 历史消息云存储没有开通、传入时间大于服务器时间 清除失败，1 与其他错误码冲突，所以自定义错误码返回
+              if (error == 1) {
+                error = RongIMLib.ErrorCode.CLEAR_HIS_ERROR
+              }
+              setTimeout(function () {
+                callback.onError(error)
+              })
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.clearHistoryMessages = function (params, callback) {
+      ServerDataProvider.prototype.clearHistoryMessages = function (
+        params,
+        callback
+      ) {
         this.clearRemoteHistoryMessages(params, callback)
       }
       // 兼容老版本
-      ServerDataProvider.prototype.clearMessages = function (conversationType, targetId, callback) {}
-      ServerDataProvider.prototype.updateMessages = function (conversationType, targetId, key, value, callback) {
+      ServerDataProvider.prototype.clearMessages = function (
+        conversationType,
+        targetId,
+        callback
+      ) {}
+      ServerDataProvider.prototype.updateMessages = function (
+        conversationType,
+        targetId,
+        key,
+        value,
+        callback
+      ) {
         var me = this
         if (key == 'readStatus') {
           if (RongIMLib.RongIMClient._memoryStore.conversationList.length > 0) {
-            me.getConversationList({
-              onSuccess: function (list) {
-                Array.forEach(list, function (conver) {
-                  if (conver.conversationType == conversationType && conver.targetId == targetId) {
-                    conver.unreadMessageCount = 0
-                  }
-                })
+            me.getConversationList(
+              {
+                onSuccess: function (list) {
+                  Array.forEach(list, function (conver) {
+                    if (
+                      conver.conversationType == conversationType &&
+                      conver.targetId == targetId
+                    ) {
+                      conver.unreadMessageCount = 0
+                    }
+                  })
+                },
+                onError: function (errorCode) {
+                  setTimeout(function () {
+                    callback.onError(errorCode)
+                  })
+                },
               },
-              onError: function (errorCode) {
-                setTimeout(function () {
-                  callback.onError(errorCode)
-                })
-              }
-            }, null)
+              null
+            )
           }
         }
         setTimeout(function () {
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.getConversation = function (conversationType, targetId, callback) {
+      ServerDataProvider.prototype.getConversation = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         var conver = null
-        for (var i = 0, len = RongIMLib.RongIMClient._memoryStore.conversationList.length; i < len; i++) {
-          if (RongIMLib.RongIMClient._memoryStore.conversationList[i].conversationType == conversationType && RongIMLib.RongIMClient._memoryStore.conversationList[i].targetId == targetId) {
+        for (
+          var i = 0,
+            len = RongIMLib.RongIMClient._memoryStore.conversationList.length;
+          i < len;
+          i++
+        ) {
+          if (
+            RongIMLib.RongIMClient._memoryStore.conversationList[i]
+              .conversationType == conversationType &&
+            RongIMLib.RongIMClient._memoryStore.conversationList[i].targetId ==
+              targetId
+          ) {
             conver = RongIMLib.RongIMClient._memoryStore.conversationList[i]
             if (RongIMLib.RongUtil.supportLocalStorage()) {
-              var count = RongIMLib.RongIMClient._storageProvider.getItem('cu' + RongIMLib.Bridge._client.userId + conversationType + targetId)
+              var count = RongIMLib.RongIMClient._storageProvider.getItem(
+                'cu' +
+                  RongIMLib.Bridge._client.userId +
+                  conversationType +
+                  targetId
+              )
               if (conver.unreadMessageCount == 0) {
                 conver.unreadMessageCount = Number(count)
               }
@@ -10001,7 +12784,10 @@
         })
         return conver
       }
-      ServerDataProvider.prototype.filterConversations = function (types, list) {
+      ServerDataProvider.prototype.filterConversations = function (
+        types,
+        list
+      ) {
         var conversaions = []
         RongIMLib.RongUtil.forEach(types, function (type) {
           RongIMLib.RongUtil.forEach(list, function (conversation) {
@@ -10012,7 +12798,12 @@
         })
         return conversaions
       }
-      ServerDataProvider.prototype.getConversationList = function (callback, conversationTypes, count, isHidden) {
+      ServerDataProvider.prototype.getConversationList = function (
+        callback,
+        conversationTypes,
+        count,
+        isHidden
+      ) {
         var that = this
         var isSync = RongIMLib.RongIMClient._memoryStore.isSyncRemoteConverList
         var list = RongIMLib.RongIMClient._memoryStore.conversationList
@@ -10027,63 +12818,114 @@
           })
           return
         }
-        RongIMLib.RongIMClient.getInstance().getRemoteConversationList({
-          onSuccess: function (list) {
-            if (RongIMLib.RongUtil.supportLocalStorage()) {
-              Array.forEach(RongIMLib.RongIMClient._memoryStore.conversationList, function (item) {
-                var count = RongIMLib.RongIMClient._storageProvider.getItem('cu' + RongIMLib.Bridge._client.userId + item.conversationType + item.targetId)
-                if (item.unreadMessageCount == 0) {
-                  item.unreadMessageCount = Number(count)
-                }
+        RongIMLib.RongIMClient.getInstance().getRemoteConversationList(
+          {
+            onSuccess: function (list) {
+              if (RongIMLib.RongUtil.supportLocalStorage()) {
+                Array.forEach(
+                  RongIMLib.RongIMClient._memoryStore.conversationList,
+                  function (item) {
+                    var count = RongIMLib.RongIMClient._storageProvider.getItem(
+                      'cu' +
+                        RongIMLib.Bridge._client.userId +
+                        item.conversationType +
+                        item.targetId
+                    )
+                    if (item.unreadMessageCount == 0) {
+                      item.unreadMessageCount = Number(count)
+                    }
+                  }
+                )
+              }
+              RongIMLib.RongIMClient._memoryStore.isSyncRemoteConverList = false
+              setTimeout(function () {
+                callback.onSuccess(list)
               })
-            }
-            RongIMLib.RongIMClient._memoryStore.isSyncRemoteConverList = false
-            setTimeout(function () {
-              callback.onSuccess(list)
-            })
+            },
+            onError: function (errorcode) {
+              setTimeout(function () {
+                callback.onError(errorcode)
+              })
+            },
           },
-          onError: function (errorcode) {
-            setTimeout(function () {
-              callback.onError(errorcode)
-            })
-          }
-        }, conversationTypes, count, isHidden)
+          conversationTypes,
+          count,
+          isHidden
+        )
       }
       ServerDataProvider.prototype.clearCache = function () {
         var memoryStore = RongIMLib.RongIMClient._memoryStore || {}
         memoryStore.conversationList = []
         memoryStore.isSyncRemoteConverList = true
       }
-      ServerDataProvider.prototype.clearConversations = function (conversationTypes, callback) {
+      ServerDataProvider.prototype.clearConversations = function (
+        conversationTypes,
+        callback
+      ) {
         Array.forEach(conversationTypes, function (conversationType) {
-          Array.forEach(RongIMLib.RongIMClient._memoryStore.conversationList, function (conver) {
-            if (conversationType == conver.conversationType) {
-              RongIMLib.RongIMClient.getInstance().removeConversation(conver.conversationType, conver.targetId, {
-                onSuccess: function () {},
-                onError: function () {}
-              })
+          Array.forEach(
+            RongIMLib.RongIMClient._memoryStore.conversationList,
+            function (conver) {
+              if (conversationType == conver.conversationType) {
+                RongIMLib.RongIMClient.getInstance().removeConversation(
+                  conver.conversationType,
+                  conver.targetId,
+                  {
+                    onSuccess: function () {},
+                    onError: function () {},
+                  }
+                )
+              }
             }
-          })
+          )
         })
         setTimeout(function () {
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.setMessageContent = function (messageId, content, objectname) {}
-      ServerDataProvider.prototype.setMessageSearchField = function (messageId, content, searchFiles) {}
-      ServerDataProvider.prototype.getHistoryMessages = function (conversationType, targetId, timestamp, count, callback, objectname, order) {
+      ServerDataProvider.prototype.setMessageContent = function (
+        messageId,
+        content,
+        objectname
+      ) {}
+      ServerDataProvider.prototype.setMessageSearchField = function (
+        messageId,
+        content,
+        searchFiles
+      ) {}
+      ServerDataProvider.prototype.getHistoryMessages = function (
+        conversationType,
+        targetId,
+        timestamp,
+        count,
+        callback,
+        objectname,
+        order
+      ) {
         var config = {
           objectname: objectname,
-          order: order
+          order: order,
         }
-        RongIMLib.RongIMClient.getInstance().getRemoteHistoryMessages(conversationType, targetId, timestamp, count, callback, config)
+        RongIMLib.RongIMClient.getInstance().getRemoteHistoryMessages(
+          conversationType,
+          targetId,
+          timestamp,
+          count,
+          callback,
+          config
+        )
       }
-      ServerDataProvider.prototype.getTotalUnreadCount = function (callback, conversationTypes) {
+      ServerDataProvider.prototype.getTotalUnreadCount = function (
+        callback,
+        conversationTypes
+      ) {
         var count = 0
         var storageProvider = RongIMLib.RongIMClient._storageProvider
         if (conversationTypes) {
           RongIMLib.RongUtil.forEach(conversationTypes, function (type) {
-            var unreadKeys = storageProvider.getItemKeyList('cu' + RongIMLib.Bridge._client.userId + type)
+            var unreadKeys = storageProvider.getItemKeyList(
+              'cu' + RongIMLib.Bridge._client.userId + type
+            )
             RongIMLib.RongUtil.forEach(unreadKeys, function (key) {
               var unread = storageProvider.getItem(key)
               var unreadCount = Number(unread) || 0
@@ -10091,7 +12933,9 @@
             })
           })
         } else {
-          var unreadKeys = storageProvider.getItemKeyList('cu' + RongIMLib.Bridge._client.userId)
+          var unreadKeys = storageProvider.getItemKeyList(
+            'cu' + RongIMLib.Bridge._client.userId
+          )
           RongIMLib.RongUtil.forEach(unreadKeys, function (key) {
             var unread = storageProvider.getItem(key)
             var unreadCount = Number(unread) || 0
@@ -10100,27 +12944,43 @@
         }
         callback.onSuccess(count)
       }
-      ServerDataProvider.prototype.getConversationUnreadCount = function (conversationTypes, callback) {
+      ServerDataProvider.prototype.getConversationUnreadCount = function (
+        conversationTypes,
+        callback
+      ) {
         var count = 0
         Array.forEach(conversationTypes, function (converType) {
-          Array.forEach(RongIMLib.RongIMClient._memoryStore.conversationList, function (conver) {
-            if (conver.conversationType == converType) {
-              count += conver.unreadMessageCount
+          Array.forEach(
+            RongIMLib.RongIMClient._memoryStore.conversationList,
+            function (conver) {
+              if (conver.conversationType == converType) {
+                count += conver.unreadMessageCount
+              }
             }
-          })
+          )
         })
         setTimeout(function () {
           callback.onSuccess(count)
         })
       }
       // 由于 Web 端未读消息数按会话统计，撤回消息会导致未读数不准确，提供设置未读数接口，桌面版不实现此方法
-      ServerDataProvider.prototype.setUnreadCount = function (conversationType, targetId, count) {
+      ServerDataProvider.prototype.setUnreadCount = function (
+        conversationType,
+        targetId,
+        count
+      ) {
         var storageProvider = RongIMLib.RongIMClient._storageProvider
-        var key = 'cu' + RongIMLib.Bridge._client.userId + conversationType + targetId
+        var key =
+          'cu' + RongIMLib.Bridge._client.userId + conversationType + targetId
         storageProvider.setItem(key, count)
       }
-      ServerDataProvider.prototype.getUnreadCount = function (conversationType, targetId, callback) {
-        var key = 'cu' + RongIMLib.Bridge._client.userId + conversationType + targetId
+      ServerDataProvider.prototype.getUnreadCount = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
+        var key =
+          'cu' + RongIMLib.Bridge._client.userId + conversationType + targetId
         var unread = RongIMLib.RongIMClient._storageProvider.getItem(key)
         var unreadCount = Number(unread)
         setTimeout(function () {
@@ -10132,26 +12992,59 @@
           conver.mentionedMsg = null
           var targetId = conver.targetId
           var conversationType = conver.conversationType
-          var mentioneds = RongIMLib.RongIMClient._storageProvider.getItem('mentioneds_' + RongIMLib.Bridge._client.userId + '_' + conversationType + '_' + targetId)
+          var mentioneds = RongIMLib.RongIMClient._storageProvider.getItem(
+            'mentioneds_' +
+              RongIMLib.Bridge._client.userId +
+              '_' +
+              conversationType +
+              '_' +
+              targetId
+          )
           if (mentioneds) {
             var info = JSON.parse(mentioneds)
             delete info[conversationType + '_' + targetId]
             if (!RongIMLib.MessageUtil.isEmpty(info)) {
-              RongIMLib.RongIMClient._storageProvider.setItem('mentioneds_' + RongIMLib.Bridge._client.userId + '_' + conversationType + '_' + targetId, JSON.stringify(info))
+              RongIMLib.RongIMClient._storageProvider.setItem(
+                'mentioneds_' +
+                  RongIMLib.Bridge._client.userId +
+                  '_' +
+                  conversationType +
+                  '_' +
+                  targetId,
+                JSON.stringify(info)
+              )
             } else {
-              RongIMLib.RongIMClient._storageProvider.removeItem('mentioneds_' + RongIMLib.Bridge._client.userId + '_' + conversationType + '_' + targetId)
+              RongIMLib.RongIMClient._storageProvider.removeItem(
+                'mentioneds_' +
+                  RongIMLib.Bridge._client.userId +
+                  '_' +
+                  conversationType +
+                  '_' +
+                  targetId
+              )
             }
           }
         }
       }
-      ServerDataProvider.prototype.clearUnreadCountByTimestamp = function (conversationType, targetId, timestamp, callback) {
+      ServerDataProvider.prototype.clearUnreadCountByTimestamp = function (
+        conversationType,
+        targetId,
+        timestamp,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.clearUnreadCount = function (conversationType, targetId, callback) {
+      ServerDataProvider.prototype.clearUnreadCount = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         var me = this
-        RongIMLib.RongIMClient._storageProvider.removeItem('cu' + RongIMLib.Bridge._client.userId + conversationType + targetId)
+        RongIMLib.RongIMClient._storageProvider.removeItem(
+          'cu' + RongIMLib.Bridge._client.userId + conversationType + targetId
+        )
         this.getConversation(conversationType, targetId, {
           onSuccess: function (conver) {
             if (conver) {
@@ -10166,7 +13059,7 @@
             setTimeout(function () {
               callback.onError(error)
             })
-          }
+          },
         })
       }
       ServerDataProvider.prototype.clearTotalUnreadCount = function (callback) {
@@ -10183,7 +13076,9 @@
           }
         }
         // 1. 获取所有 key 2. 清除
-        var unreadKeys = RongIMLib.RongIMClient._storageProvider.getItemKeyList('cu' + RongIMLib.Bridge._client.userId)
+        var unreadKeys = RongIMLib.RongIMClient._storageProvider.getItemKeyList(
+          'cu' + RongIMLib.Bridge._client.userId
+        )
         RongIMLib.RongUtil.forEach(unreadKeys, function (key) {
           RongIMLib.RongIMClient._storageProvider.removeItem(key)
         })
@@ -10191,7 +13086,12 @@
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.setConversationToTop = function (conversationType, targetId, isTop, callback) {
+      ServerDataProvider.prototype.setConversationToTop = function (
+        conversationType,
+        targetId,
+        isTop,
+        callback
+      ) {
         var me = this
         this.getConversation(conversationType, targetId, {
           onSuccess: function (conver) {
@@ -10205,10 +13105,13 @@
             setTimeout(function () {
               callback.onError(error)
             })
-          }
+          },
         })
       }
-      ServerDataProvider.prototype.getConversationNotificationStatus = function (params, callback) {
+      ServerDataProvider.prototype.getConversationNotificationStatus = function (
+        params,
+        callback
+      ) {
         var targetId = params.targetId
         var conversationType = params.conversationType
         var notification = RongIMLib.RongIMClient._memoryStore.notification
@@ -10223,7 +13126,7 @@
         }
         var topics = {
           1: 'qryPPush',
-          3: 'qryDPush'
+          3: 'qryDPush',
         }
         var topic = topics[conversationType]
         if (!topic) {
@@ -10240,22 +13143,30 @@
             callback.onSuccess(status)
           })
         }
-        RongIMLib.RongIMClient.bridge.queryMsg(topic, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function (status) {
-            success(status)
-          },
-          onError: function (e) {
-            if (e == 1) {
-              success(e)
-            } else {
-              setTimeout(function () {
-                callback.onError(e)
-              })
-            }
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          topic,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function (status) {
+              success(status)
+            },
+            onError: function (e) {
+              if (e == 1) {
+                success(e)
+              } else {
+                setTimeout(function () {
+                  callback.onError(e)
+                })
+              }
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.setConversationNotificationStatus = function (params, callback) {
+      ServerDataProvider.prototype.setConversationNotificationStatus = function (
+        params,
+        callback
+      ) {
         var conversationType = params.conversationType
         var targetId = params.targetId
         var status = params.status
@@ -10266,7 +13177,7 @@
           '1_1': 'blkPPush',
           '3_1': 'blkDPush',
           '1_0': 'unblkPPush',
-          '3_0': 'unblkDPush'
+          '3_0': 'unblkDPush',
         }
         var key = getKey()
         var notification = RongIMLib.RongIMClient._memoryStore.notification
@@ -10282,35 +13193,46 @@
         var modules = new RongIMLib.RongIMClient.Protobuf.BlockPushInput()
         modules.setBlockeeId(targetId)
         var userId = RongIMLib.Bridge._client.userId
-        RongIMLib.RongIMClient.bridge.queryMsg(topic, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function (status) {
-            setTimeout(function () {
-              callback.onSuccess(status)
-            })
-          },
-          onError: function (e) {
-            setTimeout(function () {
-              callback.onError(e)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          topic,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function (status) {
+              setTimeout(function () {
+                callback.onSuccess(status)
+              })
+            },
+            onError: function (e) {
+              setTimeout(function () {
+                callback.onError(e)
+              })
+            },
           }
-        })
+        )
       }
       ServerDataProvider.prototype.getUserStatus = function (userId, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.GetUserStatusInput()
         userId = RongIMLib.Bridge._client.userId
-        RongIMLib.RongIMClient.bridge.queryMsg(35, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function (status) {
-            status = RongIMLib.RongInnerTools.convertUserStatus(status)
-            setTimeout(function () {
-              callback.onSuccess(status)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          35,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function (status) {
+              status = RongIMLib.RongInnerTools.convertUserStatus(status)
+              setTimeout(function () {
+                callback.onSuccess(status)
+              })
+            },
+            onError: function (e) {
+              setTimeout(function () {
+                callback.onError(e)
+              })
+            },
           },
-          onError: function (e) {
-            setTimeout(function () {
-              callback.onError(e)
-            })
-          }
-        }, 'GetUserStatusOutput')
+          'GetUserStatusOutput'
+        )
         // callback.onSuccess(new UserStatus());
       }
       ServerDataProvider.prototype.setUserStatus = function (status, callback) {
@@ -10319,60 +13241,99 @@
         if (status) {
           modules.setStatus(status)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg(36, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function (status) {
-            setTimeout(function () {
-              callback.onSuccess(true)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          36,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function (status) {
+              setTimeout(function () {
+                callback.onSuccess(true)
+              })
+            },
+            onError: function (e) {
+              setTimeout(function () {
+                callback.onError(e)
+              })
+            },
           },
-          onError: function (e) {
-            setTimeout(function () {
-              callback.onError(e)
-            })
-          }
-        }, 'SetUserStatusOutput')
+          'SetUserStatusOutput'
+        )
       }
-      ServerDataProvider.prototype.subscribeUserStatus = function (userIds, callback) {
+      ServerDataProvider.prototype.subscribeUserStatus = function (
+        userIds,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.SubUserStatusInput()
         var userId = RongIMLib.Bridge._client.userId
         modules.setUserid(userIds)
-        RongIMLib.RongIMClient.bridge.queryMsg(37, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), userId, {
-          onSuccess: function (status) {
-            setTimeout(function () {
-              callback && callback.onSuccess(true)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          37,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          userId,
+          {
+            onSuccess: function (status) {
+              setTimeout(function () {
+                callback && callback.onSuccess(true)
+              })
+            },
+            onError: function (e) {
+              setTimeout(function () {
+                callback && callback.onError(e)
+              })
+            },
           },
-          onError: function (e) {
-            setTimeout(function () {
-              callback && callback.onError(e)
-            })
-          }
-        }, 'SubUserStatusOutput')
+          'SubUserStatusOutput'
+        )
       }
-      ServerDataProvider.prototype.setUserStatusListener = function (params, callback) {
+      ServerDataProvider.prototype.setUserStatusListener = function (
+        params,
+        callback
+      ) {
         RongIMLib.RongIMClient.userStatusListener = callback
         var userIds = params.userIds || []
         if (userIds.length) {
-          RongIMLib.RongIMClient._dataAccessProvider.subscribeUserStatus(userIds)
+          RongIMLib.RongIMClient._dataAccessProvider.subscribeUserStatus(
+            userIds
+          )
         }
       }
       ServerDataProvider.prototype.clearListeners = function () {}
       ServerDataProvider.prototype.setServerInfo = function (info) {}
-      ServerDataProvider.prototype.getUnreadMentionedMessages = function (conversationType, targetId) {
+      ServerDataProvider.prototype.getUnreadMentionedMessages = function (
+        conversationType,
+        targetId
+      ) {
         return null
       }
-      ServerDataProvider.prototype.setConversationHidden = function (conversationType, targetId, isHidden) {}
-      ServerDataProvider.prototype.setMessageExtra = function (messageId, value, callback) {
+      ServerDataProvider.prototype.setConversationHidden = function (
+        conversationType,
+        targetId,
+        isHidden
+      ) {}
+      ServerDataProvider.prototype.setMessageExtra = function (
+        messageId,
+        value,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.setMessageReceivedStatus = function (messageId, receivedStatus, callback) {
+      ServerDataProvider.prototype.setMessageReceivedStatus = function (
+        messageId,
+        receivedStatus,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess(true)
         })
       }
-      ServerDataProvider.prototype.setMessageSentStatus = function (messageId, sentStatus, callback) {
+      ServerDataProvider.prototype.setMessageSentStatus = function (
+        messageId,
+        sentStatus,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess(true)
         })
@@ -10382,22 +13343,42 @@
           callback.onSuccess([])
         })
       }
-      ServerDataProvider.prototype.getConversationByContent = function (keywords, callback) {
+      ServerDataProvider.prototype.getConversationByContent = function (
+        keywords,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess([])
         })
       }
-      ServerDataProvider.prototype.getMessagesFromConversation = function (conversationType, targetId, keywords, callback) {
+      ServerDataProvider.prototype.getMessagesFromConversation = function (
+        conversationType,
+        targetId,
+        keywords,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess([])
         })
       }
-      ServerDataProvider.prototype.searchConversationByContent = function (keyword, callback, conversationTypes) {
+      ServerDataProvider.prototype.searchConversationByContent = function (
+        keyword,
+        callback,
+        conversationTypes
+      ) {
         setTimeout(function () {
           callback.onSuccess([])
         })
       }
-      ServerDataProvider.prototype.searchMessageByContent = function (conversationType, targetId, keyword, timestamp, count, total, callback) {
+      ServerDataProvider.prototype.searchMessageByContent = function (
+        conversationType,
+        targetId,
+        keyword,
+        timestamp,
+        count,
+        total,
+        callback
+      ) {
         setTimeout(function () {
           callback.onSuccess([])
         })
@@ -10414,35 +13395,55 @@
         }
         return status
       }
-      ServerDataProvider.prototype.getAgoraDynamicKey = function (engineType, channelName, callback) {
+      ServerDataProvider.prototype.getAgoraDynamicKey = function (
+        engineType,
+        channelName,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.VoipDynamicInput()
         modules.setEngineType(engineType)
         modules.setChannelName(channelName)
-        RongIMLib.RongIMClient.bridge.queryMsg(32, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-          onSuccess: function (result) {
-            setTimeout(function () {
-              callback.onSuccess(result)
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          32,
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          RongIMLib.Bridge._client.userId,
+          {
+            onSuccess: function (result) {
+              setTimeout(function () {
+                callback.onSuccess(result)
+              })
+            },
+            onError: function (errorCode) {
+              setTimeout(function () {
+                callback.onError(errorCode)
+              })
+            },
           },
-          onError: function (errorCode) {
-            setTimeout(function () {
-              callback.onError(errorCode)
-            })
-          }
-        }, 'VoipDynamicOutput')
+          'VoipDynamicOutput'
+        )
       }
       ServerDataProvider.prototype.setDeviceInfo = function (deviceId) {}
       ServerDataProvider.prototype.setEnvironment = function (isPrivate) {}
       ServerDataProvider.prototype.clearData = function () {
         return true
       }
-      ServerDataProvider.prototype.getPublicServiceProfile = function (publicServiceType, publicServiceId, callback) {
-        var profile = RongIMLib.RongIMClient._memoryStore.publicServiceMap.get(publicServiceType, publicServiceId)
+      ServerDataProvider.prototype.getPublicServiceProfile = function (
+        publicServiceType,
+        publicServiceId,
+        callback
+      ) {
+        var profile = RongIMLib.RongIMClient._memoryStore.publicServiceMap.get(
+          publicServiceType,
+          publicServiceId
+        )
         setTimeout(function () {
           callback.onSuccess(profile)
         })
       }
-      ServerDataProvider.prototype.getRemotePublicServiceList = function (callback, pullMessageTime) {
+      ServerDataProvider.prototype.getRemotePublicServiceList = function (
+        callback,
+        pullMessageTime
+      ) {
         if (RongIMLib.RongIMClient._memoryStore.depend.openMp) {
           var modules = new RongIMLib.RongIMClient.Protobuf.PullMpInput()
           var self = this
@@ -10452,139 +13453,202 @@
             modules.setTime(pullMessageTime)
           }
           modules.setMpid('')
-          RongIMLib.RongIMClient.bridge.queryMsg(28, RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), RongIMLib.Bridge._client.userId, {
-            onSuccess: function (data) {
-              // TODO 找出最大时间
-              // self.lastReadTime.set(conversationType + targetId, MessageUtil.int64ToTimestamp(data.syncTime));
-              RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList.length = 0
-              RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList = data
-              setTimeout(function () {
-                callback && callback.onSuccess(data)
-              })
+          RongIMLib.RongIMClient.bridge.queryMsg(
+            28,
+            RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+            RongIMLib.Bridge._client.userId,
+            {
+              onSuccess: function (data) {
+                // TODO 找出最大时间
+                // self.lastReadTime.set(conversationType + targetId, MessageUtil.int64ToTimestamp(data.syncTime));
+                RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList.length = 0
+                RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList = data
+                setTimeout(function () {
+                  callback && callback.onSuccess(data)
+                })
+              },
+              onError: function (errorCode) {
+                setTimeout(function () {
+                  callback && callback.onError(errorCode)
+                })
+              },
             },
-            onError: function (errorCode) {
-              setTimeout(function () {
-                callback && callback.onError(errorCode)
-              })
-            }
-          }, 'PullMpOutput')
+            'PullMpOutput'
+          )
         }
       }
-      ServerDataProvider.prototype.getRTCUserInfoList = function (room, callback) {
+      ServerDataProvider.prototype.getRTCUserInfoList = function (
+        room,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcQueryListInput()
         // 1 是正序,2是倒序
         modules.setOrder(2)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcUData', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function (result) {
-            var users = {}
-            var list = result.list
-            RongIMLib.RongUtil.forEach(list, function (item) {
-              var userId = item.userId
-              var tmpData = {}
-              RongIMLib.RongUtil.forEach(item.userData, function (data) {
-                var key = data.key
-                var value = data.value
-                tmpData[key] = value
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcUData',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function (result) {
+              var users = {}
+              var list = result.list
+              RongIMLib.RongUtil.forEach(list, function (item) {
+                var userId = item.userId
+                var tmpData = {}
+                RongIMLib.RongUtil.forEach(item.userData, function (data) {
+                  var key = data.key
+                  var value = data.value
+                  tmpData[key] = value
+                })
+                users[userId] = tmpData
               })
-              users[userId] = tmpData
-            })
-            callback.onSuccess(users)
+              callback.onSuccess(users)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
-          }
-        }, 'RtcUserListOutput')
+          'RtcUserListOutput'
+        )
       }
       ServerDataProvider.prototype.getRTCUserList = function (room, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcQueryListInput()
         modules.setOrder(2)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcUList', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function (result) {
-            callback.onSuccess({
-              users: result.list
-            })
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcUList',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function (result) {
+              callback.onSuccess({
+                users: result.list,
+              })
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
-          }
-        }, 'RtcUserListOutput')
+          'RtcUserListOutput'
+        )
       }
-      ServerDataProvider.prototype.setRTCUserInfo = function (room, info, callback) {
+      ServerDataProvider.prototype.setRTCUserInfo = function (
+        room,
+        info,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcValueInfo()
         modules.setKey(info.key)
         modules.setValue(info.value)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcUPut', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function () {
-            callback.onSuccess(true)
-          },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcUPut',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function () {
+              callback.onSuccess(true)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.removeRTCUserInfo = function (room, info, callback) {
+      ServerDataProvider.prototype.removeRTCUserInfo = function (
+        room,
+        info,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcKeyDeleteInput()
         var keys = info.keys || []
         if (!RongIMLib.RongUtil.isArray(keys)) {
           keys = [keys]
         }
         modules.setKey(keys)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcUDel', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function () {
-            callback.onSuccess(true)
-          },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcUDel',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function () {
+              callback.onSuccess(true)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           }
-        })
+        )
       }
       ServerDataProvider.prototype.getRTCRoomInfo = function (room, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcQueryListInput()
         modules.setOrder(2)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcRInfo', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function (result) {
-            var room = {
-              id: result.roomId,
-              total: result.userCount
-            }
-            RongIMLib.RongUtil.forEach(result.roomData, function (data) {
-              room[data.key] = data.value
-            })
-            callback.onSuccess(room)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcRInfo',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function (result) {
+              var room = {
+                id: result.roomId,
+                total: result.userCount,
+              }
+              RongIMLib.RongUtil.forEach(result.roomData, function (data) {
+                room[data.key] = data.value
+              })
+              callback.onSuccess(room)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
-          }
-        }, 'RtcRoomInfoOutput')
+          'RtcRoomInfoOutput'
+        )
       }
-      ServerDataProvider.prototype.setRTCRoomInfo = function (room, info, callback) {
+      ServerDataProvider.prototype.setRTCRoomInfo = function (
+        room,
+        info,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcValueInfo()
         modules.setKey(info.key)
         modules.setValue(info.value)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcRPut', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function () {
-            callback.onSuccess(true)
-          },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcRPut',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function () {
+              callback.onSuccess(true)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           }
-        })
+        )
       }
-      ServerDataProvider.prototype.removeRTCRoomInfo = function (room, info, callback) {
+      ServerDataProvider.prototype.removeRTCRoomInfo = function (
+        room,
+        info,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcKeyDeleteInput()
         var keys = info.keys || []
         if (!RongIMLib.RongUtil.isArray(keys)) {
           keys = [keys]
         }
         modules.setKey(keys)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcRDel', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function () {
-            callback.onSuccess(true)
-          },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcRDel',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function () {
+              callback.onSuccess(true)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           }
-        })
+        )
       }
       ServerDataProvider.prototype.joinRTCRoom = function (room, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcInput()
@@ -10593,41 +13657,52 @@
         if (room.broadcastType) {
           modules.setBroadcastType(room.broadcastType)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcRJoin_data', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function (result) {
-            var users = {}
-            var list = result.list
-            var token = result.token
-            RongIMLib.RongUtil.forEach(list, function (item) {
-              var userId = item.userId
-              var tmpData = {}
-              RongIMLib.RongUtil.forEach(item.userData, function (data) {
-                var key = data.key
-                var value = data.value
-                tmpData[key] = value
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcRJoin_data',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function (result) {
+              var users = {}
+              var list = result.list
+              var token = result.token
+              RongIMLib.RongUtil.forEach(list, function (item) {
+                var userId = item.userId
+                var tmpData = {}
+                RongIMLib.RongUtil.forEach(item.userData, function (data) {
+                  var key = data.key
+                  var value = data.value
+                  tmpData[key] = value
+                })
+                users[userId] = tmpData
               })
-              users[userId] = tmpData
-            })
-            callback.onSuccess({
-              users: users,
-              token: token
-            })
+              callback.onSuccess({
+                users: users,
+                token: token,
+              })
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
-          }
-        }, 'RtcUserListOutput')
+          'RtcUserListOutput'
+        )
       }
       ServerDataProvider.prototype.quitRTCRoom = function (room, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.SetUserStatusInput()
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcRExit', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function () {
-            callback.onSuccess(true)
-          },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcRExit',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function () {
+              callback.onSuccess(true)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           }
-        })
+        )
       }
       ServerDataProvider.prototype.RTCPing = function (room, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcInput()
@@ -10636,9 +13711,22 @@
         if (room.broadcastType) {
           modules.setBroadcastType(room.broadcastType)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcPing', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, callback)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcPing',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          callback
+        )
       }
-      ServerDataProvider.prototype.setRTCData = function (roomId, key, value, isInner, apiType, callback, message) {
+      ServerDataProvider.prototype.setRTCData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        apiType,
+        callback,
+        message
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcSetDataInput()
         modules.setInterior(isInner)
         modules.setTarget(apiType)
@@ -10656,26 +13744,51 @@
           }
           modules.setContent(content)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcSetData', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, callback, 'RtcOutput')
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcSetData',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          roomId,
+          callback,
+          'RtcOutput'
+        )
       }
-      ServerDataProvider.prototype.getRTCData = function (roomId, keys, isInner, apiType, callback) {
+      ServerDataProvider.prototype.getRTCData = function (
+        roomId,
+        keys,
+        isInner,
+        apiType,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcDataInput()
         modules.setInterior(isInner)
         modules.setTarget(apiType)
         modules.setKey(keys)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcQryData', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, {
-          onSuccess: function (result) {
-            var props = {}
-            var list = result.outInfo
-            RongIMLib.RongUtil.forEach(list, function (item) {
-              props[item.key] = item.value
-            })
-            callback.onSuccess(props)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcQryData',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          roomId,
+          {
+            onSuccess: function (result) {
+              var props = {}
+              var list = result.outInfo
+              RongIMLib.RongUtil.forEach(list, function (item) {
+                props[item.key] = item.value
+              })
+              callback.onSuccess(props)
+            },
+            onError: callback.onError,
           },
-          onError: callback.onError
-        }, 'RtcQryOutput')
+          'RtcQryOutput'
+        )
       }
-      ServerDataProvider.prototype.removeRTCData = function (roomId, keys, isInner, apiType, callback, message) {
+      ServerDataProvider.prototype.removeRTCData = function (
+        roomId,
+        keys,
+        isInner,
+        apiType,
+        callback,
+        message
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcDataInput()
         modules.setInterior(isInner)
         modules.setTarget(apiType)
@@ -10692,28 +13805,120 @@
           }
           modules.setContent(content)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcDelData', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, callback, 'RtcOutput')
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcDelData',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          roomId,
+          callback,
+          'RtcOutput'
+        )
       }
-      ServerDataProvider.prototype.setRTCUserData = function (roomId, key, value, isInner, callback, message) {
-        this.setRTCData(roomId, key, value, isInner, RongIMLib.RTCAPIType.PERSON, callback, message)
+      ServerDataProvider.prototype.setRTCUserData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        callback,
+        message
+      ) {
+        this.setRTCData(
+          roomId,
+          key,
+          value,
+          isInner,
+          RongIMLib.RTCAPIType.PERSON,
+          callback,
+          message
+        )
       }
-      ServerDataProvider.prototype.getRTCUserData = function (roomId, keys, isInner, callback, message) {
-        this.getRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.PERSON, callback)
+      ServerDataProvider.prototype.getRTCUserData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        this.getRTCData(
+          roomId,
+          keys,
+          isInner,
+          RongIMLib.RTCAPIType.PERSON,
+          callback
+        )
       }
-      ServerDataProvider.prototype.removeRTCUserData = function (roomId, keys, isInner, callback, message) {
-        this.removeRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.PERSON, callback, message)
+      ServerDataProvider.prototype.removeRTCUserData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        this.removeRTCData(
+          roomId,
+          keys,
+          isInner,
+          RongIMLib.RTCAPIType.PERSON,
+          callback,
+          message
+        )
       }
-      ServerDataProvider.prototype.setRTCRoomData = function (roomId, key, value, isInner, callback, message) {
-        this.setRTCData(roomId, key, value, isInner, RongIMLib.RTCAPIType.ROOM, callback, message)
+      ServerDataProvider.prototype.setRTCRoomData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        callback,
+        message
+      ) {
+        this.setRTCData(
+          roomId,
+          key,
+          value,
+          isInner,
+          RongIMLib.RTCAPIType.ROOM,
+          callback,
+          message
+        )
       }
-      ServerDataProvider.prototype.getRTCRoomData = function (roomId, keys, isInner, callback, message) {
-        this.getRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback)
+      ServerDataProvider.prototype.getRTCRoomData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        this.getRTCData(
+          roomId,
+          keys,
+          isInner,
+          RongIMLib.RTCAPIType.ROOM,
+          callback
+        )
       }
-      ServerDataProvider.prototype.removeRTCRoomData = function (roomId, keys, isInner, callback, message) {
-        this.removeRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback, message)
+      ServerDataProvider.prototype.removeRTCRoomData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        this.removeRTCData(
+          roomId,
+          keys,
+          isInner,
+          RongIMLib.RTCAPIType.ROOM,
+          callback,
+          message
+        )
       }
       // 信令 SDK 新增
-      ServerDataProvider.prototype.setRTCOutData = function (roomId, data, type, callback, message) {
+      ServerDataProvider.prototype.setRTCOutData = function (
+        roomId,
+        data,
+        type,
+        callback,
+        message
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcSetOutDataInput()
         modules.setTarget(type)
         if (!RongIMLib.RongUtil.isArray(data)) {
@@ -10741,52 +13946,85 @@
           }
           modules.setContent(content)
         }
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcSetOutData', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, callback, 'RtcOutput')
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcSetOutData',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          roomId,
+          callback,
+          'RtcOutput'
+        )
       }
       // 信令 SDK 新增
-      ServerDataProvider.prototype.getRTCOutData = function (roomId, userIds, callback) {
+      ServerDataProvider.prototype.getRTCOutData = function (
+        roomId,
+        userIds,
+        callback
+      ) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcQryUserOutDataInput()
         modules.setUserId(userIds)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcQryUserOutData', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), roomId, callback, 'RtcUserOutDataOutput')
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcQryUserOutData',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          roomId,
+          callback,
+          'RtcUserOutDataOutput'
+        )
       }
       ServerDataProvider.prototype.getNavi = function () {
-        var navi = RongIMLib.RongIMClient._storageProvider.getItem('fullnavi') || '{}'
+        var navi =
+          RongIMLib.RongIMClient._storageProvider.getItem('fullnavi') || '{}'
         return JSON.parse(navi)
       }
       ServerDataProvider.prototype.getRTCToken = function (room, callback) {
         var modules = new RongIMLib.RongIMClient.Protobuf.RtcInput()
         modules.setRoomType(0)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcToken', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function (result) {
-            callback.onSuccess(result)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcToken',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function (result) {
+              callback.onSuccess(result)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
-          }
-        }, 'RtcTokenOutput')
+          'RtcTokenOutput'
+        )
       }
-      ServerDataProvider.prototype.setRTCState = function (room, content, callback) {
+      ServerDataProvider.prototype.setRTCState = function (
+        room,
+        content,
+        callback
+      ) {
         // MCFollowInput 为 PB 复用，字段：一个必传 string（第一位）
         var modules = new RongIMLib.RongIMClient.Protobuf.MCFollowInput()
         var report = content.report
         modules.setId(report)
-        RongIMLib.RongIMClient.bridge.queryMsg('rtcUserState', RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()), room.id, {
-          onSuccess: function (result) {
-            callback.onSuccess(result)
+        RongIMLib.RongIMClient.bridge.queryMsg(
+          'rtcUserState',
+          RongIMLib.MessageUtil.ArrayForm(modules.toArrayBuffer()),
+          room.id,
+          {
+            onSuccess: function (result) {
+              callback.onSuccess(result)
+            },
+            onError: function (errorCode) {
+              callback.onError(errorCode)
+            },
           },
-          onError: function (errorCode) {
-            callback.onError(errorCode)
-          }
-        }, 'RtcOutput')
+          'RtcOutput'
+        )
       }
       return ServerDataProvider
     })()
     RongIMLib.ServerDataProvider = ServerDataProvider
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var VCDataProvider = (function () {
-      function VCDataProvider (addon) {
+      function VCDataProvider(addon) {
         // C++ 需要的 SDK 版本号
         this.version = '2.8.27'
         this.userId = ''
@@ -10842,12 +14080,17 @@
         this.addon.registerMessageType('RC:RRRspMsg', 0)
         return sdkInfo
       }
-      VCDataProvider.prototype.connect = function (token, callback, userId, serverConf) {
+      VCDataProvider.prototype.connect = function (
+        token,
+        callback,
+        userId,
+        serverConf
+      ) {
         this.useConsole && console.log('connect')
         this.userId = userId
         this.connectCallback = callback
         RongIMLib.Bridge._client = {
-          userId: userId
+          userId: userId,
         }
         serverConf = serverConf || {}
         var openmp = !!serverConf.openMp
@@ -10855,7 +14098,13 @@
         if (serverConf.type) {
           this.addon.setEnvironment(true)
         }
-        this.addon.connectWithToken(token, userId, serverConf.serverList, openmp, openus)
+        this.addon.connectWithToken(
+          token,
+          userId,
+          serverConf.serverList,
+          openmp,
+          openus
+        )
       }
       VCDataProvider.prototype.setServerInfo = function (info) {
         'setServerInfo' in this.addon && this.addon.setServerInfo(info.navi)
@@ -10877,7 +14126,9 @@
         this.useConsole && console.log('clearData')
         return this.addon.clearData()
       }
-      VCDataProvider.prototype.setConnectionStatusListener = function (listener) {
+      VCDataProvider.prototype.setConnectionStatusListener = function (
+        listener
+      ) {
         var me = this
         /**
                 ConnectionStatus_TokenIncorrect = 31004,
@@ -10901,123 +14152,194 @@
                 */
         me.connectListener = listener
         this.useConsole && console.log('setConnectionStatusListener')
-        me.addon && me.addon.setConnectionStatusListener(function (result) {
-          switch (result) {
-            case 10:
-              setTimeout(function () {
-                listener.onChanged(RongIMLib.ConnectionStatus.CONNECTING)
-              })
-              break
-            case 31004:
-              setTimeout(function () {
-                me.connectCallback.onTokenIncorrect()
-              })
-              break
-            case 1:
-            case 8:
-            case 9:
-            case 11:
-            case 12:
-            case 31011:
-            case 30000:
-            case 30002:
-              setTimeout(function () {
-                listener.onChanged(RongIMLib.ConnectionStatus.DISCONNECTED)
-              })
-              break
-            case 0:
-            case 33005:
-              setTimeout(function () {
-                me.connectCallback.onSuccess(me.userId)
-                listener.onChanged(RongIMLib.ConnectionStatus.CONNECTED)
-              })
-              break
-            case 6:
-              setTimeout(function () {
-                listener.onChanged(RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT)
-              })
-              break
-            default:
-              setTimeout(function () {
-                listener.onChanged(result)
-              })
-              break
-          }
-        })
+        me.addon &&
+          me.addon.setConnectionStatusListener(function (result) {
+            switch (result) {
+              case 10:
+                setTimeout(function () {
+                  listener.onChanged(RongIMLib.ConnectionStatus.CONNECTING)
+                })
+                break
+              case 31004:
+                setTimeout(function () {
+                  me.connectCallback.onTokenIncorrect()
+                })
+                break
+              case 1:
+              case 8:
+              case 9:
+              case 11:
+              case 12:
+              case 31011:
+              case 30000:
+              case 30002:
+                setTimeout(function () {
+                  listener.onChanged(RongIMLib.ConnectionStatus.DISCONNECTED)
+                })
+                break
+              case 0:
+              case 33005:
+                setTimeout(function () {
+                  me.connectCallback.onSuccess(me.userId)
+                  listener.onChanged(RongIMLib.ConnectionStatus.CONNECTED)
+                })
+                break
+              case 6:
+                setTimeout(function () {
+                  listener.onChanged(
+                    RongIMLib.ConnectionStatus.KICKED_OFFLINE_BY_OTHER_CLIENT
+                  )
+                })
+                break
+              default:
+                setTimeout(function () {
+                  listener.onChanged(result)
+                })
+                break
+            }
+          })
       }
-      VCDataProvider.prototype.setOnReceiveMessageListener = function (listener) {
+      VCDataProvider.prototype.setOnReceiveMessageListener = function (
+        listener
+      ) {
         var me = this
         var localCount = 0
         me.messageListener = listener
         this.useConsole && console.log('setOnReceiveMessageListener')
-        me.addon && me.addon.setOnReceiveMessageListener(function (result, leftCount, offline, hasMore) {
-          var message = me.buildMessage(result)
-          message.offLineMessage = offline
-          setTimeout(function () {
-            var voipMsgTypes = ['AcceptMessage', 'RingingMessage', 'HungupMessage', 'InviteMessage', 'MediaModifyMessage', 'MemberModifyMessage']
-            var isVoIPMsg = voipMsgTypes.indexOf(message.messageType) > -1
-            if (isVoIPMsg) {
-              RongIMLib.RongIMClient._voipProvider && RongIMLib.RongIMClient._voipProvider.onReceived(message)
-            } else if (message.conversationType == 12) {
-              RongIMLib.RongIMClient.RTCListener(message)
-              RongIMLib.RongIMClient.RTCInnerListener(message)
-              RongIMLib.RongIMClient.RTCSignalLisener(message)
-            } else {
-              listener.onReceived(message, leftCount, hasMore)
-            }
+        me.addon &&
+          me.addon.setOnReceiveMessageListener(function (
+            result,
+            leftCount,
+            offline,
+            hasMore
+          ) {
+            var message = me.buildMessage(result)
+            message.offLineMessage = offline
+            setTimeout(function () {
+              var voipMsgTypes = [
+                'AcceptMessage',
+                'RingingMessage',
+                'HungupMessage',
+                'InviteMessage',
+                'MediaModifyMessage',
+                'MemberModifyMessage',
+              ]
+              var isVoIPMsg = voipMsgTypes.indexOf(message.messageType) > -1
+              if (isVoIPMsg) {
+                RongIMLib.RongIMClient._voipProvider &&
+                  RongIMLib.RongIMClient._voipProvider.onReceived(message)
+              } else if (message.conversationType == 12) {
+                RongIMLib.RongIMClient.RTCListener(message)
+                RongIMLib.RongIMClient.RTCInnerListener(message)
+                RongIMLib.RongIMClient.RTCSignalLisener(message)
+              } else {
+                listener.onReceived(message, leftCount, hasMore)
+              }
+            })
           })
-        })
       }
-      VCDataProvider.prototype.sendTypingStatusMessage = function (conversationType, targetId, messageName, sendCallback) {
+      VCDataProvider.prototype.sendTypingStatusMessage = function (
+        conversationType,
+        targetId,
+        messageName,
+        sendCallback
+      ) {
         var me = this
         this.useConsole && console.log('sendTypingStatusMessage')
         if (messageName in RongIMLib.RongIMClient.MessageParams) {
-          me.sendMessage(conversationType, targetId, RongIMLib.TypingStatusMessage.obtain(RongIMLib.RongIMClient.MessageParams[messageName].objectName, ''), {
-            onSuccess: function () {
-              setTimeout(function () {
-                sendCallback.onSuccess()
-              })
-            },
-            onError: function (errorCode) {
-              setTimeout(function () {
-                sendCallback.onError(errorCode, null)
-              })
-            },
-            onBefore: function () {}
-          })
+          me.sendMessage(
+            conversationType,
+            targetId,
+            RongIMLib.TypingStatusMessage.obtain(
+              RongIMLib.RongIMClient.MessageParams[messageName].objectName,
+              ''
+            ),
+            {
+              onSuccess: function () {
+                setTimeout(function () {
+                  sendCallback.onSuccess()
+                })
+              },
+              onError: function (errorCode) {
+                setTimeout(function () {
+                  sendCallback.onError(errorCode, null)
+                })
+              },
+              onBefore: function () {},
+            }
+          )
         }
       }
-      VCDataProvider.prototype.setMessageStatus = function (conversationType, targetId, timestamp, status, callback) {
-        this.addon.updateMessageReceiptStatus(conversationType, targetId, timestamp)
+      VCDataProvider.prototype.setMessageStatus = function (
+        conversationType,
+        targetId,
+        timestamp,
+        status,
+        callback
+      ) {
+        this.addon.updateMessageReceiptStatus(
+          conversationType,
+          targetId,
+          timestamp
+        )
         callback.onSuccess(true)
       }
-      VCDataProvider.prototype.sendTextMessage = function (conversationType, targetId, content, sendMessageCallback) {
+      VCDataProvider.prototype.sendTextMessage = function (
+        conversationType,
+        targetId,
+        content,
+        sendMessageCallback
+      ) {
         var msgContent = RongIMLib.TextMessage.obtain(content)
         this.useConsole && console.log('sendTextMessage')
-        this.sendMessage(conversationType, targetId, msgContent, sendMessageCallback)
+        this.sendMessage(
+          conversationType,
+          targetId,
+          msgContent,
+          sendMessageCallback
+        )
       }
-      VCDataProvider.prototype.getRemoteHistoryMessages = function (conversationType, targetId, timestamp, count, callback, config) {
+      VCDataProvider.prototype.getRemoteHistoryMessages = function (
+        conversationType,
+        targetId,
+        timestamp,
+        count,
+        callback,
+        config
+      ) {
         try {
           var me = this
           me.useConsole && console.log('getRemoteHistoryMessages')
-          me.addon.getRemoteHistoryMessages(conversationType, targetId, timestamp || 0, count, function (ret, hasMore) {
-            var list = ret ? JSON.parse(ret).list : []
-            var msgs = []
-            list.reverse()
-            for (var i = 0, len = list.length; i < len; i++) {
-              var message = me.buildMessage(list[i].obj)
-              message.sentStatus = RongIMLib.SentStatus.READ
-              msgs[i] = message
+          me.addon.getRemoteHistoryMessages(
+            conversationType,
+            targetId,
+            timestamp || 0,
+            count,
+            function (ret, hasMore) {
+              var list = ret ? JSON.parse(ret).list : []
+              var msgs = []
+              list.reverse()
+              for (var i = 0, len = list.length; i < len; i++) {
+                var message = me.buildMessage(list[i].obj)
+                message.sentStatus = RongIMLib.SentStatus.READ
+                msgs[i] = message
+              }
+              callback.onSuccess(msgs, !!hasMore)
+            },
+            function (errorCode) {
+              callback.onError(errorCode)
             }
-            callback.onSuccess(msgs, !!hasMore)
-          }, function (errorCode) {
-            callback.onError(errorCode)
-          })
+          )
         } catch (e) {
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.getRemoteConversationList = function (callback, conversationTypes, count, isGetHiddenConvers) {
+      VCDataProvider.prototype.getRemoteConversationList = function (
+        callback,
+        conversationTypes,
+        count,
+        isGetHiddenConvers
+      ) {
         try {
           this.useConsole && console.log('getRemoteConversationList')
           var converTypes = conversationTypes || [1, 2, 3, 4, 5, 6, 7, 8]
@@ -11027,7 +14349,8 @@
           var me = this
           var index = 0
           list.reverse()
-          isGetHiddenConvers = typeof isGetHiddenConvers === 'boolean' ? isGetHiddenConvers : false
+          isGetHiddenConvers =
+            typeof isGetHiddenConvers === 'boolean' ? isGetHiddenConvers : false
           for (var i = 0, len_1 = list.length; i < len_1; i++) {
             var tmpObj = list[i].obj
             var obj = JSON.parse(tmpObj)
@@ -11050,14 +14373,22 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.removeConversation = function (conversationType, targetId, callback) {
+      VCDataProvider.prototype.removeConversation = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         try {
           this.useConsole && console.log('removeConversation')
           this.addon.removeConversation(conversationType, targetId)
-          var conversations = RongIMLib.RongIMClient._memoryStore.conversationList
+          var conversations =
+            RongIMLib.RongIMClient._memoryStore.conversationList
           var len = conversations.length
           for (var i = 0; i < len; i++) {
-            if (conversations[i].conversationType == conversationType && targetId == conversations[i].targetId) {
+            if (
+              conversations[i].conversationType == conversationType &&
+              targetId == conversations[i].targetId
+            ) {
               conversations.splice(i, 1)
               break
             }
@@ -11067,61 +14398,111 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.joinChatRoom = function (chatRoomId, messageCount, callback) {
+      VCDataProvider.prototype.joinChatRoom = function (
+        chatRoomId,
+        messageCount,
+        callback
+      ) {
         this.useConsole && console.log('joinChatRoom')
-        this.addon.joinChatRoom(chatRoomId, messageCount, function () {
-          callback.onSuccess()
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.joinChatRoom(
+          chatRoomId,
+          messageCount,
+          function () {
+            callback.onSuccess()
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.quitChatRoom = function (chatRoomId, callback) {
         this.useConsole && console.log('quitChatRoom')
-        this.addon.quitChatRoom(chatRoomId, function () {
-          callback.onSuccess()
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.quitChatRoom(
+          chatRoomId,
+          function () {
+            callback.onSuccess()
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.addToBlacklist = function (userId, callback) {
         this.useConsole && console.log('addToBlacklist')
-        this.addon.addToBlacklist(userId, function () {
-          callback.onSuccess()
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.addToBlacklist(
+          userId,
+          function () {
+            callback.onSuccess()
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.getBlacklist = function (callback) {
         this.useConsole && console.log('getBlacklist')
-        this.addon.getBlacklist(function (blacklistors) {
-          callback.onSuccess(blacklistors)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.getBlacklist(
+          function (blacklistors) {
+            callback.onSuccess(blacklistors)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
-      VCDataProvider.prototype.getBlacklistStatus = function (userId, callback) {
+      VCDataProvider.prototype.getBlacklistStatus = function (
+        userId,
+        callback
+      ) {
         this.useConsole && console.log('getBlacklistStatus')
-        this.addon.getBlacklistStatus(userId, function (result) {
-          callback.onSuccess(result)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.getBlacklistStatus(
+          userId,
+          function (result) {
+            callback.onSuccess(result)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
-      VCDataProvider.prototype.removeFromBlacklist = function (userId, callback) {
+      VCDataProvider.prototype.removeFromBlacklist = function (
+        userId,
+        callback
+      ) {
         this.useConsole && console.log('removeFromBlacklist')
-        this.addon.removeFromBlacklist(userId, function () {
-          callback.onSuccess()
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.removeFromBlacklist(
+          userId,
+          function () {
+            callback.onSuccess()
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
-      VCDataProvider.prototype.sendMessage = function (conversationType, targetId, messageContent, sendCallback, mentiondMsg, pushText, appData, methodType, params) {
+      VCDataProvider.prototype.sendMessage = function (
+        conversationType,
+        targetId,
+        messageContent,
+        sendCallback,
+        mentiondMsg,
+        pushText,
+        appData,
+        methodType,
+        params
+      ) {
         var me = this
         var users = []
         me.useConsole && console.log('sendMessage')
         params = params || {}
-        var isGroup = (conversationType == RongIMLib.ConversationType.DISCUSSION || conversationType == RongIMLib.ConversationType.GROUP)
-        if (isGroup && messageContent.messageName == RongIMLib.RongIMClient.MessageType.ReadReceiptResponseMessage) {
+        var isGroup =
+          conversationType == RongIMLib.ConversationType.DISCUSSION ||
+          conversationType == RongIMLib.ConversationType.GROUP
+        if (
+          isGroup &&
+          messageContent.messageName ==
+            RongIMLib.RongIMClient.MessageType.ReadReceiptResponseMessage
+        ) {
           users = []
           var rspMsg = messageContent
           if (rspMsg.receiptMessageDic) {
@@ -11132,7 +14513,11 @@
             users = ids
           }
         }
-        if (isGroup && messageContent.messageName == RongIMLib.RongIMClient.MessageType.SyncReadStatusMessage) {
+        if (
+          isGroup &&
+          messageContent.messageName ==
+            RongIMLib.RongIMClient.MessageType.SyncReadStatusMessage
+        ) {
           users = []
           users.push(me.userId)
         }
@@ -11140,31 +14525,59 @@
         if (isGroup && userIds) {
           users = userIds
         }
-        var msg = me.addon.sendMessage(conversationType, targetId, RongIMLib.RongIMClient.MessageParams[messageContent.messageName].objectName, messageContent.encode(), pushText || '', appData || '', function (progress) {}, function (message, code) {
-          var msg = me.buildMessage(message)
-          var errorCode = RongIMLib.ErrorCode.SENSITIVE_REPLACE
-          if (code == errorCode) {
-            return sendCallback.onError(errorCode, msg)
-          }
-          sendCallback.onSuccess(msg)
-        }, function (message, code) {
-          sendCallback.onError(code, me.buildMessage(message))
-        }, users, mentiondMsg)
+        var msg = me.addon.sendMessage(
+          conversationType,
+          targetId,
+          RongIMLib.RongIMClient.MessageParams[messageContent.messageName]
+            .objectName,
+          messageContent.encode(),
+          pushText || '',
+          appData || '',
+          function (progress) {},
+          function (message, code) {
+            var msg = me.buildMessage(message)
+            var errorCode = RongIMLib.ErrorCode.SENSITIVE_REPLACE
+            if (code == errorCode) {
+              return sendCallback.onError(errorCode, msg)
+            }
+            sendCallback.onSuccess(msg)
+          },
+          function (message, code) {
+            sendCallback.onError(code, me.buildMessage(message))
+          },
+          users,
+          mentiondMsg
+        )
         var tempMessage = JSON.parse(msg)
         sendCallback.onBefore && sendCallback.onBefore(tempMessage.messageId)
         RongIMLib.MessageIdHandler.messageId = tempMessage.messageId
       }
-      VCDataProvider.prototype.registerMessageType = function (messageType, objectName, messageTag, messageContent, searchProps) {
+      VCDataProvider.prototype.registerMessageType = function (
+        messageType,
+        objectName,
+        messageTag,
+        messageContent,
+        searchProps
+      ) {
         this.useConsole && console.log('registerMessageType')
-        this.addon.registerMessageType(objectName, messageTag.getMessageTag(), searchProps)
-        var regMsg = RongIMLib.ModelUtil.modleCreate(messageContent, messageType)
+        this.addon.registerMessageType(
+          objectName,
+          messageTag.getMessageTag(),
+          searchProps
+        )
+        var regMsg = RongIMLib.ModelUtil.modleCreate(
+          messageContent,
+          messageType
+        )
         RongIMLib.RongIMClient.RegisterMessage[messageType] = regMsg
-        RongIMLib.RongIMClient.RegisterMessage[messageType].messageName = messageType
+        RongIMLib.RongIMClient.RegisterMessage[
+          messageType
+        ].messageName = messageType
         registerMessageTypeMapping[objectName] = messageType
         RongIMLib.RongIMClient.MessageType[messageType] = messageType
         RongIMLib.RongIMClient.MessageParams[messageType] = {
           objectName: objectName,
-          msgTag: messageTag
+          msgTag: messageTag,
         }
         typeMapping[objectName] = messageType
       }
@@ -11189,7 +14602,7 @@
             type: name,
             name: message.name,
             flag: flag,
-            protos: protos
+            protos: protos,
           })
         }
         var register = function (message) {
@@ -11204,18 +14617,42 @@
           register(message)
         }
       }
-      VCDataProvider.prototype.addMessage = function (conversationType, targetId, message, callback) {
+      VCDataProvider.prototype.addMessage = function (
+        conversationType,
+        targetId,
+        message,
+        callback
+      ) {
         this.useConsole && console.log('addMessage')
         var direction = message.direction
-        var msg = this.addon.insertMessage(conversationType, targetId, message.senderUserId, message.objectName, JSON.stringify(message.content), function () {
-          callback.onSuccess(me.buildMessage(msg))
-        }, function () {
-          callback.onError(RongIMLib.ErrorCode.MSG_INSERT_ERROR)
-        }, direction)
+        var msg = this.addon.insertMessage(
+          conversationType,
+          targetId,
+          message.senderUserId,
+          message.objectName,
+          JSON.stringify(message.content),
+          function () {
+            callback.onSuccess(me.buildMessage(msg))
+          },
+          function () {
+            callback.onError(RongIMLib.ErrorCode.MSG_INSERT_ERROR)
+          },
+          direction
+        )
         var me = this
       }
-      VCDataProvider.prototype.removeMessage = function (conversationType, targetId, delMsgs, callback) {}
-      VCDataProvider.prototype.removeLocalMessage = function (conversationType, targetId, timestamps, callback) {
+      VCDataProvider.prototype.removeMessage = function (
+        conversationType,
+        targetId,
+        delMsgs,
+        callback
+      ) {}
+      VCDataProvider.prototype.removeLocalMessage = function (
+        conversationType,
+        targetId,
+        timestamps,
+        callback
+      ) {
         try {
           this.useConsole && console.log('removeLocalMessage')
           this.addon.deleteMessages(timestamps)
@@ -11233,7 +14670,11 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.clearMessages = function (conversationType, targetId, callback) {
+      VCDataProvider.prototype.clearMessages = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         try {
           this.useConsole && console.log('clearMessages')
           this.addon.clearMessages(conversationType, targetId)
@@ -11243,8 +14684,16 @@
         }
       }
       // Web 端接口，桌面版无需实现
-      VCDataProvider.prototype.setUnreadCount = function (conversationType, targetId, count) {}
-      VCDataProvider.prototype.getConversation = function (conversationType, targetId, callback) {
+      VCDataProvider.prototype.setUnreadCount = function (
+        conversationType,
+        targetId,
+        count
+      ) {}
+      VCDataProvider.prototype.getConversation = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         try {
           this.useConsole && console.log('getConversation')
           var ret = this.addon.getConversation(conversationType, targetId)
@@ -11253,16 +14702,29 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.getConversationList = function (callback, conversationTypes, count, isGetHiddenConvers) {
+      VCDataProvider.prototype.getConversationList = function (
+        callback,
+        conversationTypes,
+        count,
+        isGetHiddenConvers
+      ) {
         this.useConsole && console.log('getConversationList')
-        this.getRemoteConversationList(callback, conversationTypes, count, isGetHiddenConvers)
+        this.getRemoteConversationList(
+          callback,
+          conversationTypes,
+          count,
+          isGetHiddenConvers
+        )
       }
       VCDataProvider.prototype.clearCache = function () {
         var memoryStore = RongIMLib.RongIMClient._memoryStore || {}
         memoryStore.conversationList = []
         memoryStore.isSyncRemoteConverList
       }
-      VCDataProvider.prototype.clearConversations = function (conversationTypes, callback) {
+      VCDataProvider.prototype.clearConversations = function (
+        conversationTypes,
+        callback
+      ) {
         try {
           this.useConsole && console.log('clearConversations')
           this.addon.clearConversations()
@@ -11271,15 +14733,31 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.setMessageContent = function (messageId, content, objectName) {
+      VCDataProvider.prototype.setMessageContent = function (
+        messageId,
+        content,
+        objectName
+      ) {
         content = JSON.stringify(content)
         this.addon.setMessageContent(messageId, content, objectName)
       }
-      VCDataProvider.prototype.setMessageSearchField = function (messageId, content, searchFiles) {
+      VCDataProvider.prototype.setMessageSearchField = function (
+        messageId,
+        content,
+        searchFiles
+      ) {
         content = JSON.stringify(content)
         this.addon.setMessageContent(messageId, content, searchFiles)
       }
-      VCDataProvider.prototype.getHistoryMessages = function (conversationType, targetId, timestamp, count, callback, objectname, direction) {
+      VCDataProvider.prototype.getHistoryMessages = function (
+        conversationType,
+        targetId,
+        timestamp,
+        count,
+        callback,
+        objectname,
+        direction
+      ) {
         this.useConsole && console.log('getHistoryMessages')
         if (count <= 0) {
           callback.onError(RongIMLib.ErrorCode.TIMEOUT)
@@ -11288,7 +14766,14 @@
         objectname = objectname || ''
         direction = typeof direction === 'undefined' || direction
         try {
-          var ret = this.addon.getHistoryMessages(conversationType, targetId, timestamp || 0, count, objectname, direction)
+          var ret = this.addon.getHistoryMessages(
+            conversationType,
+            targetId,
+            timestamp || 0,
+            count,
+            objectname,
+            direction
+          )
           var list = ret ? JSON.parse(ret).list : []
           var msgs = []
           var me = this
@@ -11302,7 +14787,10 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.clearRemoteHistoryMessages = function (params, callback) {
+      VCDataProvider.prototype.clearRemoteHistoryMessages = function (
+        params,
+        callback
+      ) {
         var conversationType = params.conversationType
         var targetId = params.targetId
         var timestamp = params.timestamp
@@ -11311,7 +14799,7 @@
           2: true,
           3: true,
           5: true,
-          6: true
+          6: true,
         }
         var topic = _topic[conversationType]
         if (!topic) {
@@ -11322,17 +14810,26 @@
           callback.onError(RongIMLib.ErrorCode.CLEAR_HIS_TIME_ERROR)
           return
         }
-        this.addon.clearRemoteHistoryMessages(+conversationType, targetId, timestamp, function () {
-          callback.onSuccess(true)
-        }, function (errorCode) {
-          if (errorCode == 1) {
-            // 没有开通历史消息云存储
-            errorCode = RongIMLib.ErrorCode.CLEAR_HIS_ERROR
+        this.addon.clearRemoteHistoryMessages(
+          +conversationType,
+          targetId,
+          timestamp,
+          function () {
+            callback.onSuccess(true)
+          },
+          function (errorCode) {
+            if (errorCode == 1) {
+              // 没有开通历史消息云存储
+              errorCode = RongIMLib.ErrorCode.CLEAR_HIS_ERROR
+            }
+            callback.onError(errorCode)
           }
-          callback.onError(errorCode)
-        })
+        )
       }
-      VCDataProvider.prototype.clearHistoryMessages = function (params, callback) {
+      VCDataProvider.prototype.clearHistoryMessages = function (
+        params,
+        callback
+      ) {
         var conversationType = +params.conversationType
         var targetId = params.targetId
         try {
@@ -11344,7 +14841,10 @@
           callback.onError(RongIMLib.ErrorCode.CLEAR_HIS_ERROR)
         }
       }
-      VCDataProvider.prototype.getTotalUnreadCount = function (callback, conversationTypes) {
+      VCDataProvider.prototype.getTotalUnreadCount = function (
+        callback,
+        conversationTypes
+      ) {
         try {
           var result
           this.useConsole && console.log('getTotalUnreadCount')
@@ -11358,11 +14858,18 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.getConversationUnreadCount = function (conversationTypes, callback) {
+      VCDataProvider.prototype.getConversationUnreadCount = function (
+        conversationTypes,
+        callback
+      ) {
         this.useConsole && console.log('getConversationUnreadCount')
         this.getTotalUnreadCount(callback, conversationTypes)
       }
-      VCDataProvider.prototype.getUnreadCount = function (conversationType, targetId, callback) {
+      VCDataProvider.prototype.getUnreadCount = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         try {
           this.useConsole && console.log('getUnreadCount')
           var result = this.addon.getUnreadCount(conversationType, targetId)
@@ -11371,7 +14878,11 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.clearUnreadCount = function (conversationType, targetId, callback) {
+      VCDataProvider.prototype.clearUnreadCount = function (
+        conversationType,
+        targetId,
+        callback
+      ) {
         try {
           this.useConsole && console.log('clearUnreadCount')
           var result = this.addon.clearUnreadCount(conversationType, targetId)
@@ -11383,16 +14894,30 @@
       VCDataProvider.prototype.clearTotalUnreadCount = function (callback) {
         this.useConsole && console.log('clearTotalUnreadCount')
       }
-      VCDataProvider.prototype.clearUnreadCountByTimestamp = function (conversationType, targetId, timestamp, callback) {
+      VCDataProvider.prototype.clearUnreadCountByTimestamp = function (
+        conversationType,
+        targetId,
+        timestamp,
+        callback
+      ) {
         try {
           this.useConsole && console.log('clearUnreadCountByTimestamp')
-          var result = this.addon.clearUnreadCountByTimestamp(conversationType, targetId, timestamp)
+          var result = this.addon.clearUnreadCountByTimestamp(
+            conversationType,
+            targetId,
+            timestamp
+          )
           callback.onSuccess(true)
         } catch (e) {
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.setConversationToTop = function (conversationType, targetId, isTop, callback) {
+      VCDataProvider.prototype.setConversationToTop = function (
+        conversationType,
+        targetId,
+        isTop,
+        callback
+      ) {
         try {
           this.useConsole && console.log('setConversationToTop')
           this.addon.setConversationToTop(conversationType, targetId, isTop)
@@ -11401,10 +14926,18 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.setConversationHidden = function (conversationType, targetId, isHidden) {
+      VCDataProvider.prototype.setConversationHidden = function (
+        conversationType,
+        targetId,
+        isHidden
+      ) {
         this.addon.setConversationHidden(conversationType, targetId, isHidden)
       }
-      VCDataProvider.prototype.setMessageReceivedStatus = function (messageId, receivedStatus, callback) {
+      VCDataProvider.prototype.setMessageReceivedStatus = function (
+        messageId,
+        receivedStatus,
+        callback
+      ) {
         try {
           this.useConsole && console.log('setMessageReceivedStatus')
           this.addon.setMessageReceivedStatus(messageId, receivedStatus)
@@ -11413,7 +14946,11 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.setMessageSentStatus = function (messageId, sentStatus, callback) {
+      VCDataProvider.prototype.setMessageSentStatus = function (
+        messageId,
+        sentStatus,
+        callback
+      ) {
         try {
           this.useConsole && console.log('setMessageSentStatus')
           this.addon.setMessageSentStatus(messageId, sentStatus)
@@ -11424,25 +14961,44 @@
       }
       VCDataProvider.prototype.getFileToken = function (fileType, callback) {
         this.useConsole && console.log('getFileToken')
-        this.addon.getUploadToken(fileType, function (token) {
-          callback.onSuccess({
-            token: token
-          })
-        }, function (errorCode) {
-          callback.onError(errorCode)
-        })
+        this.addon.getUploadToken(
+          fileType,
+          function (token) {
+            callback.onSuccess({
+              token: token,
+            })
+          },
+          function (errorCode) {
+            callback.onError(errorCode)
+          }
+        )
       }
-      VCDataProvider.prototype.getFileUrl = function (fileType, fileName, oriName, callback) {
+      VCDataProvider.prototype.getFileUrl = function (
+        fileType,
+        fileName,
+        oriName,
+        callback
+      ) {
         this.useConsole && console.log('getFileUrl')
-        this.addon.getDownloadUrl(fileType, fileName, oriName, function (url) {
-          callback.onSuccess({
-            downloadUrl: url
-          })
-        }, function (errorCode) {
-          callback.onError(errorCode)
-        })
+        this.addon.getDownloadUrl(
+          fileType,
+          fileName,
+          oriName,
+          function (url) {
+            callback.onSuccess({
+              downloadUrl: url,
+            })
+          },
+          function (errorCode) {
+            callback.onError(errorCode)
+          }
+        )
       }
-      VCDataProvider.prototype.searchConversationByContent = function (keyword, callback, conversationTypes) {
+      VCDataProvider.prototype.searchConversationByContent = function (
+        keyword,
+        callback,
+        conversationTypes
+      ) {
         var converTypes = []
         if (typeof conversationTypes === 'undefined') {
           converTypes = [1, 2, 3, 4, 5, 6, 7]
@@ -11451,7 +15007,10 @@
         }
         try {
           this.useConsole && console.log('searchConversationByContent')
-          var result = this.addon.searchConversationByContent(converTypes, keyword)
+          var result = this.addon.searchConversationByContent(
+            converTypes,
+            keyword
+          )
           var list = JSON.parse(result).list
           var convers = []
           var me = this
@@ -11464,92 +15023,152 @@
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.searchMessageByContent = function (conversationType, targetId, keyword, timestamp, count, total, callback) {
+      VCDataProvider.prototype.searchMessageByContent = function (
+        conversationType,
+        targetId,
+        keyword,
+        timestamp,
+        count,
+        total,
+        callback
+      ) {
         var me = this
         try {
           this.useConsole && console.log('searchMessageByContent')
-          this.addon.searchMessageByContent(conversationType, targetId, keyword, timestamp, count, total, function (ret, matched) {
-            var list = ret ? JSON.parse(ret).list : []
-            var msgs = []
-            list.reverse()
-            for (var i = 0, len = list.length; i < len; i++) {
-              msgs[i] = me.buildMessage(list[i].obj)
+          this.addon.searchMessageByContent(
+            conversationType,
+            targetId,
+            keyword,
+            timestamp,
+            count,
+            total,
+            function (ret, matched) {
+              var list = ret ? JSON.parse(ret).list : []
+              var msgs = []
+              list.reverse()
+              for (var i = 0, len = list.length; i < len; i++) {
+                msgs[i] = me.buildMessage(list[i].obj)
+              }
+              callback.onSuccess(msgs, matched)
             }
-            callback.onSuccess(msgs, matched)
-          })
+          )
         } catch (e) {
           callback.onError(e)
         }
       }
-      VCDataProvider.prototype.getChatRoomInfo = function (chatRoomId, count, order, callback) {
+      VCDataProvider.prototype.getChatRoomInfo = function (
+        chatRoomId,
+        count,
+        order,
+        callback
+      ) {
         this.useConsole && console.log('getChatRoomInfo')
-        this.addon.getChatroomInfo(chatRoomId, count, order, function (ret, count) {
-          var list = ret ? JSON.parse(ret).list : []
-          var chatRoomInfo = {
-            userInfos: [],
-            userTotalNums: count
-          }
-          if (list.length > 0) {
-            for (var i = 0, len = list.length; i < len; i++) {
-              chatRoomInfo.userInfos.push(JSON.parse(list[i].obj))
+        this.addon.getChatroomInfo(
+          chatRoomId,
+          count,
+          order,
+          function (ret, count) {
+            var list = ret ? JSON.parse(ret).list : []
+            var chatRoomInfo = {
+              userInfos: [],
+              userTotalNums: count,
             }
+            if (list.length > 0) {
+              for (var i = 0, len = list.length; i < len; i++) {
+                chatRoomInfo.userInfos.push(JSON.parse(list[i].obj))
+              }
+            }
+            callback.onSuccess(chatRoomInfo)
+          },
+          function (errcode) {
+            callback.onError(errcode)
           }
-          callback.onSuccess(chatRoomInfo)
-        }, function (errcode) {
-          callback.onError(errcode)
-        })
+        )
       }
-      VCDataProvider.prototype.setChatroomHisMessageTimestamp = function (chatRoomId, timestamp) {}
-      VCDataProvider.prototype.getChatRoomHistoryMessages = function (chatRoomId, count, order, callback) {}
+      VCDataProvider.prototype.setChatroomHisMessageTimestamp = function (
+        chatRoomId,
+        timestamp
+      ) {}
+      VCDataProvider.prototype.getChatRoomHistoryMessages = function (
+        chatRoomId,
+        count,
+        order,
+        callback
+      ) {}
       VCDataProvider.prototype.getDelaTime = function () {
         return this.addon.getDeltaTime()
       }
       VCDataProvider.prototype.getUserStatus = function (userId, callback) {
         var me = this
-        this.addon.getUserStatus(userId, function (status) {
-          var entity = RongIMLib.RongInnerTools.convertUserStatus({
-            status: status,
-            userId: ''
-          })
-          callback.onSuccess(entity)
-        }, function (code) {
-          callback.onError(code)
-        })
+        this.addon.getUserStatus(
+          userId,
+          function (status) {
+            var entity = RongIMLib.RongInnerTools.convertUserStatus({
+              status: status,
+              userId: '',
+            })
+            callback.onSuccess(entity)
+          },
+          function (code) {
+            callback.onError(code)
+          }
+        )
       }
       VCDataProvider.prototype.setUserStatus = function (status, callback) {
-        this.addon.setUserStatus(status, function () {
-          callback.onSuccess(true)
-        }, function (code) {
-          callback.onError(code)
-        })
+        this.addon.setUserStatus(
+          status,
+          function () {
+            callback.onSuccess(true)
+          },
+          function (code) {
+            callback.onError(code)
+          }
+        )
       }
-      VCDataProvider.prototype.subscribeUserStatus = function (userIds, callback) {
-        this.addon.subscribeUserStatus(userIds, function () {
-          callback && callback.onSuccess(true)
-        }, function (code) {
-          callback && callback.onError(code)
-        })
+      VCDataProvider.prototype.subscribeUserStatus = function (
+        userIds,
+        callback
+      ) {
+        this.addon.subscribeUserStatus(
+          userIds,
+          function () {
+            callback && callback.onSuccess(true)
+          },
+          function (code) {
+            callback && callback.onError(code)
+          }
+        )
       }
-      VCDataProvider.prototype.setUserStatusListener = function (params, callback) {
+      VCDataProvider.prototype.setUserStatusListener = function (
+        params,
+        callback
+      ) {
         var me = this
         this.addon.setOnReceiveStatusListener(function (userId, status) {
           var entity = RongIMLib.RongInnerTools.convertUserStatus({
             userId: userId,
-            status: status
+            status: status,
           })
           RongIMLib.RongIMClient.userStatusObserver.notify({
             key: userId,
-            entity: entity
+            entity: entity,
           })
         })
         var userIds = params.userIds || []
         if (userIds.length) {
-          RongIMLib.RongIMClient._dataAccessProvider.subscribeUserStatus(userIds)
+          RongIMLib.RongIMClient._dataAccessProvider.subscribeUserStatus(
+            userIds
+          )
         }
       }
-      VCDataProvider.prototype.getUnreadMentionedMessages = function (conversationType, targetId) {
+      VCDataProvider.prototype.getUnreadMentionedMessages = function (
+        conversationType,
+        targetId
+      ) {
         var me = this
-        var mentions = JSON.parse(me.addon.getUnreadMentionedMessages(conversationType, targetId)).list
+        var mentions = JSON.parse(
+          me.addon.getUnreadMentionedMessages(conversationType, targetId)
+        ).list
         for (var i = 0, len = mentions.length; i < len; i++) {
           var temp = JSON.parse(mentions[i].obj)
           temp.content = JSON.parse(temp.content)
@@ -11557,38 +15176,98 @@
         }
         return mentions
       }
-      VCDataProvider.prototype.hasRemoteUnreadMessages = function (token, callback) {
+      VCDataProvider.prototype.hasRemoteUnreadMessages = function (
+        token,
+        callback
+      ) {
         callback.onSuccess(false)
       }
-      VCDataProvider.prototype.sendRecallMessage = function (content, sendMessageCallback) {
+      VCDataProvider.prototype.sendRecallMessage = function (
+        content,
+        sendMessageCallback
+      ) {
         var me = this
-        me.addon.recallMessage('RC:RcCmd', JSON.stringify(content), content.push || '', function () {
-          content.objectName = 'RC:RcCmd'
-          sendMessageCallback.onSuccess(me.buildMessage(JSON.stringify(content)))
-        }, function (errorCode) {
-          sendMessageCallback.onError(errorCode)
-        })
+        me.addon.recallMessage(
+          'RC:RcCmd',
+          JSON.stringify(content),
+          content.push || '',
+          function () {
+            content.objectName = 'RC:RcCmd'
+            sendMessageCallback.onSuccess(
+              me.buildMessage(JSON.stringify(content))
+            )
+          },
+          function (errorCode) {
+            sendMessageCallback.onError(errorCode)
+          }
+        )
       }
       VCDataProvider.prototype.updateMessage = function (message, callback) {}
-      VCDataProvider.prototype.updateMessages = function (conversationType, targetId, key, value, callback) {}
+      VCDataProvider.prototype.updateMessages = function (
+        conversationType,
+        targetId,
+        key,
+        value,
+        callback
+      ) {}
       VCDataProvider.prototype.reconnect = function (callback) {}
-      VCDataProvider.prototype.sendReceiptResponse = function (conversationType, targetId, sendCallback) {}
-      VCDataProvider.prototype.setMessageExtra = function (messageId, value, callback) {}
-      VCDataProvider.prototype.addMemberToDiscussion = function (discussionId, userIdList, callback) {}
-      VCDataProvider.prototype.createDiscussion = function (name, userIdList, callback) {}
-      VCDataProvider.prototype.getDiscussion = function (discussionId, callback) {}
-      VCDataProvider.prototype.quitDiscussion = function (discussionId, callback) {}
-      VCDataProvider.prototype.removeMemberFromDiscussion = function (discussionId, userId, callback) {}
-      VCDataProvider.prototype.setDiscussionInviteStatus = function (discussionId, status, callback) {}
-      VCDataProvider.prototype.setDiscussionName = function (discussionId, name, callback) {}
+      VCDataProvider.prototype.sendReceiptResponse = function (
+        conversationType,
+        targetId,
+        sendCallback
+      ) {}
+      VCDataProvider.prototype.setMessageExtra = function (
+        messageId,
+        value,
+        callback
+      ) {}
+      VCDataProvider.prototype.addMemberToDiscussion = function (
+        discussionId,
+        userIdList,
+        callback
+      ) {}
+      VCDataProvider.prototype.createDiscussion = function (
+        name,
+        userIdList,
+        callback
+      ) {}
+      VCDataProvider.prototype.getDiscussion = function (
+        discussionId,
+        callback
+      ) {}
+      VCDataProvider.prototype.quitDiscussion = function (
+        discussionId,
+        callback
+      ) {}
+      VCDataProvider.prototype.removeMemberFromDiscussion = function (
+        discussionId,
+        userId,
+        callback
+      ) {}
+      VCDataProvider.prototype.setDiscussionInviteStatus = function (
+        discussionId,
+        status,
+        callback
+      ) {}
+      VCDataProvider.prototype.setDiscussionName = function (
+        discussionId,
+        name,
+        callback
+      ) {}
       VCDataProvider.prototype.setEnvironment = function (isPrivate) {
         this.addon.setEnvironment(isPrivate)
       }
-      VCDataProvider.prototype.addConversation = function (conversation, callback) {}
+      VCDataProvider.prototype.addConversation = function (
+        conversation,
+        callback
+      ) {}
       VCDataProvider.prototype.updateConversation = function (conversation) {
         return null
       }
-      VCDataProvider.prototype.getConversationNotificationStatus = function (params, callback) {
+      VCDataProvider.prototype.getConversationNotificationStatus = function (
+        params,
+        callback
+      ) {
         var conversationType = params.conversationType
         var targetId = params.targetId
         var notification = RongIMLib.RongIMClient._memoryStore.notification
@@ -11598,14 +15277,22 @@
           callback.onSuccess(status)
           return
         }
-        this.addon.getConversationNotificationStatus(conversationType, targetId, function (status) {
-          notification[key] = status
-          callback.onSuccess(status)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.getConversationNotificationStatus(
+          conversationType,
+          targetId,
+          function (status) {
+            notification[key] = status
+            callback.onSuccess(status)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
-      VCDataProvider.prototype.setConversationNotificationStatus = function (params, callback) {
+      VCDataProvider.prototype.setConversationNotificationStatus = function (
+        params,
+        callback
+      ) {
         var conversationType = params.conversationType
         var targetId = params.targetId
         var status = params.status
@@ -11613,43 +15300,69 @@
         var key = conversationType + '_' + targetId
         notification[key] = status
         var notify = !!status
-        this.addon.setConversationNotificationStatus(conversationType, targetId, notify, function () {
-          callback.onSuccess(status)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.setConversationNotificationStatus(
+          conversationType,
+          targetId,
+          notify,
+          function () {
+            callback.onSuccess(status)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.getCurrentConnectionStatus = function () {
         return this.addon.getConnectionStatus()
       }
-      VCDataProvider.prototype.getAgoraDynamicKey = function (engineType, channelName, callback) {
+      VCDataProvider.prototype.getAgoraDynamicKey = function (
+        engineType,
+        channelName,
+        callback
+      ) {
         var extra = ''
-        this.addon.getVoIPKey(engineType, channelName, extra, function (token) {
-          callback.onSuccess(token)
-        }, function (errorCode) {
-          callback.onError(errorCode)
-        })
+        this.addon.getVoIPKey(
+          engineType,
+          channelName,
+          extra,
+          function (token) {
+            callback.onSuccess(token)
+          },
+          function (errorCode) {
+            callback.onError(errorCode)
+          }
+        )
       }
-      VCDataProvider.prototype.getPublicServiceProfile = function (publicServiceType, publicServiceId, callback) {
-        var profile = RongIMLib.RongIMClient._memoryStore.publicServiceMap.get(publicServiceType, publicServiceId)
+      VCDataProvider.prototype.getPublicServiceProfile = function (
+        publicServiceType,
+        publicServiceId,
+        callback
+      ) {
+        var profile = RongIMLib.RongIMClient._memoryStore.publicServiceMap.get(
+          publicServiceType,
+          publicServiceId
+        )
         callback.onSuccess(profile)
       }
       VCDataProvider.prototype.setDeviceInfo = function (device) {
         var id = device.id || ''
         this.addon.setDeviceId(id)
       }
-      VCDataProvider.prototype.getRemotePublicServiceList = function (callback, pullMessageTime) {
+      VCDataProvider.prototype.getRemotePublicServiceList = function (
+        callback,
+        pullMessageTime
+      ) {
         var publicList = []
         var ret = this.addon.getAccounts()
         var transformProto = function (ret) {
           var result = {
             hasFollowed: false,
             isGlobal: false,
-            menu: null
+            menu: null,
           }
           if (!ret.obj) {
             var error = {
-              error: ret
+              error: ret,
             }
             throw new Error('公众账号数据格式错误: ' + JSON.stringify(error))
           }
@@ -11660,7 +15373,7 @@
             aName: 'introduction',
             aUri: 'portraitUri',
             follow: 'hasFollowed',
-            isGlobal: 'isGlobal'
+            isGlobal: 'isGlobal',
           }
           for (var key in obj) {
             var val = obj[key]
@@ -11690,7 +15403,9 @@
           RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList.length = 0
           RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList = publicList
         }
-        callback.onSuccess(RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList)
+        callback.onSuccess(
+          RongIMLib.RongIMClient._memoryStore.publicServiceMap.publicServiceList
+        )
       }
       VCDataProvider.prototype.buildMessage = function (result) {
         var message = new RongIMLib.Message()
@@ -11707,7 +15422,9 @@
         message.sentTime = ret.sentTime
         message.objectName = ret.objectName
         var content = ret.content ? JSON.parse(ret.content) : ret.content
-        var messageType = typeMapping[ret.objectName] || registerMessageTypeMapping[ret.objectName]
+        var messageType =
+          typeMapping[ret.objectName] ||
+          registerMessageTypeMapping[ret.objectName]
         if (content) {
           content.messageName = messageType
         }
@@ -11733,7 +15450,9 @@
         lastestMsg.targetId = c.targetId
         conver.latestMessage = lastestMsg
         conver.latestMessageId = lastestMsg.messageId
-        conver.latestMessage.messageType = typeMapping[lastestMsg.objectName] || registerMessageTypeMapping[lastestMsg.objectName]
+        conver.latestMessage.messageType =
+          typeMapping[lastestMsg.objectName] ||
+          registerMessageTypeMapping[lastestMsg.objectName]
         conver.objectName = lastestMsg.objectName
         conver.receivedStatus = RongIMLib.ReceivedStatus.READ
         conver.sentTime = lastestMsg.sentTime
@@ -11742,7 +15461,10 @@
         conver.targetId = c.targetId
         conver.unreadMessageCount = c.unreadCount
         conver.hasUnreadMention = c.m_hasUnreadMention
-        var mentions = this.getUnreadMentionedMessages(c.conversationType, c.targetId)
+        var mentions = this.getUnreadMentionedMessages(
+          c.conversationType,
+          c.targetId
+        )
         if (mentions.length > 0) {
           // 取最后一条 @ 消息,原因：和 web 互相兼容
           var mention = mentions.pop()
@@ -11750,200 +15472,456 @@
             uid: mention.messageUid,
             time: mention.sentTime,
             mentionedInfo: mention.content.mentionedInfo,
-            sendUserId: mention.senderUserId
+            sendUserId: mention.senderUserId,
           }
         }
         return conver
       }
       VCDataProvider.prototype.getRTCUserInfoList = function (room, callback) {
-        this.addon.getRTCUsers(room.id, 1, function (result) {
-          callback.onSuccess(result)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.getRTCUsers(
+          room.id,
+          1,
+          function (result) {
+            callback.onSuccess(result)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.getRTCRoomInfo = function (room, callback) {
         var order = 2
-        this.addon.getRTCResouce(room.id, order, function (result) {
-          callback.onSuccess(JSON.parse(result))
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.getRTCResouce(
+          room.id,
+          order,
+          function (result) {
+            callback.onSuccess(JSON.parse(result))
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.joinRTCRoom = function (room, callback) {
         var id = room.id
         var type = room.type || 0
-        this.addon.joinRTCRoom(id, type, function (result, token) {
-          var res = JSON.parse(result)
-          var users = {}
-          var list = res.list
-          RongIMLib.RongUtil.forEach(list, function (item) {
-            var userId = item.id
-            var tmpData = {}
-            RongIMLib.RongUtil.forEach(item.data, function (data) {
-              var key = data.key
-              var value = data.value
-              tmpData[key] = value
+        this.addon.joinRTCRoom(
+          id,
+          type,
+          function (result, token) {
+            var res = JSON.parse(result)
+            var users = {}
+            var list = res.list
+            RongIMLib.RongUtil.forEach(list, function (item) {
+              var userId = item.id
+              var tmpData = {}
+              RongIMLib.RongUtil.forEach(item.data, function (data) {
+                var key = data.key
+                var value = data.value
+                tmpData[key] = value
+              })
+              users[userId] = tmpData
             })
-            users[userId] = tmpData
-          })
-          callback.onSuccess({
-            users: users,
-            token: token
-          })
-        }, function (error) {
-          callback.onError(error)
-        })
+            callback.onSuccess({
+              users: users,
+              token: token,
+            })
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.quitRTCRoom = function (room, callback) {
-        this.addon.exitRTCRoom(room.id, function () {
-          callback.onSuccess(true)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.exitRTCRoom(
+          room.id,
+          function () {
+            callback.onSuccess(true)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
       VCDataProvider.prototype.RTCPing = function (room, callback) {
-        this.addon.sendRTCPing(room.id, function () {
-          callback.onSuccess(true)
-        }, function (error) {
-          callback.onError(error)
-        })
+        this.addon.sendRTCPing(
+          room.id,
+          function () {
+            callback.onSuccess(true)
+          },
+          function (error) {
+            callback.onError(error)
+          }
+        )
       }
-      VCDataProvider.prototype.setRTCData = function (roomId, key, value, isInner, apiType, callback, message) {
+      VCDataProvider.prototype.setRTCData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        apiType,
+        callback,
+        message
+      ) {
         var context = this
         var hanlders = {
-          room_inner: function (roomId, key, value, name, content, success, error) {
-            context.addon.setRTCInnerData(roomId, RongIMLib.RTCAPIType.ROOM, key, value, name, content, success, error)
+          room_inner: function (
+            roomId,
+            key,
+            value,
+            name,
+            content,
+            success,
+            error
+          ) {
+            context.addon.setRTCInnerData(
+              roomId,
+              RongIMLib.RTCAPIType.ROOM,
+              key,
+              value,
+              name,
+              content,
+              success,
+              error
+            )
           },
-          room_outer: function (roomId, key, value, name, content, success, error) {
-            context.addon.setRTCOuterData(roomId, RongIMLib.RTCAPIType.ROOM, key, value, name, content, success, error)
+          room_outer: function (
+            roomId,
+            key,
+            value,
+            name,
+            content,
+            success,
+            error
+          ) {
+            context.addon.setRTCOuterData(
+              roomId,
+              RongIMLib.RTCAPIType.ROOM,
+              key,
+              value,
+              name,
+              content,
+              success,
+              error
+            )
           },
-          user_inner: function (roomId, key, value, name, content, success, error) {
-            context.addon.setRTCInnerData(roomId, RongIMLib.RTCAPIType.PERSON, key, value, name, content, success, error)
+          user_inner: function (
+            roomId,
+            key,
+            value,
+            name,
+            content,
+            success,
+            error
+          ) {
+            context.addon.setRTCInnerData(
+              roomId,
+              RongIMLib.RTCAPIType.PERSON,
+              key,
+              value,
+              name,
+              content,
+              success,
+              error
+            )
           },
-          user_outer: function (roomId, key, value, name, content, success, error) {
-            context.addon.setRTCOuterData(roomId, RongIMLib.RTCAPIType.PERSON, key, value, name, content, success, error)
-          }
+          user_outer: function (
+            roomId,
+            key,
+            value,
+            name,
+            content,
+            success,
+            error
+          ) {
+            context.addon.setRTCOuterData(
+              roomId,
+              RongIMLib.RTCAPIType.PERSON,
+              key,
+              value,
+              name,
+              content,
+              success,
+              error
+            )
+          },
         }
         var type = RongIMLib.RTCAPIType.PERSON == apiType ? 'user' : 'room'
         var direction = isInner ? 'inner' : 'outer'
         var tpl = '{type}_{direction}'
         var name = RongIMLib.RongUtil.tplEngine(tpl, {
           type: type,
-          direction: direction
+          direction: direction,
         })
         var handler = hanlders[name]
         if (handler) {
           message = message || {}
           var name = message.name
           var content = message.content
-          handler(roomId, key, value, name, content, function () {
-            callback.onSuccess(true)
-          }, function (code) {
-            callback.onError(code)
-          })
+          handler(
+            roomId,
+            key,
+            value,
+            name,
+            content,
+            function () {
+              callback.onSuccess(true)
+            },
+            function (code) {
+              callback.onError(code)
+            }
+          )
         }
       }
-      VCDataProvider.prototype.setRTCRoomData = function (roomId, key, value, isInner, callback, message) {
-        this.setRTCData(roomId, key, value, isInner, RongIMLib.RTCAPIType.ROOM, callback, message)
+      VCDataProvider.prototype.setRTCRoomData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        callback,
+        message
+      ) {
+        this.setRTCData(
+          roomId,
+          key,
+          value,
+          isInner,
+          RongIMLib.RTCAPIType.ROOM,
+          callback,
+          message
+        )
       }
-      VCDataProvider.prototype.getRTCData = function (roomId, keys, isInner, apiType, callback) {
+      VCDataProvider.prototype.getRTCData = function (
+        roomId,
+        keys,
+        isInner,
+        apiType,
+        callback
+      ) {
         var context = this
         var hanlders = {
           room_inner: function (roomId, keys, success, error) {
-            context.addon.getRTCInnerData(roomId, RongIMLib.RTCAPIType.ROOM, keys, success, error)
+            context.addon.getRTCInnerData(
+              roomId,
+              RongIMLib.RTCAPIType.ROOM,
+              keys,
+              success,
+              error
+            )
           },
           room_outer: function (roomId, keys, success, error) {
-            context.addon.getRTCOuterData(roomId, RongIMLib.RTCAPIType.ROOM, keys, success, error)
-          }
+            context.addon.getRTCOuterData(
+              roomId,
+              RongIMLib.RTCAPIType.ROOM,
+              keys,
+              success,
+              error
+            )
+          },
         }
         var type = RongIMLib.RTCAPIType.PERSON == apiType ? 'user' : 'room'
         var direction = isInner ? 'inner' : 'outer'
         var tpl = '{type}_{direction}'
         var name = RongIMLib.RongUtil.tplEngine(tpl, {
           type: type,
-          direction: direction
+          direction: direction,
         })
         var handler = hanlders[name]
         if (handler) {
-          handler(roomId, keys, function (result) {
-            var res = JSON.parse(result)
-            var props = {}
-            var list = res.list
-            RongIMLib.RongUtil.forEach(list, function (item) {
-              props[item.key] = item.value
-            })
-            callback.onSuccess(props)
-          }, function (code) {
-            callback.onError(code)
-          })
+          handler(
+            roomId,
+            keys,
+            function (result) {
+              var res = JSON.parse(result)
+              var props = {}
+              var list = res.list
+              RongIMLib.RongUtil.forEach(list, function (item) {
+                props[item.key] = item.value
+              })
+              callback.onSuccess(props)
+            },
+            function (code) {
+              callback.onError(code)
+            }
+          )
         }
       }
-      VCDataProvider.prototype.getRTCRoomData = function (roomId, keys, isInner, callback, message) {
-        this.getRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback)
+      VCDataProvider.prototype.getRTCRoomData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        this.getRTCData(
+          roomId,
+          keys,
+          isInner,
+          RongIMLib.RTCAPIType.ROOM,
+          callback
+        )
       }
-      VCDataProvider.prototype.removeRTCData = function (roomId, keys, isInner, apiType, callback, message) {
+      VCDataProvider.prototype.removeRTCData = function (
+        roomId,
+        keys,
+        isInner,
+        apiType,
+        callback,
+        message
+      ) {
         var context = this
         var hanlders = {
           room_inner: function (roomId, keys, name, content, success, error) {
-            context.addon.deleteRTCInnerData(roomId, RongIMLib.RTCAPIType.ROOM, keys, name, content, success, error)
+            context.addon.deleteRTCInnerData(
+              roomId,
+              RongIMLib.RTCAPIType.ROOM,
+              keys,
+              name,
+              content,
+              success,
+              error
+            )
           },
           room_outer: function (roomId, keys, name, content, success, error) {
-            context.addon.deleteRTCOuterData(roomId, RongIMLib.RTCAPIType.ROOM, keys, name, content, success, error)
+            context.addon.deleteRTCOuterData(
+              roomId,
+              RongIMLib.RTCAPIType.ROOM,
+              keys,
+              name,
+              content,
+              success,
+              error
+            )
           },
           user_inner: function (roomId, keys, name, content, success, error) {},
-          user_outer: function (roomId, keys, name, content, success, error) {}
+          user_outer: function (roomId, keys, name, content, success, error) {},
         }
         var type = RongIMLib.RTCAPIType.PERSON == apiType ? 'user' : 'room'
         var direction = isInner ? 'inner' : 'outer'
         var tpl = '{type}_{direction}'
         var name = RongIMLib.RongUtil.tplEngine(tpl, {
           type: type,
-          direction: direction
+          direction: direction,
         })
         var handler = hanlders[name]
         if (handler) {
           message = message || {}
           var name = message.name || ''
           var content = message.content || ''
-          handler(roomId, keys, name, content, function () {
-            callback.onSuccess(true)
-          }, function (code) {
-            callback.onError(code)
-          })
+          handler(
+            roomId,
+            keys,
+            name,
+            content,
+            function () {
+              callback.onSuccess(true)
+            },
+            function (code) {
+              callback.onError(code)
+            }
+          )
         }
       }
-      VCDataProvider.prototype.removeRTCRoomData = function (roomId, keys, isInner, callback, message) {
-        this.removeRTCData(roomId, keys, isInner, RongIMLib.RTCAPIType.ROOM, callback)
+      VCDataProvider.prototype.removeRTCRoomData = function (
+        roomId,
+        keys,
+        isInner,
+        callback,
+        message
+      ) {
+        this.removeRTCData(
+          roomId,
+          keys,
+          isInner,
+          RongIMLib.RTCAPIType.ROOM,
+          callback
+        )
       }
       VCDataProvider.prototype.getNavi = function () {
         var nav = this.addon.getNav()
         return nav[this.userId]
       }
       // 信令 SDK 新增
-      VCDataProvider.prototype.setRTCOutData = function (roomId, data, type, callback, message) {}
+      VCDataProvider.prototype.setRTCOutData = function (
+        roomId,
+        data,
+        type,
+        callback,
+        message
+      ) {}
       // 信令 SDK 新增
-      VCDataProvider.prototype.getRTCOutData = function (roomId, userId, callback) {}
-      VCDataProvider.prototype.setRTCUserInfo = function (room, info, callback) {}
-      VCDataProvider.prototype.removeRTCUserInfo = function (room, info, callback) {}
+      VCDataProvider.prototype.getRTCOutData = function (
+        roomId,
+        userId,
+        callback
+      ) {}
+      VCDataProvider.prototype.setRTCUserInfo = function (
+        room,
+        info,
+        callback
+      ) {}
+      VCDataProvider.prototype.removeRTCUserInfo = function (
+        room,
+        info,
+        callback
+      ) {}
       VCDataProvider.prototype.getRTCUserList = function (room, callback) {}
-      VCDataProvider.prototype.setRTCRoomInfo = function (room, data, callback) {}
-      VCDataProvider.prototype.removeRTCRoomInfo = function (room, data, callback) {}
-      VCDataProvider.prototype.setRTCUserData = function (roomId, key, value, isInner, callback, message) {
-        this.setRTCData(roomId, key, value, isInner, RongIMLib.RTCAPIType.PERSON, callback, message)
+      VCDataProvider.prototype.setRTCRoomInfo = function (
+        room,
+        data,
+        callback
+      ) {}
+      VCDataProvider.prototype.removeRTCRoomInfo = function (
+        room,
+        data,
+        callback
+      ) {}
+      VCDataProvider.prototype.setRTCUserData = function (
+        roomId,
+        key,
+        value,
+        isInner,
+        callback,
+        message
+      ) {
+        this.setRTCData(
+          roomId,
+          key,
+          value,
+          isInner,
+          RongIMLib.RTCAPIType.PERSON,
+          callback,
+          message
+        )
       }
-      VCDataProvider.prototype.getRTCUserData = function (roomId, key, isInner, callback, message) {}
-      VCDataProvider.prototype.removeRTCUserData = function (roomId, key, isInner, callback, message) {}
+      VCDataProvider.prototype.getRTCUserData = function (
+        roomId,
+        key,
+        isInner,
+        callback,
+        message
+      ) {}
+      VCDataProvider.prototype.removeRTCUserData = function (
+        roomId,
+        key,
+        isInner,
+        callback,
+        message
+      ) {}
       VCDataProvider.prototype.getRTCToken = function (room, callback) {}
-      VCDataProvider.prototype.setRTCState = function (room, content, callback) {}
+      VCDataProvider.prototype.setRTCState = function (
+        room,
+        content,
+        callback
+      ) {}
       return VCDataProvider
     })()
     RongIMLib.VCDataProvider = VCDataProvider
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var MemeoryProvider = (function () {
-      function MemeoryProvider () {
+      function MemeoryProvider() {
         this._memeoryStore = {}
         this.prefix = 'rong_'
       }
@@ -11998,22 +15976,27 @@
     })()
     RongIMLib.MemeoryProvider = MemeoryProvider
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var LocalStorageProvider = (function () {
       // static _instance: LocalStorageProvider = new LocalStorageProvider();
-      function LocalStorageProvider () {
+      function LocalStorageProvider() {
         this.prefix = 'rong_'
         this._host = ''
         var d = new Date()
         var m = d.getMonth() + 1
-        var date = d.getFullYear() + '/' + (m.toString().length == 1 ? '0' + m : m) + '/' + d.getDate()
+        var date =
+          d.getFullYear() +
+          '/' +
+          (m.toString().length == 1 ? '0' + m : m) +
+          '/' +
+          d.getDate()
         var nowDate = new Date(date).getTime()
         for (var key in localStorage) {
           if (key.lastIndexOf('RECEIVED') > -1) {
             var recObj = JSON.parse(localStorage.getItem(key))
             for (var key_1 in recObj) {
-              nowDate - recObj[key_1].dealtime > 0 && (delete recObj[key_1])
+              nowDate - recObj[key_1].dealtime > 0 && delete recObj[key_1]
             }
             if (RongIMLib.RongUtil.isEmpty(recObj)) {
               localStorage.removeItem(key)
@@ -12023,19 +16006,21 @@
           }
           if (key.lastIndexOf('SENT') > -1) {
             var sentObj = JSON.parse(localStorage.getItem(key))
-            nowDate - sentObj.dealtime > 0 && (localStorage.removeItem(key))
+            nowDate - sentObj.dealtime > 0 && localStorage.removeItem(key)
           }
         }
       }
       LocalStorageProvider.prototype.setItem = function (composedKey, object) {
         if (composedKey) {
-          composedKey.indexOf(this.prefix) == -1 && (composedKey = this.prefix + composedKey)
+          composedKey.indexOf(this.prefix) == -1 &&
+            (composedKey = this.prefix + composedKey)
           localStorage.setItem(composedKey, object)
         }
       }
       LocalStorageProvider.prototype.getItem = function (composedKey) {
         if (composedKey) {
-          composedKey.indexOf(this.prefix) == -1 && (composedKey = this.prefix + composedKey)
+          composedKey.indexOf(this.prefix) == -1 &&
+            (composedKey = this.prefix + composedKey)
           return localStorage.getItem(composedKey || '')
         }
         return ''
@@ -12065,7 +16050,8 @@
       }
       LocalStorageProvider.prototype.removeItem = function (composedKey) {
         if (composedKey) {
-          composedKey.indexOf(this.prefix) == -1 && (composedKey = this.prefix + composedKey)
+          composedKey.indexOf(this.prefix) == -1 &&
+            (composedKey = this.prefix + composedKey)
           localStorage.removeItem(composedKey.toString())
         }
       }
@@ -12085,10 +16071,10 @@
     })()
     RongIMLib.LocalStorageProvider = LocalStorageProvider
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var UserDataProvider = (function () {
-      function UserDataProvider () {
+      function UserDataProvider() {
         this.opersistName = 'RongIMLib'
         this.keyManager = 'RongUserDataKeyManager'
         this._host = ''
@@ -12103,7 +16089,9 @@
         key && key.indexOf(this.prefix) == -1 && (key = this.prefix + key)
         this.oPersist.setAttribute(key, value)
         var keyNames = this.getItem(this.keyManager)
-        keyNames ? keyNames.indexOf(key) == -1 && (keyNames += ',' + key) : (keyNames = key)
+        keyNames
+          ? keyNames.indexOf(key) == -1 && (keyNames += ',' + key)
+          : (keyNames = key)
         this.oPersist.setAttribute(this.prefix + this.keyManager, keyNames)
         this.oPersist.save(this.opersistName)
       }
@@ -12116,19 +16104,22 @@
         this.oPersist.removeAttribute(key)
         this.oPersist.save(this.opersistName)
         var keyNames = this.getItem(this.keyManager)
-        var keyNameArray = keyNames && keyNames.split(',') || []
+        var keyNameArray = (keyNames && keyNames.split(',')) || []
         for (var i = 0, len = keyNameArray.length; i < len; i++) {
           if (keyNameArray[i] == key) {
             keyNameArray.splice(i, 1)
           }
         }
-        this.oPersist.setAttribute(this.prefix + this.keyManager, keyNameArray.join(','))
+        this.oPersist.setAttribute(
+          this.prefix + this.keyManager,
+          keyNameArray.join(',')
+        )
         this.oPersist.save(this.opersistName)
       }
       UserDataProvider.prototype.getItemKey = function (composedStr) {
         var item = null
         var keyNames = this.getItem(this.keyManager)
-        var keyNameArray = keyNames && keyNames.split(',') || []
+        var keyNameArray = (keyNames && keyNames.split(',')) || []
         var me = this
         var _key = this.prefix + composedStr
         if (keyNameArray.length) {
@@ -12144,7 +16135,7 @@
       UserDataProvider.prototype.getItemKeyList = function (composedStr) {
         var itemList = []
         var keyNames = this.getItem(this.keyManager)
-        var keyNameArray = keyNames && keyNames.split(',') || []
+        var keyNameArray = (keyNames && keyNames.split(',')) || []
         var prefix = this.prefix
         var _key = prefix + composedStr
         if (keyNameArray.length) {
@@ -12177,11 +16168,16 @@
     })()
     RongIMLib.UserDataProvider = UserDataProvider
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var FeatureDectector = (function () {
-      function FeatureDectector (callback) {
-        if ('WebSocket' in window && 'ArrayBuffer' in window && WebSocket.prototype.CLOSED === 3 && !RongIMLib.RongIMClient._memoryStore.depend.isPolling) {
+      function FeatureDectector(callback) {
+        if (
+          'WebSocket' in window &&
+          'ArrayBuffer' in window &&
+          WebSocket.prototype.CLOSED === 3 &&
+          !RongIMLib.RongIMClient._memoryStore.depend.isPolling
+        ) {
           RongIMLib.Transportations._TransportType = RongIMLib.Socket.WEBSOCKET
           if (!RongIMLib.RongIMClient.Protobuf) {
             RongIMLib.RongIMClient.Protobuf = require('./protobuf.js')
@@ -12195,19 +16191,23 @@
     })()
     RongIMLib.FeatureDectector = FeatureDectector
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var ScriptLoader = (function () {
-      function ScriptLoader () {}
+      function ScriptLoader() {}
       ScriptLoader.prototype.load = function (src, onLoad, onError) {
         var script = document.createElement('script')
         script.async = true
         if (onLoad) {
           if (script.addEventListener) {
-            script.addEventListener('load', function (event) {
-              var target = event.target || event.srcElement
-              onLoad(target.src)
-            }, false)
+            script.addEventListener(
+              'load',
+              function (event) {
+                var target = event.target || event.srcElement
+                onLoad(target.src)
+              },
+              false
+            )
           } else if (script.readyState) {
             script.onreadystatechange = function (event) {
               var target = event.srcElement
@@ -12221,21 +16221,29 @@
             onError(target.src)
           }
         }
-        (document.head || document.getElementsByTagName('head')[0]).appendChild(script)
+        ;(
+          document.head || document.getElementsByTagName('head')[0]
+        ).appendChild(script)
         script.src = src
       }
       return ScriptLoader
     })()
   })(RongIMLib || (RongIMLib = {}))
-  var RongIMLib;
-  (function (RongIMLib) {
+  var RongIMLib
+  ;(function (RongIMLib) {
     var PublicServiceMap = (function () {
-      function PublicServiceMap () {
+      function PublicServiceMap() {
         this.publicServiceList = []
       }
-      PublicServiceMap.prototype.get = function (publicServiceType, publicServiceId) {
+      PublicServiceMap.prototype.get = function (
+        publicServiceType,
+        publicServiceId
+      ) {
         for (var i = 0, len = this.publicServiceList.length; i < len; i++) {
-          if (this.publicServiceList[i].conversationType == publicServiceType && publicServiceId == this.publicServiceList[i].publicServiceId) {
+          if (
+            this.publicServiceList[i].conversationType == publicServiceType &&
+            publicServiceId == this.publicServiceList[i].publicServiceId
+          ) {
             return this.publicServiceList[i]
           }
         }
@@ -12244,8 +16252,15 @@
         var isAdd = true
         var me = this
         for (var i = 0, len = this.publicServiceList.length; i < len; i++) {
-          if (me.publicServiceList[i].conversationType == publicServiceProfile.conversationType && publicServiceProfile.publicServiceId == me.publicServiceList[i].publicServiceId) {
-            this.publicServiceList.unshift(this.publicServiceList.splice(i, 1)[0])
+          if (
+            me.publicServiceList[i].conversationType ==
+              publicServiceProfile.conversationType &&
+            publicServiceProfile.publicServiceId ==
+              me.publicServiceList[i].publicServiceId
+          ) {
+            this.publicServiceList.unshift(
+              this.publicServiceList.splice(i, 1)[0]
+            )
             isAdd = false
             break
           }
@@ -12257,16 +16272,27 @@
       PublicServiceMap.prototype.replace = function (publicServiceProfile) {
         var me = this
         for (var i = 0, len = this.publicServiceList.length; i < len; i++) {
-          if (me.publicServiceList[i].conversationType == publicServiceProfile.conversationType && publicServiceProfile.publicServiceId == me.publicServiceList[i].publicServiceId) {
+          if (
+            me.publicServiceList[i].conversationType ==
+              publicServiceProfile.conversationType &&
+            publicServiceProfile.publicServiceId ==
+              me.publicServiceList[i].publicServiceId
+          ) {
             me.publicServiceList.splice(i, 1, publicServiceProfile)
             break
           }
         }
       }
-      PublicServiceMap.prototype.remove = function (conversationType, publicServiceId) {
+      PublicServiceMap.prototype.remove = function (
+        conversationType,
+        publicServiceId
+      ) {
         var me = this
         for (var i = 0, len = this.publicServiceList.length; i < len; i++) {
-          if (me.publicServiceList[i].conversationType == conversationType && publicServiceId == me.publicServiceList[i].publicServiceId) {
+          if (
+            me.publicServiceList[i].conversationType == conversationType &&
+            publicServiceId == me.publicServiceList[i].publicServiceId
+          ) {
             this.publicServiceList.splice(i, 1)
             break
           }
@@ -12276,15 +16302,18 @@
     })()
     RongIMLib.PublicServiceMap = PublicServiceMap
     /**
-         * 会话工具类。
-         */
+     * 会话工具类。
+     */
     var ConversationMap = (function () {
-      function ConversationMap () {
+      function ConversationMap() {
         this.conversationList = []
       }
       ConversationMap.prototype.get = function (conversavtionType, targetId) {
         for (var i = 0, len = this.conversationList.length; i < len; i++) {
-          if (this.conversationList[i].conversationType == conversavtionType && this.conversationList[i].targetId == targetId) {
+          if (
+            this.conversationList[i].conversationType == conversavtionType &&
+            this.conversationList[i].targetId == targetId
+          ) {
             return this.conversationList[i]
           }
         }
@@ -12293,7 +16322,11 @@
       ConversationMap.prototype.add = function (conversation) {
         var isAdd = true
         for (var i = 0, len = this.conversationList.length; i < len; i++) {
-          if (this.conversationList[i].conversationType === conversation.conversationType && this.conversationList[i].targetId === conversation.targetId) {
+          if (
+            this.conversationList[i].conversationType ===
+              conversation.conversationType &&
+            this.conversationList[i].targetId === conversation.targetId
+          ) {
             this.conversationList.unshift(this.conversationList.splice(i, 1)[0])
             isAdd = false
             break
@@ -12304,12 +16337,16 @@
         }
       }
       /**
-             * [replace 替换会话]
-             * 会话数组存在的情况下调用add方法会是当前会话被替换且返回到第一个位置，导致用户本地一些设置失效，所以提供replace方法
-             */
+       * [replace 替换会话]
+       * 会话数组存在的情况下调用add方法会是当前会话被替换且返回到第一个位置，导致用户本地一些设置失效，所以提供replace方法
+       */
       ConversationMap.prototype.replace = function (conversation) {
         for (var i = 0, len = this.conversationList.length; i < len; i++) {
-          if (this.conversationList[i].conversationType === conversation.conversationType && this.conversationList[i].targetId === conversation.targetId) {
+          if (
+            this.conversationList[i].conversationType ===
+              conversation.conversationType &&
+            this.conversationList[i].targetId === conversation.targetId
+          ) {
             this.conversationList.splice(i, 1, conversation)
             break
           }
@@ -12317,7 +16354,11 @@
       }
       ConversationMap.prototype.remove = function (conversation) {
         for (var i = 0, len = this.conversationList.length; i < len; i++) {
-          if (this.conversationList[i].conversationType === conversation.conversationType && this.conversationList[i].targetId === conversation.targetId) {
+          if (
+            this.conversationList[i].conversationType ===
+              conversation.conversationType &&
+            this.conversationList[i].targetId === conversation.targetId
+          ) {
             this.conversationList.splice(i, 1)
             break
           }
@@ -12327,7 +16368,7 @@
     })()
     RongIMLib.ConversationMap = ConversationMap
     var CheckParam = (function () {
-      function CheckParam () {}
+      function CheckParam() {}
       CheckParam.getInstance = function () {
         if (!CheckParam._instance) {
           CheckParam._instance = new CheckParam()
@@ -12338,7 +16379,7 @@
         RongIMLib.RongIMClient.logger({
           code: code,
           funcName: funcName,
-          msg: msg
+          msg: msg,
         })
       }
       CheckParam.prototype.check = function (f, position, d, c) {
@@ -12346,7 +16387,15 @@
           for (var g = 0, e = c.length; g < e; g++) {
             if (!new RegExp(this.getType(c[g])).test(f[g])) {
               // throw new Error("The index of " + g + " parameter was wrong type " + this.getType(c[g]) + " [" + f[g] + "] -> position:" + position);
-              var msg = '第' + (g + 1) + '个参数错误, 错误类型：' + this.getType(c[g]) + ' [' + f[g] + '] -> 位置:' + position
+              var msg =
+                '第' +
+                (g + 1) +
+                '个参数错误, 错误类型：' +
+                this.getType(c[g]) +
+                ' [' +
+                f[g] +
+                '] -> 位置:' +
+                position
               this.logger('-3', position, msg)
             }
           }
@@ -12361,7 +16410,9 @@
       }
       CheckParam.prototype.checkCookieDisable = function () {
         document.cookie = 'checkCookie=1'
-        var arr = document.cookie.match(new RegExp('(^| )checkCookie=([^;]*)(;|$)'))
+        var arr = document.cookie.match(
+          new RegExp('(^| )checkCookie=([^;]*)(;|$)')
+        )
         var isDisable = false
         if (!arr) {
           isDisable = true
@@ -12373,7 +16424,7 @@
     })()
     RongIMLib.CheckParam = CheckParam
     var LimitableMap = (function () {
-      function LimitableMap (limit) {
+      function LimitableMap(limit) {
         this.map = {}
         this.keys = []
         this.limit = limit || 10
@@ -12391,7 +16442,7 @@
     })()
     RongIMLib.LimitableMap = LimitableMap
     var MemoryCache = (function () {
-      function MemoryCache () {
+      function MemoryCache() {
         this.cache = {}
       }
       MemoryCache.prototype.set = function (key, value) {
@@ -12407,11 +16458,13 @@
     })()
     RongIMLib.MemoryCache = MemoryCache
     var RongAjax = (function () {
-      function RongAjax (options) {
+      function RongAjax(options) {
         var me = this
         me.xmlhttp = null
         me.options = options
-        var hasCORS = typeof XMLHttpRequest !== 'undefined' && 'withCredentials' in new XMLHttpRequest()
+        var hasCORS =
+          typeof XMLHttpRequest !== 'undefined' &&
+          'withCredentials' in new XMLHttpRequest()
         if (typeof XMLHttpRequest !== 'undefined' && hasCORS) {
           me.xmlhttp = new XMLHttpRequest()
         } else if (typeof XDomainRequest !== 'undefined') {
@@ -12436,19 +16489,41 @@
         me.xmlhttp.withCredentials = false
         if ('setRequestHeader' in me.xmlhttp) {
           if (me.options.type) {
-            me.xmlhttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded; charset=utf-8')
+            me.xmlhttp.setRequestHeader(
+              'Content-type',
+              'application/x-www-form-urlencoded; charset=utf-8'
+            )
           } else {
-            me.xmlhttp.setRequestHeader('Content-type', 'application/octet-stream')
-            me.xmlhttp.setRequestHeader('Authorization', 'UpToken ' + me.options.token)
+            me.xmlhttp.setRequestHeader(
+              'Content-type',
+              'application/octet-stream'
+            )
+            me.xmlhttp.setRequestHeader(
+              'Authorization',
+              'UpToken ' + me.options.token
+            )
           }
         }
-        me.xmlhttp.send(me.options.type ? 'appKey=' + me.options.appKey + '&deviceId=' + me.options.deviceId + '&timestamp=' + me.options.timestamp + '&deviceInfo=' + me.options.deviceInfo + '&privateInfo=' + JSON.stringify(me.options.privateInfo) : me.options.base64)
+        me.xmlhttp.send(
+          me.options.type
+            ? 'appKey=' +
+                me.options.appKey +
+                '&deviceId=' +
+                me.options.deviceId +
+                '&timestamp=' +
+                me.options.timestamp +
+                '&deviceInfo=' +
+                me.options.deviceInfo +
+                '&privateInfo=' +
+                JSON.stringify(me.options.privateInfo)
+            : me.options.base64
+        )
       }
       return RongAjax
     })()
     RongIMLib.RongAjax = RongAjax
     var RongUtil = (function () {
-      function RongUtil () {}
+      function RongUtil() {}
       RongUtil.noop = function () {}
       RongUtil.isEmpty = function (obj) {
         var empty = true
@@ -12492,7 +16567,7 @@
       RongUtil.stringFormat = function (tmpl, vals) {
         for (var i = 0, len = vals.length; i < len; i++) {
           var val = vals[i]
-          var reg = new RegExp('\\{' + (i) + '\\}', 'g')
+          var reg = new RegExp('\\{' + i + '\\}', 'g')
           tmpl = tmpl.replace(reg, val)
         }
         return tmpl
@@ -12507,12 +16582,12 @@
         }
         return ret.join('')
 
-        function replaceAction (object) {
-          return temp.replace(regexp || (/{([^}]+)}/g), function (match, name) {
+        function replaceAction(object) {
+          return temp.replace(regexp || /{([^}]+)}/g, function (match, name) {
             if (match.charAt(0) == '\\') {
               return match.slice(1)
             }
-            return (object[name] != undefined) ? object[name] : '{' + name + '}'
+            return object[name] != undefined ? object[name] : '{' + name + '}'
           })
         }
       }
@@ -12539,7 +16614,7 @@
       }
       RongUtil.extend = function (source, target, callback, force) {
         RongUtil.forEach(source, function (val, key) {
-          var hasProto = (key in target)
+          var hasProto = key in target
           if (force && hasProto) {
             target[key] = val
           }
@@ -12559,18 +16634,22 @@
           },
           ActiveXObject: function () {
             return new ActiveXObject('Microsoft.XMLHTTP')
-          }
+          },
         }
-        var isXHR = (typeof XMLHttpRequest === 'function')
+        var isXHR = typeof XMLHttpRequest === 'function'
         if (window.navigator) {
           var browserAgent = window.navigator.userAgent.toLowerCase()
           var isIPhone = browserAgent.indexOf('iphone') > -1
           if (isIPhone && isXHR == false) {
-            isXHR = (typeof XMLHttpRequest === 'object')
+            isXHR = typeof XMLHttpRequest === 'object'
           }
         }
-        var isXDR = (typeof XDomainRequest === 'function')
-        var key = isXHR ? 'XMLHttpRequest' : isXDR ? 'XDomainRequest' : 'ActiveXObject'
+        var isXDR = typeof XDomainRequest === 'function'
+        var key = isXHR
+          ? 'XMLHttpRequest'
+          : isXDR
+          ? 'XDomainRequest'
+          : 'ActiveXObject'
         return item[key]()
       }
       RongUtil.request = function (opts) {
@@ -12600,14 +16679,14 @@
         var sub = config.sub
         var flag = '://'
         var index = path.indexOf(flag)
-        var hasProtocol = (index > -1)
+        var hasProtocol = index > -1
         if (hasProtocol) {
           index += flag.length
           path = path.substring(index)
         }
         if (sub) {
           index = path.indexOf('/')
-          var hasPath = (index > -1)
+          var hasPath = index > -1
           if (hasPath) {
             path = path.substr(0, index)
           }
@@ -12650,8 +16729,8 @@
         }
         RongUtil.forEach(origin, function (item) {
           RongUtil.forEach(item, function (val, key, obj) {
-            var isRename = (key in newNames);
-            (isRename ? updateProperty : RongUtil.noop)(val, key, obj)
+            var isRename = key in newNames
+            ;(isRename ? updateProperty : RongUtil.noop)(val, key, obj)
           })
         })
         return isObject ? origin[0] : origin
@@ -12705,7 +16784,7 @@
 
         */
     var RongObserver = (function () {
-      function RongObserver () {
+      function RongObserver() {
         this.watchers = {}
       }
       RongObserver.prototype.genUId = function (key) {
@@ -12728,7 +16807,7 @@
         var key = params.key
         var entity = params.entity
         for (var k in me.watchers) {
-          var isNotify = (k.indexOf(key) == 0)
+          var isNotify = k.indexOf(key) == 0
           if (isNotify) {
             me.watchers[k](entity)
           }
@@ -12739,7 +16818,7 @@
     })()
     RongIMLib.RongObserver = RongObserver
     var Observer = (function () {
-      function Observer () {
+      function Observer() {
         this.observers = []
       }
       Observer.prototype.add = function (observer, force) {
@@ -12760,7 +16839,7 @@
     })()
     RongIMLib.Observer = Observer
     var Timer = (function () {
-      function Timer (config) {
+      function Timer(config) {
         this.timeout = 0
         this.timers = []
         this.timeout = config.timeout
@@ -12778,7 +16857,7 @@
     })()
     RongIMLib.Timer = Timer
     var IndexTools = (function () {
-      function IndexTools (config) {
+      function IndexTools(config) {
         this.items = []
         this.index = 0
         this.onwheel = function () {}
@@ -12802,7 +16881,7 @@
     })()
     RongIMLib.IndexTools = IndexTools
     var InnerUtil = (function () {
-      function InnerUtil () {}
+      function InnerUtil() {}
       InnerUtil.getUId = function (token) {
         return md5(token).slice(8, 16)
       }

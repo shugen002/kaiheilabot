@@ -1,8 +1,8 @@
 var axios = require('axios').create({
   baseURL: 'https://www.kaiheila.cn/',
   headers: {
-    cookie: process.env.cookie
-  }
+    cookie: process.env.cookie,
+  },
 })
 require('./utils').patchRongIMClient()
 var RongIMLib = require('./RongIMLib')
@@ -13,9 +13,7 @@ var timerA = null
 var timerB = null
 
 server.connect = async () => {
-  var res = await axios
-    .get('/api/v2/user/user-state', {
-    })
+  var res = await axios.get('/api/v2/user/user-state', {})
   server.user = res.data.user
   var data = res.data
   RongIMClient.connect(data.rong_token, {
@@ -36,7 +34,7 @@ server.connect = async () => {
     },
     onError: (...args) => {
       console.log('ConnectError', ...args)
-    }
+    },
   })
 }
 server.getUserInfo = async () => {
@@ -60,38 +58,48 @@ server.sendMessage = (type, channelId, textMessage) => {
     RongIMClient.getInstance().sendMessage(
       type,
       channelId,
-      textMessage, {
+      textMessage,
+      {
         onSuccess: resolve,
-        onError: reject
+        onError: reject,
       },
       false,
       'Push 显示内容',
       'Push 通知时附加信息',
-      null, {}
+      null,
+      {}
     )
   })
 }
 
 server.grantRole = (guildId, userId, roleId) => {
-  return axios.patch(`/api/v2/guild-roles/grant/${guildId.toString()}`, JSON.stringify({
-    user_id: userId.toString(),
-    role_id: roleId
-  }), {
-    headers: {
-      'content-type': 'application/json'
+  return axios.patch(
+    `/api/v2/guild-roles/grant/${guildId.toString()}`,
+    JSON.stringify({
+      user_id: userId.toString(),
+      role_id: roleId,
+    }),
+    {
+      headers: {
+        'content-type': 'application/json',
+      },
     }
-  })
+  )
 }
 
 server.revokeRole = (guildId, userId, roleId) => {
-  return axios.patch(`/api/v2/guild-roles/revoke/${guildId.toString()}`, JSON.stringify({
-    user_id: userId.toString(),
-    role_id: roleId
-  }), {
-    headers: {
-      'content-type': 'application/json'
+  return axios.patch(
+    `/api/v2/guild-roles/revoke/${guildId.toString()}`,
+    JSON.stringify({
+      user_id: userId.toString(),
+      role_id: roleId,
+    }),
+    {
+      headers: {
+        'content-type': 'application/json',
+      },
     }
-  })
+  )
 }
 server.doTickA = async () => {
   return (await axios.get('/api/v2/channels/sync-time')).data
