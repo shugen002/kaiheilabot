@@ -1,24 +1,38 @@
 {
-  "name": "kaiheila",
-  "version": "1.0.0",
+  "name": "kaiheilabot",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "lint": "eslint --ext .js --ignore-path .gitignore . --fix"
   },
-  "author": "",
-  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Afanyiyu/kaiheilabot.git"
+  },
+  "keywords": [
+    "kaiheila"
+  ],
+  "author": "Il Harper",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Afanyiyu/kaiheilabot/issues"
+  },
+  "homepage": "https://github.com/Afanyiyu/kaiheilabot#readme",
   "dependencies": {
-    "axios": "^0.20.0",
+    "axios": "^0.21.0",
     "wrtc": "^0.4.6",
-    "ws": "^7.3.1"
+    "ws": "^7.4.0"
   },
   "devDependencies": {
-    "eslint": "^7.11.0",
-    "eslint-config-standard": "^14.1.1",
+    "dotenv": "^8.2.0",
+    "eslint": "^7.14.0",
+    "eslint-config-prettier": "^6.15.0",
     "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.1"
+    "prettier": "^2.2.1"
   }
 }

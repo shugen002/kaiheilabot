@@ -3,13 +3,13 @@ global.window = global
 var ws = require('ws')
 global.WebSocket = ws
 global.location = {
-  protocol: 'https:'
+  protocol: 'https:',
 }
 global.document = {
-  documentElement: {}
+  documentElement: {},
 }
 global.navigator = {
-  userAgent: ''
+  userAgent: '',
 }
 global.ActiveXObject = () => {
   return {}
@@ -21,7 +21,7 @@ var RongIMLib = require('./RongIMLib')
 var RongIMClient = RongIMLib.RongIMClient
 var wsServer = new ws.Server({
   host: process.env.host,
-  port: parseInt(process.env.port)
+  port: parseInt(process.env.port),
 })
 
 var server = require('./server')
@@ -34,14 +34,14 @@ RongIMClient.setOnReceiveMessageListener({
   onReceived: (...args) => {
     var data = JSON.stringify({
       cmd: 'receiveMessage',
-      args: args
+      args: args,
     })
     wsServer.clients.forEach((e) => {
       e.send(data, () => {})
     })
-  }
+  },
 })
-function clientHandler (data) {
+function clientHandler(data) {
   try {
     var packet = JSON.parse(data)
   } catch (error) {
@@ -49,30 +49,34 @@ function clientHandler (data) {
     return
   }
   if (packet.cmd && packet.cmd === 'sendMessage') {
-    server.sendMessage(packet.type, packet.channelId,
-      new RongIMLib.TextMessage({
-        messageName: 'TextMessage',
-        content: packet.content,
-        extra: JSON.stringify({
-          type: '1',
-          guild_id: packet.guildId,
-          mention: [],
-          mention_all: false,
-          mention_roles: [],
-          mention_here: false,
-          author: {
-            nickname: server.user.username,
-            username: server.user.username,
-            identify_num: server.user.identify_num,
-            avatar: server.user.avatar,
-            id: server.user.id
-          }
-        }),
-        mentionedInfo: {
-          type: 2,
-          userIdList: []
-        }
-      }))
+    server
+      .sendMessage(
+        packet.type,
+        packet.channelId,
+        new RongIMLib.TextMessage({
+          messageName: 'TextMessage',
+          content: packet.content,
+          extra: JSON.stringify({
+            type: '1',
+            guild_id: packet.guildId,
+            mention: [],
+            mention_all: false,
+            mention_roles: [],
+            mention_here: false,
+            author: {
+              nickname: server.user.username,
+              username: server.user.username,
+              identify_num: server.user.identify_num,
+              avatar: server.user.avatar,
+              id: server.user.id,
+            },
+          }),
+          mentionedInfo: {
+            type: 2,
+            userIdList: [],
+          },
+        })
+      )
       .then((e) => {})
       .catch(console.error)
   }
