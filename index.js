@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 // patch nodejs for RongIMLib
 global.window = global
 var ws = require('ws')
