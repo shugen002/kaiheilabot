@@ -1,5 +1,4 @@
-var server = require('../../server')
-var storage = require('../../storage')
+const storage = require('../../storage')
 module.exports = {
   description: '设置任务属性',
   help:
@@ -13,9 +12,9 @@ module.exports = {
     params = params.filter((e) => {
       return e !== ''
     })
-    var a = params.join(' ')
-    var out = ''
-    var lines = a.replace(/(\d+)/g, '$1\n').split('\n')
+    const a = params.join(' ')
+    let out = ''
+    const lines = a.replace(/(\d+)/g, '$1\n').split('\n')
     let channel = storage.getChannel(message.channelId)
     if (channel.cocInheritChannel) {
       channel = storage.getChannel(channel.cocInheritChannel)
@@ -26,15 +25,15 @@ module.exports = {
     }
     lines.filter((e) => { return e.length > 0 }).forEach((e) => {
       try {
-        var value = parseInt(e.match(/\d+/)[0])
-        var key = e.replace(/\d/g, '')
+        const value = parseInt(e.match(/\d+/)[0])
+        const key = e.replace(/\d/g, '')
         player.attributes[key] = value
         out = out + key + ':' + value + ' '
       } catch (error) {
         console.log(error)
       }
     })
-    var log = `设定了属性值：\n ${out}`
+    const log = `设定了属性值：\n ${out}`
     message.reply(log)
   }
 }

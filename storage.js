@@ -1,4 +1,4 @@
-var fs = require('fs')
+const fs = require('fs')
 class Storage {
   constructor () {
     this.guilds = {}
@@ -46,8 +46,8 @@ class Storage {
 }
 
 function JSONStorage (path) {
-  var module = {}
-  var data = {
+  const module = {}
+  const data = {
     getUserModule (moduleName, userId) {
       if (!module[moduleName]) {
         module[moduleName] = {}

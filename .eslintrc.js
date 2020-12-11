@@ -11,6 +11,5 @@ module.exports = {
     ecmaVersion: 12
   },
   rules: {
-    'no-useless-return': 0
   }
 }

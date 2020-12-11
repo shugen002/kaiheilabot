@@ -1,4 +1,3 @@
-var server = require('../server')
 module.exports = {
   description: 'dump',
   help:
@@ -9,6 +8,6 @@ module.exports = {
    * @param {{reply(content:string)=>{}}} message
    */
   async exec (params, message) {
-    message.reply(JSON.stringify(await server.getGuildInfo(message.guildId)))
+    message.reply(JSON.stringify(await message.client.getGuildInfo(message.guildId)))
   }
 }

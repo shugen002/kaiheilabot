@@ -1,23 +1,23 @@
-var axios = require('axios').create({
+const axios = require('axios').create({
   baseURL: 'https://www.kaiheila.cn/',
   headers: {
     cookie: process.env.cookie
   }
 })
 require('./utils').patchRongIMClient()
-var RongIMLib = require('./RongIMLib')
-var RongIMClient = RongIMLib.RongIMClient
+const RongIMLib = require('./RongIMLib')
+const RongIMClient = RongIMLib.RongIMClient
 
-var server = {}
-var timerA = null
-var timerB = null
+const server = {}
+let timerA = null
+const timerB = null
 
 server.connect = async () => {
-  var res = await axios
+  const res = await axios
     .get('/api/v2/user/user-state', {
     })
   server.user = res.data.user
-  var data = res.data
+  const data = res.data
   RongIMClient.connect(data.rong_token, {
     onSuccess: (...args) => {
       console.log('ConnectSuccess', ...args)
@@ -40,12 +40,12 @@ server.connect = async () => {
   })
 }
 server.getUserInfo = async () => {
-  var res = await axios.get('/api/v2/user/user-state')
+  const res = await axios.get('/api/v2/user/user-state')
   server.user = res.data.user
   return server.user
 }
 server.getGuildList = async () => {
-  var res = await axios.get('/api/v2/guilds')
+  const res = await axios.get('/api/v2/guilds')
   server.guilds = res.data
   return server.guilds
 }

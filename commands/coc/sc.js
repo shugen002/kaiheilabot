@@ -1,7 +1,6 @@
-var server = require('../../server')
-var storage = require('../../storage')
-var { checkSuccess } = require('./cocConsts')
-var { roll, RollFormat } = require('../r')
+const storage = require('../../storage')
+const { checkSuccess } = require('./cocConsts')
+const { roll, RollFormat } = require('../r')
 module.exports = {
   description: '进行san检定',
   help:

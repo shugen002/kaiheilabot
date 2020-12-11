@@ -1,5 +1,5 @@
-var { RollFormat } = require('./r')
-var storage = require('../storage')
+const { RollFormat } = require('./r')
+const storage = require('../storage')
 module.exports = {
   description: '今日人品',
   help:

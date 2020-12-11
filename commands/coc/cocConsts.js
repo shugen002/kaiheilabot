@@ -229,7 +229,7 @@ const phobia = [
   '动物恐惧症(Zoophobia) : 对动物的恐惧。'
 ]
 function checkSuccess (value, standard) {
-  var result = { success: true, msg: '' }
+  const result = { success: true, msg: '' }
   if (value <= (standard)) {
     result.success = true
     if (value <= 5) {

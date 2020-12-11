@@ -1,4 +1,3 @@
-var server = require('../server')
 const storage = require('../storage')
 module.exports = {
   description: 'enable',

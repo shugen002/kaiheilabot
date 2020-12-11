@@ -1,4 +1,4 @@
-var storage = require('../../storage')
+const storage = require('../../storage')
 module.exports = {
   description: '设置继承频道',
   help:

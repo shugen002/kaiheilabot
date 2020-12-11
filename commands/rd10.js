@@ -1,4 +1,4 @@
-var { rollCommand } = require('./r')
+const { rollCommand } = require('./r')
 module.exports = {
   description: '等价于.r d10',
   help:

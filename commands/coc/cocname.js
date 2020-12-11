@@ -1,5 +1,4 @@
-var server = require('../../server')
-var storage = require('../../storage')
+const storage = require('../../storage')
 module.exports = {
   description: '设置名字',
   help:

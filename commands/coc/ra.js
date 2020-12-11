@@ -1,7 +1,6 @@
-var server = require('../../server')
-var storage = require('../../storage')
-var { checkSuccess } = require('./cocConsts')
-var { roll } = require('../r')
+const storage = require('../../storage')
+const { checkSuccess } = require('./cocConsts')
+const { roll } = require('../r')
 module.exports = {
   description: '进行属性检定',
   help:
@@ -28,11 +27,11 @@ module.exports = {
     }
     // @ts-ignore
     if (player.attributes[params[0]] !== undefined) {
-      var value = roll(100)
+      const value = roll(100)
       // @ts-ignore
-      var result = checkSuccess(value, player.attributes[params[0]])
+      const result = checkSuccess(value, player.attributes[params[0]])
       // @ts-ignore
-      var log = `对 ${player.name || message.userId} 进行 ${params[0]} 检定，D100=${value}/${player.attributes[params[0]]}，${result.msg}`
+      const log = `对 ${player.name || message.userId} 进行 ${params[0]} 检定，D100=${value}/${player.attributes[params[0]]}，${result.msg}`
       message.reply(log)
     } else {
       message.reply(`${player.name || message.userId} 没有 ${params[0]} 这个属性/技能值`)

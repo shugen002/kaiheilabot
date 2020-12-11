@@ -1,13 +1,34 @@
-const server = require('./server')
-const RongIMLib = require('./RongIMLib')
+
+class Parser {
+  constructor (client) {
+    this.client = client
+  }
+
+  parse (e) {
+    let result = null
+    switch (e.type) {
+      case 'CHANNEL_MSG':
+        result = new TextMessage(e)
+        break
+
+      default:
+        return e
+        break
+    }
+    result.client = this.client
+    return result
+  }
+}
 class TextMessage {
   constructor (msg) {
+    this.type = msg.type
     this.msg = msg
+    msg.content = JSON.parse(msg.content)
     this.extra = JSON.parse(msg.content.extra)
     this.content = msg.content.content
     this.guildId = this.extra.guild_id
-    this.channelId = msg.targetId
-    this.userId = msg.senderUserId
+    this.channelId = msg.toUserId
+    this.userId = msg.fromUserId
   }
 
   /**
@@ -15,8 +36,12 @@ class TextMessage {
    * @param {string} content 内容
    */
   reply (content) {
-    server.sendMessage(3, this.channelId,
-      new RongIMLib.TextMessage({
+    if (!this.client) {
+      console.warn('DO NOT TRY TO REPLY NO CLIENT MESSAGE')
+      return
+    }
+    this.client.sendGroupMessage(this.channelId,
+      {
         messageName: 'TextMessage',
         content: content,
         extra: JSON.stringify({
@@ -27,18 +52,17 @@ class TextMessage {
           mention_roles: [],
           mention_here: false,
           author: {
-            nickname: server.user.username,
-            username: server.user.username,
-            identify_num: server.user.identify_num,
-            avatar: server.user.avatar,
-            id: server.user.id
+            nickname: this.client.user.username,
+            username: this.client.user.username,
+            identify_num: this.client.user.identify_num,
+            avatar: this.client.user.avatar,
+            id: this.client.user.id
           },
           quote: {
             create_at: this.msg.sentTime,
             author: this.extra.author,
             type: 1,
-            id: this.msg.messageUId,
-            rong_id: this.msg.messageUId,
+            id: this.extra.local_id,
             notCount: true,
             content: this.msg.content.content,
             attachments: this.msg.content,
@@ -52,7 +76,7 @@ class TextMessage {
           type: 2,
           userIdList: []
         }
-      }))
+      })
       .then((e) => {})
       .catch(console.error)
   }
@@ -81,5 +105,8 @@ class RemoveReaction {
 }
 
 module.exports = {
-  TextMessage, AddReaction, RemoveReaction
+  Parser,
+  TextMessage,
+  AddReaction,
+  RemoveReaction
 }

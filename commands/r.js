@@ -35,7 +35,7 @@ function roll (max) {
 }
 
 function RollFormat (input, maxValue = false) {
-  var result = {
+  const result = {
     success: false,
     value: 0,
     form: '',
@@ -98,9 +98,9 @@ function RollFormat (input, maxValue = false) {
         throw new Error('错误的格式')
       }
     })
-    var last = { type: '' }
-    var value = 0
-    var totaldice = 0
+    let last = { type: '' }
+    let value = 0
+    let totaldice = 0
     for (let index = 0; index < form.length; index++) {
       const element = form[index]
       if (element.type === last.type) {
